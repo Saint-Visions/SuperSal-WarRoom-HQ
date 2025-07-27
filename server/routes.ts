@@ -883,7 +883,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       'restart_services': 'All services restarting. Expected downtime: 30 seconds.',
       'backup_data': 'Emergency backup initiated. Data secured to encrypted storage.',
       'clear_cache': 'System cache cleared. Memory usage optimized.',
-      'restart_services': 'All services restarted successfully. System performance restored.'
+      'restart_complete': 'All services restarted successfully. System performance restored.'
     };
     
     const message = emergencyActions[action] || 'Unknown emergency action';
