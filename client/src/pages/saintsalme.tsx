@@ -226,10 +226,11 @@ export default function SaintSalMe() {
         <div className="bg-slate-900/30 border-b border-slate-700 p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <div className="text-center">
-                <h1 className="text-lg font-semibold text-white">Execution Workspace</h1>
-                <p className="text-sm text-slate-400">Execute leads, build implementations, drive results</p>
-              </div>
+              <img 
+                src="/attached_assets/transparent icon cookin dark_1753612745390.png" 
+                alt="Cookin' Knowledge"
+                className="w-12 h-12 opacity-80 hover:opacity-100 transition-opacity"
+              />
             </div>
             <div className="flex items-center space-x-3">
               <Button variant="outline" size="sm">

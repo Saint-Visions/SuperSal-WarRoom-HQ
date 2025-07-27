@@ -219,10 +219,11 @@ export default function WarRoom() {
         <div className="bg-slate-900/30 border-b border-slate-700 p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <div className="text-center">
-                <h1 className="text-lg font-semibold text-white">Productivity Workspace</h1>
-                <p className="text-sm text-slate-400">Your collaborative workspace is ready for action</p>
-              </div>
+              <img 
+                src="/attached_assets/transparent icon cookin dark_1753612745390.png" 
+                alt="Cookin' Knowledge"
+                className="w-12 h-12 opacity-80 hover:opacity-100 transition-opacity"
+              />
             </div>
             <div className="flex items-center space-x-3">
               <Button variant="outline" size="sm">
@@ -254,10 +255,13 @@ export default function WarRoom() {
           
           {/* Full Screen Chat Interface */}
           <div className="relative z-10 h-full flex flex-col">
-            {/* Workspace Header */}
+            {/* Logo Header */}
             <div className="text-center py-8">
-              <h1 className="text-xl font-medium text-white/60 mb-2">Productivity Workspace</h1>
-              <p className="text-sm text-slate-400">Your collaborative workspace is ready for action</p>
+              <img 
+                src="/attached_assets/transparent icon cookin dark_1753612745390.png" 
+                alt="Cookin' Knowledge"
+                className="w-20 h-20 mx-auto opacity-80 hover:opacity-100 transition-opacity"
+              />
             </div>
             
             {/* Chat Area */}
