@@ -8,6 +8,10 @@ dist/
 temp_secrets.txt
 .replit
 .vscode/
+.cache/
+*.tgz
+*.tar.gz
+package-lock.json
 coverage/
 *.tgz
 *.tar.gz
