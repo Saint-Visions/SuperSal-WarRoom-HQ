@@ -21,11 +21,11 @@ interface MobileNavProps {
 }
 
 const navItems = [
-  { path: "/command", icon: Home, label: "Command" },
-  { path: "/warroom", icon: Shield, label: "War Room" },
-  { path: "/saintsalme", icon: Star, label: "SaintSal" },
-  { path: "/tools", icon: Search, label: "Tools" },
-  { path: "/settings", icon: Settings, label: "Settings" }
+  { path: "/command", icon: Home, label: "Command", color: "text-blue-400" },
+  { path: "/warroom", icon: Shield, label: "War Room", color: "text-cyan-400" },
+  { path: "/executive", icon: Bot, label: "Executive", color: "text-purple-400" },
+  { path: "/leads", icon: Search, label: "Intelligence", color: "text-green-400" },
+  { path: "/saintsalme", icon: Star, label: "Execution", color: "text-amber-400" }
 ];
 
 export default function MobileNav({ currentPath }: MobileNavProps) {
@@ -43,7 +43,7 @@ export default function MobileNav({ currentPath }: MobileNavProps) {
                 size="sm"
                 className={`flex flex-col items-center gap-1 h-auto p-2 ${
                   currentPath === item.path 
-                    ? "text-primary bg-primary/10" 
+                    ? `${item.color} bg-primary/10` 
                     : "text-gray-400 hover:text-white"
                 }`}
               >

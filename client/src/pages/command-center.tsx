@@ -180,7 +180,9 @@ export default function CommandCenter() {
               <CardContent>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="text-center">
-                    <p className="text-2xl font-bold text-green-400">342</p>
+                    <p className="text-2xl font-bold text-green-400">
+                      {dashboardData?.externalKPIs?.activeLeads || 342}
+                    </p>
                     <p className="text-xs text-gray-400">Active Leads</p>
                     <div className="flex items-center justify-center mt-1">
                       <TrendingUp className="w-3 h-3 text-green-400 mr-1" />
@@ -188,7 +190,9 @@ export default function CommandCenter() {
                     </div>
                   </div>
                   <div className="text-center">
-                    <p className="text-2xl font-bold text-blue-400">25%</p>
+                    <p className="text-2xl font-bold text-blue-400">
+                      {dashboardData?.externalKPIs?.conversionRate || 25}%
+                    </p>
                     <p className="text-xs text-gray-400">Conversion Rate</p>
                     <div className="flex items-center justify-center mt-1">
                       <TrendingUp className="w-3 h-3 text-blue-400 mr-1" />
@@ -196,15 +200,21 @@ export default function CommandCenter() {
                     </div>
                   </div>
                   <div className="text-center">
-                    <p className="text-2xl font-bold text-primary">$25.8K</p>
+                    <p className="text-2xl font-bold text-primary">
+                      ${((dashboardData?.externalKPIs?.monthlyRevenue || 25847) / 1000).toFixed(1)}K
+                    </p>
                     <p className="text-xs text-gray-400">Monthly Revenue</p>
                     <div className="flex items-center justify-center mt-1">
                       <TrendingUp className="w-3 h-3 text-primary mr-1" />
-                      <span className="text-xs text-primary">+18%</span>
+                      <span className="text-xs text-primary">
+                        +{dashboardData?.externalKPIs?.revenueChange || 18}%
+                      </span>
                     </div>
                   </div>
                   <div className="text-center">
-                    <p className="text-2xl font-bold text-purple-400">1,450</p>
+                    <p className="text-2xl font-bold text-purple-400">
+                      {dashboardData?.externalKPIs?.totalContacts?.toLocaleString() || '1,450'}
+                    </p>
                     <p className="text-xs text-gray-400">Total Contacts</p>
                     <div className="flex items-center justify-center mt-1">
                       <TrendingUp className="w-3 h-3 text-purple-400 mr-1" />
@@ -263,7 +273,9 @@ export default function CommandCenter() {
                       <span className="text-gray-400">Completed</span>
                     </div>
                     <div className="text-center p-2 bg-purple-500/10 rounded border border-purple-500/20">
-                      <span className="text-purple-400 font-medium">$2.8K</span>
+                      <span className="text-purple-400 font-medium">
+                        ${((dashboardData?.externalKPIs?.monthlyRevenue || 25847) / 1000).toFixed(1)}K
+                      </span>
                       <br />
                       <span className="text-gray-400">Revenue</span>
                     </div>
