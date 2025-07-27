@@ -186,7 +186,7 @@ export default function SaintSalMe() {
                 <div 
                   className="w-8 h-8 bg-cover bg-center rounded opacity-90 hover:opacity-100 transition-opacity border border-amber-400/20"
                   style={{
-                    backgroundImage: `url('/attached_assets/Frame 1000002501_1753620834045.png')`,
+                    backgroundImage: `url('/attached_assets/Frame 1000002501_1753624236163.png')`,
                     backgroundSize: 'cover'
                   }}
                 />
@@ -278,7 +278,7 @@ export default function SaintSalMe() {
               <div 
                 className="w-12 h-12 bg-cover bg-center rounded opacity-90 hover:opacity-100 transition-opacity border border-amber-400/20"
                 style={{
-                  backgroundImage: `url('/attached_assets/Frame 1000002501_1753620834045.png')`,
+                  backgroundImage: `url('/attached_assets/Frame 1000002501_1753624236163.png')`,
                   backgroundSize: 'cover'
                 }}
               />
