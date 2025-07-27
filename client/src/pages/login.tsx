@@ -97,9 +97,13 @@ export default function Login() {
               initial={{ scale: 0.8 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.2, duration: 0.5 }}
-              className="mx-auto w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center"
+              className="mx-auto"
             >
-              <Shield className="w-8 h-8 text-primary" />
+              <img 
+                src="/side-by-side-logo.png" 
+                alt="Sv. | Cookin' Knowledge" 
+                className="w-48 h-auto mx-auto opacity-90 hover:opacity-100 transition-opacity"
+              />
             </motion.div>
             
             <div>
