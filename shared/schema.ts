@@ -12,6 +12,9 @@ export const users = pgTable("users", {
   lastName: text("last_name"),
   stripeCustomerId: text("stripe_customer_id"),
   stripeSubscriptionId: text("stripe_subscription_id"),
+  biometricEnabled: boolean("biometric_enabled").default(false),
+  lastLogin: timestamp("last_login"),
+  isAdmin: boolean("is_admin").default(false),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
@@ -173,3 +176,69 @@ export type Workflow = typeof workflows.$inferSelect;
 export type InsertWorkflow = z.infer<typeof insertWorkflowSchema>;
 export type ChatSession = typeof chatSessions.$inferSelect;
 export type InsertChatSession = z.infer<typeof insertChatSessionSchema>;
+
+// SuperSal Executive Tasks
+export const supersalTasks = pgTable("supersal_tasks", {
+  id: uuid("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: uuid("user_id").references(() => users.id).notNull(),
+  title: text("title").notNull(),
+  description: text("description"),
+  instructions: text("instructions"),
+  priority: text("priority").default("medium"), // low, medium, high, urgent
+  status: text("status").default("pending"), // pending, in_progress, completed, cancelled
+  dueDate: timestamp("due_date"),
+  completed: boolean("completed").default(false),
+  aiGenerated: boolean("ai_generated").default(false),
+  supersalResponse: text("supersal_response"),
+  tags: jsonb("tags"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Business Operations
+export const businesses = pgTable("businesses", {
+  id: uuid("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: uuid("user_id").references(() => users.id).notNull(),
+  name: text("name").notNull(),
+  type: text("type"), // client, partner, vendor, internal
+  ghlAccountId: text("ghl_account_id"),
+  status: text("status").default("active"), // active, inactive, pending
+  revenue: decimal("revenue", { precision: 10, scale: 2 }),
+  lastContact: timestamp("last_contact"),
+  notes: text("notes"),
+  metadata: jsonb("metadata"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// War Room System Status
+export const systemStatus = pgTable("system_status", {
+  id: uuid("id").primaryKey().default(sql`gen_random_uuid()`),
+  service: text("service").notNull(), // ghl, azure, stripe, openai, twilio
+  status: text("status").notNull(), // online, offline, degraded, maintenance
+  lastCheck: timestamp("last_check").defaultNow(),
+  responseTime: integer("response_time"), // in milliseconds
+  errorCount: integer("error_count").default(0),
+  metadata: jsonb("metadata"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Insert schemas for new tables
+export const insertSupersalTaskSchema = createInsertSchema(supersalTasks).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertBusinessSchema = createInsertSchema(businesses).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+// Types for new tables
+export type SupersalTask = typeof supersalTasks.$inferSelect;
+export type InsertSupersalTask = z.infer<typeof insertSupersalTaskSchema>;
+export type Business = typeof businesses.$inferSelect;
+export type InsertBusiness = z.infer<typeof insertBusinessSchema>;
+export type SystemStatus = typeof systemStatus.$inferSelect;

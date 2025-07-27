@@ -60,6 +60,14 @@ export interface IStorage {
   getChatSession(id: string): Promise<ChatSession | undefined>;
   createChatSession(session: InsertChatSession): Promise<ChatSession>;
   updateChatSession(id: string, session: Partial<ChatSession>): Promise<ChatSession>;
+
+  // SuperSal Tasks
+  getSupersalTasks(userId: string): Promise<any[]>;
+  createSupersalTask(task: any): Promise<any>;
+  completeSupersalTask(id: string): Promise<any>;
+
+  // System Status
+  getSystemStatus(): Promise<any[]>;
 }
 
 export class MemStorage implements IStorage {
@@ -71,6 +79,8 @@ export class MemStorage implements IStorage {
   private aiMemory: Map<string, AiMemory> = new Map();
   private workflows: Map<string, Workflow> = new Map();
   private chatSessions: Map<string, ChatSession> = new Map();
+  private supersalTasks: Map<string, any> = new Map();
+  private systemStatuses: Map<string, any> = new Map();
 
   // Users
   async getUser(id: string): Promise<User | undefined> {
@@ -309,6 +319,83 @@ export class MemStorage implements IStorage {
     };
     this.chatSessions.set(id, updatedSession);
     return updatedSession;
+  }
+
+  // SuperSal Tasks
+  async getSupersalTasks(userId: string): Promise<any[]> {
+    return Array.from(this.supersalTasks.values())
+      .filter(task => task.userId === userId)
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  }
+
+  async createSupersalTask(taskData: any): Promise<any> {
+    const id = randomUUID();
+    const task = {
+      id,
+      ...taskData,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    this.supersalTasks.set(id, task);
+    return task;
+  }
+
+  async completeSupersalTask(id: string): Promise<any> {
+    const task = this.supersalTasks.get(id);
+    if (!task) {
+      throw new Error("Task not found");
+    }
+    
+    task.completed = true;
+    task.status = "completed";
+    task.updatedAt = new Date().toISOString();
+    task.supersalResponse = "Task completed successfully by SuperSal™";
+    
+    this.supersalTasks.set(id, task);
+    return task;
+  }
+
+  // System Status
+  async getSystemStatus(): Promise<any[]> {
+    // Mock system status data
+    return [
+      {
+        id: "azure-status",
+        service: "azure",
+        status: "connected",
+        lastCheck: new Date().toISOString(),
+        responseTime: 124,
+        errorCount: 0,
+        metadata: { version: "2024.1" }
+      },
+      {
+        id: "stripe-status", 
+        service: "stripe",
+        status: "live",
+        lastCheck: new Date().toISOString(),
+        responseTime: 89,
+        errorCount: 0,
+        metadata: { mode: "live" }
+      },
+      {
+        id: "ghl-status",
+        service: "ghl", 
+        status: "mock",
+        lastCheck: new Date().toISOString(),
+        responseTime: 156,
+        errorCount: 2,
+        metadata: { fallback: true }
+      },
+      {
+        id: "twilio-status",
+        service: "twilio",
+        status: "active", 
+        lastCheck: new Date().toISOString(),
+        responseTime: 201,
+        errorCount: 0,
+        metadata: { sms_enabled: true }
+      }
+    ];
   }
 }
 

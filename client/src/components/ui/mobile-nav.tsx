@@ -8,7 +8,9 @@ import {
   Menu, 
   X,
   Home,
-  Settings
+  Settings,
+  Shield,
+  Star
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -17,10 +19,10 @@ interface MobileNavProps {
 }
 
 const navItems = [
-  { path: "/", icon: Home, label: "Command" },
-  { path: "/ai", icon: Bot, label: "AI" },
-  { path: "/devlab", icon: Terminal, label: "DevLab" },
-  { path: "/settings", icon: Settings, label: "Settings" }
+  { path: "/command", icon: Home, label: "Command" },
+  { path: "/warroom", icon: Shield, label: "War Room" },
+  { path: "/executive", icon: Star, label: "Executive" },
+  { path: "/ai", icon: Bot, label: "AI" }
 ];
 
 export default function MobileNav({ currentPath }: MobileNavProps) {
