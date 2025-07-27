@@ -1045,24 +1045,39 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Simulate advanced AI processing with workspace integration
       await new Promise(resolve => setTimeout(resolve, 1500 + Math.random() * 1000));
       
-      const responses = [
-        {
-          response: `Based on your current business metrics, I see revenue is at $${(127000 + Math.random() * 10000).toFixed(0)}. I can help optimize your lead conversion pipeline to reach your $150K target. Would you like me to analyze your top-performing workflows?`,
-          analysis: "Detected revenue optimization opportunity based on current business intelligence data and performance trends."
-        },
-        {
-          response: `I've analyzed your Saint Vision brokerage performance. Your 8 active listings show strong potential. I recommend focusing on the 3 warm leads in your pipeline - they have 67% higher conversion probability based on my analysis.`,
-          analysis: "Real estate market analysis combined with lead scoring algorithms to prioritize high-value opportunities."
-        },
-        {
-          response: `Your system shows 99.9% uptime - excellent! I can integrate with your Azure services, GoHighLevel CRM, and Stripe payments to create automated workflows. What specific business process would you like me to optimize first?`,
-          analysis: "System health monitoring indicates optimal performance for implementing advanced automation workflows."
-        },
-        {
-          response: `I have full access to your business intelligence dashboard, lead management system, database, and all integrated tools. I can help with real-time analytics, workflow automation, lead qualification, or strategic planning. What's your priority?`,
-          analysis: "Full workspace access confirmed - all production tools and data sources are available for comprehensive business optimization."
-        }
-      ];
+      // Casual execution responses based on message content
+      let response = "Looking good! Your business stuff is running well. Made some decent money this month and the leads are flowing. What do you want to work on?";
+      let analysis = "Everything's working smooth - systems are up and running fine.";
+      
+      if (message.toLowerCase().includes('hello') || message.toLowerCase().includes('hey') || message.toLowerCase().includes('hi')) {
+        response = "Hey! Good to see you. Your execution tools are ready to go - everything's connected and working. What should we tackle today?";
+        analysis = "All systems operational and ready for business execution.";
+      } else {
+        // Casual default responses
+        const casualResponses = [
+          {
+            response: `Your business is doing well! Made about $${(127000 + Math.random() * 10000).toFixed(0)} and leads are converting nicely. Want me to run some automation or check on something specific?`,
+            analysis: "Business performance is solid with good revenue and lead conversion."
+          },
+          {
+            response: "Found some good prospects that look promising. Your CRM is working great and follow-ups are going out automatically. Should I focus on these leads?",
+            analysis: "Lead pipeline is strong with automated systems working effectively."
+          },
+          {
+            response: "Everything's running smooth - your Saint Vision deals are moving and your automation saved you time. System's running fast too.",
+            analysis: "Operations are optimized with good performance across all systems."
+          },
+          {
+            response: "All your integrations are working great - Azure, Stripe, GoHighLevel all connected and performing well. Ready to execute whatever you need.",
+            analysis: "All business systems integrated and operating at full capacity."
+          }
+        ];
+        const selected = casualResponses[Math.floor(Math.random() * casualResponses.length)];
+        response = selected.response;
+        analysis = selected.analysis;
+      }
+
+      const responses = [{ response, analysis }];
       
       const selectedResponse = responses[Math.floor(Math.random() * responses.length)];
       
@@ -1094,23 +1109,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { message, context } = req.body;
       
-      // Simulate production planning AI processing
-      await new Promise(resolve => setTimeout(resolve, 1500 + Math.random() * 1000));
+      // Simulate thinking time but shorter
+      await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 1000));
       
-      const productionResponses = [
-        {
-          response: `Based on your current system metrics, I've identified 3 optimization opportunities: 1) Your lead conversion pipeline is at 67% efficiency - we can boost this to 80% with automated follow-ups. 2) Database queries are averaging 2.3s - implementing indexing will reduce this to <500ms. 3) Azure integration shows 99.2% uptime - excellent performance. Should I proceed with the pipeline optimization?`,
-        },
-        {
-          response: `Production analysis complete. Your War Room is operating at peak efficiency with 47 active clients generating $8,947 revenue. I recommend focusing on your Saint Vision brokerage - 3 warm leads show 78% conversion probability. The GoHighLevel integration is capturing 23 new leads daily. Want me to prioritize the high-probability leads?`,
-        },
-        {
-          response: `System monitoring shows optimal performance across all production centers. Azure services: 99.9% uptime, Database: <200ms response time, Integrations: All operational. I can help you scale operations - your current infrastructure can handle 3x the current load. Should I prepare scaling recommendations?`,
-        },
-        {
-          response: `Production planning mode activated. I have full access to your business intelligence, lead management, database operations, and automation systems. Current focus areas: Lead conversion optimization, revenue pipeline analysis, system performance monitoring. What specific production challenge should we tackle first?`,
-        }
-      ];
+      // More specific responses based on message content
+      let response = "Hey! Everything's running smooth right now. Your stuff is doing well - made some good money this month. What do you need help with?";
+      
+      if (message.toLowerCase().includes('time') || message.toLowerCase().includes('appointment') || message.toLowerCase().includes('appt')) {
+        response = "Your next appointment is tomorrow at 2:30 PM with the Johnson client. After that you've got a strategy call at 4 PM. Want me to send you the details?";
+      } else if (message.toLowerCase().includes('day') || message.toLowerCase().includes('today') || message.toLowerCase().includes('date')) {
+        response = "It's Sunday, July 27th, 2025. Pretty quiet day so far. Perfect time to catch up on some planning or just relax. What's the plan?";
+      } else if (message.toLowerCase().includes('hello') || message.toLowerCase().includes('hey') || message.toLowerCase().includes('hi')) {
+        response = "Hey there! Good to see you. Everything's running smooth - your systems are humming along nicely. What can I help you with today?";
+      } else {
+        // Casual default responses  
+        const casualResponses = [
+          "Looking good today! Your systems are all up and running fine. Made about $12k this month so far. Your clients seem happy.",
+          "Yeah, I can see a few things we could improve. Your conversion rate could be better - maybe set up some automated follow-ups? Database is a bit slow, but nothing major.",
+          "Things are going really well! You've got 156 leads in the pipeline and revenue is solid at $25k this month. Your campaigns are working better than usual.",
+          "Everything looks pretty good from what I can see. Saint Vision closed some deals, the automation saved you time, and we found some good prospects. System's not even breaking a sweat."
+        ];
+        response = casualResponses[Math.floor(Math.random() * casualResponses.length)];
+      }
+
+      const productionResponses = [{ response }];
       
       const selectedResponse = productionResponses[Math.floor(Math.random() * productionResponses.length)];
       
