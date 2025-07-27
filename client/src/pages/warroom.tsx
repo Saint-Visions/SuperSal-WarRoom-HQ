@@ -33,10 +33,12 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
+import SuperSalAuthorityPanel from "@/components/supersal-authority-panel";
 
 export default function WarRoom() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [selectedTool, setSelectedTool] = useState("productivity");
+  const [activeTab, setActiveTab] = useState("operations");
   const [message, setMessage] = useState("");
   const [isThinking, setIsThinking] = useState(false);
   const [conversation, setConversation] = useState<any[]>([]);
@@ -112,6 +114,7 @@ export default function WarRoom() {
     { id: "security", icon: Shield, label: "Security", color: "text-red-400" },
     { id: "integrations", icon: Globe, label: "Integrations", color: "text-orange-400" },
     { id: "radar", icon: Radar, label: "Radar", color: "text-teal-400" },
+    { id: "authority", icon: Shield, label: "SuperSal Authority", color: "text-primary" },
     { id: "settings", icon: Settings, label: "Settings", color: "text-gray-400" }
   ];
 
@@ -296,7 +299,11 @@ export default function WarRoom() {
               <div className="h-full flex flex-col justify-center">
                 
                 <div className="flex-1 overflow-y-auto mb-6 min-h-[400px]">
-                  {conversation.length === 0 && !message.trim() && !isThinking ? (
+                  {selectedTool === "authority" ? (
+                    <div className="h-full">
+                      <SuperSalAuthorityPanel />
+                    </div>
+                  ) : conversation.length === 0 && !message.trim() && !isThinking ? (
                     <div className="text-center text-slate-400 py-12 h-full flex flex-col justify-center">
                       <Target className="w-16 h-16 mx-auto mb-4 text-cyan-400" />
                       <h3 className="text-xl font-semibold mb-2 text-white">Production Command Center</h3>

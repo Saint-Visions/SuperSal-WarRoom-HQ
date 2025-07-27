@@ -7,6 +7,7 @@ import { ghlService } from "./services/ghl-service";
 import { stripeService } from "./services/stripe-service";
 import { microsoftCalendarService } from "./services/microsoft-calendar-service";
 import { twilioService } from "./services/twilio-service";
+import { supersalAuthority } from "./services/supersalFunctionalAuthority";
 import multer from "multer";
 import { 
   insertContactSchema, 
@@ -1364,6 +1365,47 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(result);
     } catch (error) {
       res.status(500).json({ error: 'Execution action failed' });
+    }
+  });
+
+  // SuperSal Functional Authority API
+  app.post("/api/supersal/audit", async (req, res) => {
+    try {
+      const { taskName, targetPage, criticalSystems } = req.body;
+      
+      if (!taskName || !targetPage || !criticalSystems) {
+        return res.status(400).json({ error: 'Missing required audit parameters' });
+      }
+
+      const auditResult = await supersalAuthority.auditPage(taskName, targetPage, criticalSystems);
+      const tacticalResponse = supersalAuthority.generateTacticalPrompt(auditResult);
+      
+      res.json({
+        audit: auditResult,
+        response: tacticalResponse,
+        timestamp: new Date().toISOString()
+      });
+    } catch (error: any) {
+      res.status(500).json({ error: 'SuperSal audit failed: ' + error.message });
+    }
+  });
+
+  app.get("/api/supersal/system-status", async (req, res) => {
+    try {
+      const criticalSystems = ['database', 'openai', 'azure', 'stripe', 'ghl', 'microsoft'];
+      const auditResult = await supersalAuthority.auditPage(
+        'System Health Check',
+        'All Critical Systems',
+        criticalSystems
+      );
+      
+      res.json({
+        status: auditResult.overallStatus,
+        systems: auditResult.checks.externalSystems,
+        lastCheck: auditResult.timestamp
+      });
+    } catch (error: any) {
+      res.status(500).json({ error: 'System status check failed: ' + error.message });
     }
   });
 
