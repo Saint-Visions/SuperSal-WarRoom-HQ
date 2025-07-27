@@ -246,23 +246,6 @@ export default function WarRoom() {
             {/* Center Chat Interface */}
             <div className="lg:col-span-2">
               <Card className="bg-slate-900/30 border-slate-700 h-full flex flex-col">
-                <CardHeader className="pb-4 border-b border-slate-700">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-8 h-8 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-lg flex items-center justify-center">
-                        <Brain className="w-5 h-5 text-white" />
-                      </div>
-                      <div>
-                        <CardTitle className="text-white">Execute business operations, analyze data, manage workflows...</CardTitle>
-                        <p className="text-sm text-slate-400">Dual companion ready • Azure-powered • Production-grade operations</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <Badge variant="secondary" className="bg-cyan-500/20 text-cyan-400">PRODUCTION</Badge>
-                      <div className="text-xs text-slate-400">SAINTAL GOTTA QUY ⚡</div>
-                    </div>
-                  </div>
-                </CardHeader>
                 
                 <CardContent className="flex-1 flex flex-col p-0">
                   {/* Chat Area */}
