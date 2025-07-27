@@ -61,6 +61,11 @@ export default function SaintSalMe() {
     refetchInterval: 10000,
   });
 
+  const { data: realtimeData } = useQuery({
+    queryKey: ['/api/workspace/realtime'],
+    refetchInterval: 3000,
+  });
+
   // AI chat for execution tasks
   const aiChatMutation = useMutation({
     mutationFn: async (data: { message: string; mode: string }) => {
