@@ -29,6 +29,7 @@ import {
   Rocket
 } from "lucide-react";
 import PartnerTechLogo from "@/components/ui/partnertech-logo";
+import { PremiumCookinLogo } from "@/components/ui/logo-components";
 
 interface LeadIntelligence {
   id: string;
@@ -148,11 +149,17 @@ export default function LeadIntelligence() {
     <ParallaxBackground className="min-h-screen">
       <div className="min-h-screen bg-charcoal/90 text-white p-6">
         <div className="max-w-7xl mx-auto">
+        
+        {/* Premium Cookin' Knowledge Wall Logo - Top Left */}
+        <div className="absolute top-6 left-6 z-50">
+          <PremiumCookinLogo size="lg" animated={true} />
+        </div>
+        
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-6"
+          className="mb-6 mt-40"
         >
           <div className="flex items-center space-x-4 mb-4">
             <PartnerTechLogo size="lg" animated={true} />

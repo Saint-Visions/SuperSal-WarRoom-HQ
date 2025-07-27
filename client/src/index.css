@@ -221,6 +221,13 @@
     @apply text-gray-400 text-xs;
   }
 
+  /* Custom animations */
+  @keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    50% { transform: translateX(100%); }
+    100% { transform: translateX(100%); }
+  }
+
   /* Command center specific styles */
   .command-grid {
     @apply grid grid-cols-1 lg:grid-cols-3 gap-6;
