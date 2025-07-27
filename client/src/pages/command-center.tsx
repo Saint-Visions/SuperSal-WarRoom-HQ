@@ -21,9 +21,12 @@ import {
   AlertTriangle,
   Settings,
   LogOut,
-  Shield
+  Shield,
+  Upload
 } from "lucide-react";
 import { Link } from "wouter";
+import DragDropZone from "@/components/ui/drag-drop-zone";
+import TerminalIntegration from "@/components/ui/terminal-integration";
 
 export default function CommandCenter() {
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -53,11 +56,18 @@ export default function CommandCenter() {
   const contacts = dashboardData?.contacts || [];
   const kpiMetrics = dashboardData?.kpiMetrics || [];
 
+  // Saint Vision Group LLC Brokerage Data
+  const { data: brokerageData } = useQuery({
+    queryKey: ['/api/brokerage/dashboard'],
+  });
+
   const quickActions = [
     { id: "warroom", label: "War Room", icon: Shield, href: "/warroom", color: "bg-red-500/20 text-red-400" },
     { id: "executive", label: "SuperSal Executive", icon: Star, href: "/executive", color: "bg-primary/20 text-primary" },
-    { id: "new_call", label: "Schedule Call", icon: Phone, color: "bg-blue-500/20 text-blue-400" },
-    { id: "new_contact", label: "Add Contact", icon: Users, color: "bg-green-500/20 text-green-400" },
+    { id: "leads", label: "PartnerTech.ai", icon: TrendingUp, href: "/leads", color: "bg-blue-500/20 text-blue-400" },
+    { id: "brokerage", label: "Saint Vision Brokerage", icon: Shield, href: "#", color: "bg-purple-500/20 text-purple-400" },
+    { id: "new_call", label: "Schedule Call", icon: Phone, color: "bg-green-500/20 text-green-400" },
+    { id: "new_contact", label: "Add Contact", icon: Users, color: "bg-orange-500/20 text-orange-400" },
   ];
 
   const upcomingTasks = tasks.slice(0, 5);
@@ -426,6 +436,38 @@ export default function CommandCenter() {
               </CardContent>
             </Card>
 
+            {/* Saint Vision Group LLC Brokerage */}
+            <Card className="bg-black/40 backdrop-blur-xl border-purple-500/20">
+              <CardHeader>
+                <CardTitle className="flex items-center text-purple-400">
+                  <Shield className="w-5 h-5 mr-2" />
+                  Saint Vision Brokerage
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-xs text-gray-400">Active Listings</p>
+                    <p className="text-lg font-bold text-purple-400">{brokerageData?.listings || 24}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-400">Pending Sales</p>
+                    <p className="text-lg font-bold text-green-400">{brokerageData?.pendingSales || 8}</p>
+                  </div>
+                </div>
+                <div>
+                  <div className="flex justify-between text-sm mb-1">
+                    <span>Monthly Commission</span>
+                    <span>${brokerageData?.monthlyCommission || '12.5K'}</span>
+                  </div>
+                  <Progress value={brokerageData?.commissionProgress || 78} className="h-2" />
+                </div>
+                <Button size="sm" className="w-full bg-purple-500/20 hover:bg-purple-500/30 text-purple-400 border border-purple-500/30">
+                  Open GHL Brokerage
+                </Button>
+              </CardContent>
+            </Card>
+
             {/* Performance Insights */}
             <Card className="bg-black/40 backdrop-blur-xl border-primary/20">
               <CardHeader>
@@ -458,6 +500,30 @@ export default function CommandCenter() {
                 </div>
               </CardContent>
             </Card>
+            {/* Drag & Drop Zone for Screenshots */}
+            <Card className="bg-black/40 backdrop-blur-xl border-primary/20 col-span-full">
+              <CardHeader>
+                <CardTitle className="flex items-center text-primary">
+                  <Upload className="w-5 h-5 mr-2" />
+                  Quick File Upload
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <DragDropZone 
+                  className="min-h-[80px]"
+                  compact={true}
+                  onFileUpload={(files) => {
+                    console.log('Files uploaded:', files);
+                    // Integration with AI assistant and analysis
+                  }}
+                />
+              </CardContent>
+            </Card>
+
+            {/* Terminal Integration */}
+            <div className="col-span-full">
+              <TerminalIntegration embedded={true} />
+            </div>
           </motion.div>
         </div>
       </div>

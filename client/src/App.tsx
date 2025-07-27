@@ -10,6 +10,7 @@ import SupersalExecutive from "@/pages/supersal-executive";
 import LeadIntelligence from "@/pages/lead-intelligence";
 import NotFound from "@/pages/not-found";
 import MobileNav from "@/components/ui/mobile-nav";
+import StickyCompanion from "@/components/ui/sticky-companion";
 
 function Router() {
   const [location] = useLocation();
@@ -38,6 +39,7 @@ function App() {
         <div className="dark min-h-screen bg-background text-foreground">
           <Toaster />
           <Router />
+          <StickyCompanion />
         </div>
       </TooltipProvider>
     </QueryClientProvider>

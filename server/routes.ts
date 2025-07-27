@@ -605,6 +605,97 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Terminal Integration API
+  app.get('/api/terminal/status', (req, res) => {
+    res.json({ connected: true, shell: 'bash', version: '5.0' });
+  });
+
+  app.post('/api/terminal/execute', (req, res) => {
+    const { command } = req.body;
+    
+    // Mock terminal execution for demo
+    const mockOutputs: Record<string, string> = {
+      'ls -la': 'total 48\ndrwxr-xr-x 12 user user 4096 Jan 27 08:40 .\ndrwxr-xr-x  3 user user 4096 Jan 27 08:00 ..\n-rw-r--r--  1 user user  220 Jan 27 08:00 .bashrc',
+      'git status': 'On branch main\nYour branch is up to date with \'origin/main\'.\nnothing to commit, working tree clean',
+      'npm install': 'npm install completed successfully\nPackages installed: 247\nTime: 15.3s',
+      'uname -a': 'Linux replit 5.4.0-91-generic #102-Ubuntu SMP x86_64 GNU/Linux'
+    };
+
+    const output = mockOutputs[command] || `Command "${command}" executed successfully`;
+    
+    res.json({ 
+      success: true, 
+      output,
+      exitCode: 0,
+      command 
+    });
+  });
+
+  // VS Code Integration API
+  app.get('/api/vscode/status', (req, res) => {
+    res.json({ available: true, version: '1.85.0', extensions: ['typescript', 'prettier'] });
+  });
+
+  app.post('/api/vscode/open', (req, res) => {
+    const { file } = req.body;
+    res.json({ 
+      success: true, 
+      message: `Opening ${file || 'project'} in VS Code`,
+      url: `vscode://file/${process.cwd()}${file ? '/' + file : ''}`
+    });
+  });
+
+  // File Upload API
+  app.post('/api/upload', upload.array('files'), (req, res) => {
+    try {
+      const files = req.files as Express.Multer.File[];
+      const fileData = files.map(file => ({
+        filename: file.filename,
+        originalName: file.originalname,
+        size: file.size,
+        mimetype: file.mimetype,
+        path: file.path
+      }));
+
+      res.json({
+        success: true,
+        files: fileData,
+        message: `Successfully uploaded ${files.length} file(s)`
+      });
+    } catch (error) {
+      res.status(400).json({ 
+        success: false, 
+        message: 'Upload failed: ' + error.message 
+      });
+    }
+  });
+
+  // Saint Vision Group LLC Brokerage API
+  app.get('/api/brokerage/dashboard', (req, res) => {
+    res.json({
+      listings: 24,
+      pendingSales: 8,
+      monthlyCommission: '12.5K',
+      commissionProgress: 78,
+      totalRevenue: 156750,
+      avgDaysOnMarket: 18,
+      clientSatisfaction: 4.8,
+      activeClients: 42,
+      closedDeals: 15,
+      pipeline: [
+        { id: 1, address: '123 Oak Street', price: 450000, status: 'pending', client: 'Johnson Family' },
+        { id: 2, address: '456 Pine Avenue', price: 325000, status: 'showing', client: 'Miller Corp' },
+        { id: 3, address: '789 Maple Drive', price: 675000, status: 'offer', client: 'Davis Trust' }
+      ],
+      ghlIntegration: {
+        connected: true,
+        lastSync: new Date().toISOString(),
+        contactsCount: 1247,
+        activeLeads: 89
+      }
+    });
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
