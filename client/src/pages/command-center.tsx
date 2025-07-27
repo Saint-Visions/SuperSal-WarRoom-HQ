@@ -468,6 +468,46 @@ export default function CommandCenter() {
               </CardContent>
             </Card>
 
+            {/* SuperSal Execution Chat */}
+            <Card className="bg-black/40 backdrop-blur-xl border-cyan-500/20">
+              <CardHeader>
+                <CardTitle className="flex items-center text-cyan-400">
+                  <MessageSquare className="w-5 h-5 mr-2" />
+                  SuperSal Execution
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <div className="h-32 bg-gray-900/50 rounded-lg p-3 overflow-y-auto text-xs space-y-2">
+                  <div className="text-cyan-400">
+                    <span className="text-gray-400">[10:47]</span> Task: Lead outreach campaign initiated
+                  </div>
+                  <div className="text-green-400">
+                    <span className="text-gray-400">[10:45]</span> ✓ Email sequences deployed to 47 prospects
+                  </div>
+                  <div className="text-yellow-400">
+                    <span className="text-gray-400">[10:43]</span> ⚡ GHL sync: 12 new contacts processed
+                  </div>
+                  <div className="text-purple-400">
+                    <span className="text-gray-400">[10:41]</span> 🎯 Revenue goal: $2.8K of $4K achieved
+                  </div>
+                </div>
+                <div className="flex space-x-2">
+                  <input 
+                    type="text" 
+                    placeholder="Ask SuperSal..." 
+                    className="flex-1 bg-gray-900/50 border border-gray-600 rounded px-2 py-1 text-xs text-white placeholder-gray-400 focus:border-cyan-400 focus:outline-none"
+                  />
+                  <Button size="sm" className="bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-400 border border-cyan-500/30 px-3">
+                    →
+                  </Button>
+                </div>
+                <div className="flex justify-between text-xs text-gray-400">
+                  <span>Active: 5 tasks</span>
+                  <span>Completed: 7/12</span>
+                </div>
+              </CardContent>
+            </Card>
+
             {/* Performance Insights */}
             <Card className="bg-black/40 backdrop-blur-xl border-primary/20">
               <CardHeader>
