@@ -14,6 +14,7 @@ import {
   Search
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import PartnerTechLogo from "@/components/ui/partnertech-logo";
 
 interface MobileNavProps {
   currentPath: string;
@@ -56,9 +57,11 @@ export default function MobileNav({ currentPath }: MobileNavProps) {
       {/* Mobile Header - Quick Access Menu */}
       <div className="md:hidden fixed top-0 left-0 right-0 z-40 bg-black/90 backdrop-blur-lg border-b border-white/10">
         <div className="flex items-center justify-between px-4 py-3">
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-3">
             <Command className="w-6 h-6 text-primary" />
             <span className="font-bold text-lg">SuperSal™</span>
+            <div className="h-4 w-px bg-gray-600"></div>
+            <PartnerTechLogo size="sm" showText={false} />
           </div>
           
           <Button

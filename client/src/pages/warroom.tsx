@@ -284,14 +284,14 @@ export default function WarRoom() {
                 <CardTitle className="flex items-center justify-between text-primary">
                   <div className="flex items-center">
                     <Search className="w-5 h-5 mr-2" />
-                    Lead Intelligence
+                    PartnerTech.ai
                   </div>
                   <Button 
                     size="sm" 
                     className="bg-primary hover:bg-primary/80 text-black"
                     onClick={() => window.location.href = '/leads'}
                   >
-                    Open Hub
+                    Launch AI
                   </Button>
                 </CardTitle>
               </CardHeader>
@@ -308,21 +308,21 @@ export default function WarRoom() {
                 </div>
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
-                    <span>Apollo API</span>
-                    <Badge variant="outline" className="text-green-400">Connected</Badge>
+                    <span>PartnerTech Engine</span>
+                    <Badge variant="outline" className="text-green-400">Online</Badge>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span>Seamless AI</span>
+                    <span>Intent Detection</span>
                     <Badge variant="outline" className="text-green-400">Active</Badge>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span>Clearbit</span>
-                    <Badge variant="outline" className="text-yellow-400">Mock</Badge>
+                    <span>Data Enrichment</span>
+                    <Badge variant="outline" className="text-primary">SuperSal™</Badge>
                   </div>
                 </div>
-                <Button className="w-full bg-gray-700 hover:bg-gray-600" size="sm">
+                <Button className="w-full bg-primary/20 hover:bg-primary/30 text-primary border border-primary/30" size="sm">
                   <Search className="w-4 h-4 mr-2" />
-                  Quick Search
+                  Ask PartnerTech.ai
                 </Button>
               </CardContent>
             </Card>

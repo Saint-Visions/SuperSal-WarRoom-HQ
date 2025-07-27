@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import AppleStyleCard, { AppleButton } from "@/components/ui/apple-style-card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
@@ -26,6 +27,7 @@ import {
   Brain,
   Rocket
 } from "lucide-react";
+import PartnerTechLogo from "@/components/ui/partnertech-logo";
 
 interface LeadIntelligence {
   id: string;
@@ -150,8 +152,13 @@ export default function LeadIntelligence() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-6"
         >
-          <h1 className="text-3xl font-bold mb-2">Lead Intelligence Hub</h1>
-          <p className="text-gray-400">Advanced lead discovery powered by AI • Better than Apollo & Seamless</p>
+          <div className="flex items-center space-x-4 mb-4">
+            <PartnerTechLogo size="lg" animated={true} />
+            <div>
+              <h1 className="text-3xl font-bold">Lead Intelligence</h1>
+              <p className="text-gray-400">Powered by SuperSal™ • OpenAI-level intelligence meets Apple-grade experience</p>
+            </div>
+          </div>
         </motion.div>
 
         {/* Search Interface */}
@@ -161,11 +168,11 @@ export default function LeadIntelligence() {
           transition={{ delay: 0.1 }}
           className="mb-6"
         >
-          <Card className="bg-black/40 backdrop-blur-xl border-primary/20">
+          <AppleStyleCard glow={true}>
             <CardHeader>
               <CardTitle className="flex items-center text-primary">
-                <Brain className="w-5 h-5 mr-2" />
-                Intent-Based Lead Discovery
+                <PartnerTechLogo size="sm" showText={false} />
+                <span className="ml-2">Intelligence Engine</span>
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -173,30 +180,31 @@ export default function LeadIntelligence() {
                 <div className="flex-1 relative">
                   <Search className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
                   <Input
-                    placeholder="Search companies by name, industry, technology, or intent..."
+                    placeholder="Ask PartnerTech.ai: Find SaaS companies with hiring intent..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-10 bg-white/5 border-gray-600 focus:border-primary"
+                    className="pl-10 bg-white/5 border-gray-600 focus:border-primary text-white placeholder-gray-400"
                     onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
                   />
                 </div>
-                <Button
+                <AppleButton
                   onClick={handleSearch}
                   disabled={isSearching || !searchQuery.trim()}
-                  className="bg-primary hover:bg-primary/80 text-black px-8"
+                  variant="primary"
+                  className="px-8"
                 >
                   {isSearching ? (
-                    <div className="flex items-center">
+                    <>
                       <Database className="w-4 h-4 mr-2 animate-spin" />
                       Searching...
-                    </div>
+                    </>
                   ) : (
-                    <div className="flex items-center">
+                    <>
                       <Rocket className="w-4 h-4 mr-2" />
                       Find Leads
-                    </div>
+                    </>
                   )}
-                </Button>
+                </AppleButton>
               </div>
 
               {/* Advanced Filters */}
@@ -241,7 +249,7 @@ export default function LeadIntelligence() {
                 </Select>
               </div>
             </CardContent>
-          </Card>
+          </AppleStyleCard>
         </motion.div>
 
         {/* Results Grid */}
@@ -358,17 +366,17 @@ export default function LeadIntelligence() {
           >
             <Database className="w-16 h-16 text-gray-500 mx-auto mb-4" />
             <h3 className="text-xl font-semibold text-gray-400 mb-2">
-              No leads found
+              PartnerTech.ai Ready
             </h3>
             <p className="text-gray-500 mb-6">
-              Start by searching for companies with buying intent
+              Ask our AI to discover high-intent prospects for you
             </p>
             <Button
-              onClick={() => setSearchQuery("SaaS companies hiring sales")}
+              onClick={() => setSearchQuery("Find technology companies expanding their sales teams")}
               className="bg-primary hover:bg-primary/80 text-black"
             >
               <Brain className="w-4 h-4 mr-2" />
-              Try Sample Search
+              Try AI Search
             </Button>
           </motion.div>
         )}
