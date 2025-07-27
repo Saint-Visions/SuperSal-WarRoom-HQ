@@ -80,8 +80,8 @@ export default function DragDropZone({
     }
 
     const formData = new FormData();
-    Array.from(files).forEach((file, index) => {
-      formData.append(`file_${index}`, file);
+    Array.from(files).forEach((file) => {
+      formData.append('files', file);
     });
     
     uploadMutation.mutate(formData);
