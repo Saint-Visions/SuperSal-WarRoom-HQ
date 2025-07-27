@@ -68,6 +68,16 @@ export interface IStorage {
 
   // System Status
   getSystemStatus(): Promise<any[]>;
+
+  // Lead Intelligence
+  getLeadIntelligence(userId: string): Promise<any[]>;
+  createLeadIntelligence(lead: any): Promise<any>;
+  enrichLead(leadId: string): Promise<any>;
+  searchLeads(searchParams: any): Promise<any[]>;
+
+  // Search Campaigns
+  getSearchCampaigns(userId: string): Promise<any[]>;
+  createSearchCampaign(campaign: any): Promise<any>;
 }
 
 export class MemStorage implements IStorage {
@@ -81,6 +91,8 @@ export class MemStorage implements IStorage {
   private chatSessions: Map<string, ChatSession> = new Map();
   private supersalTasks: Map<string, any> = new Map();
   private systemStatuses: Map<string, any> = new Map();
+  private leadIntelligence: Map<string, any> = new Map();
+  private searchCampaigns: Map<string, any> = new Map();
 
   // Users
   async getUser(id: string): Promise<User | undefined> {
@@ -396,6 +408,137 @@ export class MemStorage implements IStorage {
         metadata: { sms_enabled: true }
       }
     ];
+  }
+
+  // Lead Intelligence
+  async getLeadIntelligence(userId: string): Promise<any[]> {
+    return Array.from(this.leadIntelligence.values())
+      .filter(lead => lead.userId === userId)
+      .sort((a, b) => b.leadScore - a.leadScore);
+  }
+
+  async createLeadIntelligence(leadData: any): Promise<any> {
+    const id = randomUUID();
+    const lead = {
+      id,
+      ...leadData,
+      enrichedAt: new Date().toISOString(),
+      createdAt: new Date().toISOString(),
+    };
+    this.leadIntelligence.set(id, lead);
+    return lead;
+  }
+
+  async enrichLead(leadId: string): Promise<any> {
+    const lead = this.leadIntelligence.get(leadId);
+    if (!lead) {
+      throw new Error("Lead not found");
+    }
+
+    // Mock enrichment - in production this would call Clearbit/Apollo/Seamless APIs
+    lead.contactInfo = {
+      emails: [`contact@${lead.domain}`, `sales@${lead.domain}`],
+      phone: "+1-555-" + Math.floor(Math.random() * 10000).toString().padStart(4, '0'),
+      linkedin: `https://linkedin.com/company/${lead.companyName.toLowerCase().replace(/\s+/g, '-')}`
+    };
+    lead.technologies = lead.technologies || ["Salesforce", "HubSpot", "Slack", "AWS"];
+    lead.leadScore = Math.min(100, lead.leadScore + 15);
+    lead.enrichedAt = new Date().toISOString();
+
+    this.leadIntelligence.set(leadId, lead);
+    return lead;
+  }
+
+  async searchLeads(searchParams: any): Promise<any[]> {
+    const mockLeads = [
+      {
+        companyName: "TechCorp Solutions",
+        domain: "techcorp.com",
+        industry: "Technology",
+        employeeCount: 250,
+        revenue: 15000000,
+        location: "San Francisco, CA",
+        description: "Leading SaaS provider for enterprise automation",
+        leadScore: 85,
+        intent: "buying",
+        source: "apollo",
+        technologies: ["Salesforce", "AWS", "React"],
+      },
+      {
+        companyName: "GrowthMax Inc",
+        domain: "growthmax.io",
+        industry: "Marketing",
+        employeeCount: 150,
+        revenue: 8000000,
+        location: "Austin, TX",
+        description: "Digital marketing agency scaling rapidly",
+        leadScore: 78,
+        intent: "hiring",
+        source: "seamless",
+        technologies: ["HubSpot", "Google Analytics", "Slack"],
+      },
+      {
+        companyName: "DataFlow Systems",
+        domain: "dataflow.com",
+        industry: "Technology",
+        employeeCount: 400,
+        revenue: 25000000,
+        location: "New York, NY",
+        description: "Enterprise data analytics platform",
+        leadScore: 92,
+        intent: "expanding",
+        source: "clearbit",
+        technologies: ["Snowflake", "Tableau", "AWS"],
+      }
+    ];
+
+    // Filter based on search parameters
+    const filteredLeads = mockLeads.filter(lead => {
+      if (searchParams.industry && searchParams.industry !== "all" && 
+          lead.industry.toLowerCase() !== searchParams.industry.toLowerCase()) {
+        return false;
+      }
+      if (searchParams.intent && searchParams.intent !== "all" && 
+          lead.intent !== searchParams.intent) {
+        return false;
+      }
+      if (searchParams.query && 
+          !lead.companyName.toLowerCase().includes(searchParams.query.toLowerCase()) &&
+          !lead.description.toLowerCase().includes(searchParams.query.toLowerCase())) {
+        return false;
+      }
+      return true;
+    });
+
+    // Create and store the leads
+    const storedLeads = [];
+    for (const leadData of filteredLeads) {
+      const lead = await this.createLeadIntelligence({
+        ...leadData,
+        userId: "550e8400-e29b-41d4-a716-446655440000" // Mock user ID
+      });
+      storedLeads.push(lead);
+    }
+
+    return storedLeads;
+  }
+
+  // Search Campaigns
+  async getSearchCampaigns(userId: string): Promise<any[]> {
+    return Array.from(this.searchCampaigns.values())
+      .filter(campaign => campaign.userId === userId)
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  }
+
+  async createSearchCampaign(campaignData: any): Promise<any> {
+    const id = randomUUID();
+    const campaign = {
+      id,
+      ...campaignData,
+      createdAt: new Date().toISOString(),
+    };
+    this.searchCampaigns.set(id, campaign);
+    return campaign;
   }
 }
 

@@ -278,22 +278,52 @@ export default function WarRoom() {
             transition={{ delay: 0.3 }}
             className="space-y-6"
           >
-            {/* GHL Embedded Frame */}
+            {/* Lead Intelligence Integration */}
             <Card className="bg-black/40 backdrop-blur-xl border-primary/20 h-96">
               <CardHeader>
-                <CardTitle className="flex items-center text-primary">
-                  <Globe className="w-5 h-5 mr-2" />
-                  GHL Operations
+                <CardTitle className="flex items-center justify-between text-primary">
+                  <div className="flex items-center">
+                    <Search className="w-5 h-5 mr-2" />
+                    Lead Intelligence
+                  </div>
+                  <Button 
+                    size="sm" 
+                    className="bg-primary hover:bg-primary/80 text-black"
+                    onClick={() => window.location.href = '/leads'}
+                  >
+                    Open Hub
+                  </Button>
                 </CardTitle>
               </CardHeader>
-              <CardContent className="h-full">
-                <div className="bg-gray-900 rounded-lg h-full flex items-center justify-center border border-gray-700">
-                  <div className="text-center">
-                    <Globe className="w-12 h-12 text-gray-500 mx-auto mb-4" />
-                    <p className="text-gray-400">GHL iframe will load here</p>
-                    <p className="text-xs text-gray-500">Full CRM integration</p>
+              <CardContent className="space-y-4">
+                <div className="grid grid-cols-2 gap-4 text-center">
+                  <div>
+                    <p className="text-2xl font-bold text-primary">847</p>
+                    <p className="text-xs text-gray-400">Total Leads</p>
+                  </div>
+                  <div>
+                    <p className="text-2xl font-bold text-green-400">92</p>
+                    <p className="text-xs text-gray-400">High Intent</p>
                   </div>
                 </div>
+                <div className="space-y-2">
+                  <div className="flex justify-between text-sm">
+                    <span>Apollo API</span>
+                    <Badge variant="outline" className="text-green-400">Connected</Badge>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span>Seamless AI</span>
+                    <Badge variant="outline" className="text-green-400">Active</Badge>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span>Clearbit</span>
+                    <Badge variant="outline" className="text-yellow-400">Mock</Badge>
+                  </div>
+                </div>
+                <Button className="w-full bg-gray-700 hover:bg-gray-600" size="sm">
+                  <Search className="w-4 h-4 mr-2" />
+                  Quick Search
+                </Button>
               </CardContent>
             </Card>
 

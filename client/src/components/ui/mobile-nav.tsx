@@ -10,7 +10,8 @@ import {
   Home,
   Settings,
   Shield,
-  Star
+  Star,
+  Search
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -22,7 +23,7 @@ const navItems = [
   { path: "/command", icon: Home, label: "Command" },
   { path: "/warroom", icon: Shield, label: "War Room" },
   { path: "/executive", icon: Star, label: "Executive" },
-  { path: "/ai", icon: Bot, label: "AI" }
+  { path: "/leads", icon: Search, label: "Leads" }
 ];
 
 export default function MobileNav({ currentPath }: MobileNavProps) {

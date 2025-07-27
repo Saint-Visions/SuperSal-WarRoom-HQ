@@ -17,7 +17,9 @@ import {
   insertWorkflowSchema,
   insertChatSessionSchema,
   insertSupersalTaskSchema,
-  insertBusinessSchema
+  insertBusinessSchema,
+  insertLeadIntelligenceSchema,
+  insertSearchCampaignSchema
 } from "@shared/schema";
 
 const upload = multer({ storage: multer.memoryStorage() });
@@ -515,6 +517,91 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(status);
     } catch (error: any) {
       res.status(500).json({ message: "System status error: " + error.message });
+    }
+  });
+
+  // Lead Intelligence & Search
+  app.get("/api/leads/intelligence", async (req, res) => {
+    try {
+      const leads = await storage.getLeadIntelligence(mockUserId);
+      res.json(leads);
+    } catch (error: any) {
+      res.status(500).json({ message: "Get lead intelligence error: " + error.message });
+    }
+  });
+
+  app.post("/api/leads/search", async (req, res) => {
+    try {
+      const leads = await storage.searchLeads(req.body);
+      res.json({ results: leads });
+    } catch (error: any) {
+      res.status(500).json({ message: "Search leads error: " + error.message });
+    }
+  });
+
+  app.post("/api/leads/enrich/:id", async (req, res) => {
+    try {
+      const lead = await storage.enrichLead(req.params.id);
+      res.json(lead);
+    } catch (error: any) {
+      res.status(500).json({ message: "Enrich lead error: " + error.message });
+    }
+  });
+
+  app.post("/api/leads/push-crm/:id", async (req, res) => {
+    try {
+      const lead = await storage.getLeadIntelligence(mockUserId);
+      const targetLead = lead.find((l: any) => l.id === req.params.id);
+      
+      if (!targetLead) {
+        return res.status(404).json({ message: "Lead not found" });
+      }
+
+      // Push to GoHighLevel CRM
+      const ghlContact = await ghlService.createContact({
+        firstName: targetLead.companyName.split(' ')[0],
+        lastName: targetLead.companyName.split(' ').slice(1).join(' ') || 'Company',
+        email: targetLead.contactInfo?.emails?.[0] || `contact@${targetLead.domain}`,
+        phone: targetLead.contactInfo?.phone || '',
+        companyName: targetLead.companyName,
+        website: targetLead.domain,
+        tags: [targetLead.intent, targetLead.industry, 'lead-intel'].filter(Boolean),
+        customFields: {
+          lead_score: targetLead.leadScore.toString(),
+          industry: targetLead.industry,
+          employee_count: targetLead.employeeCount?.toString() || '',
+          revenue: targetLead.revenue?.toString() || '',
+          technologies: targetLead.technologies?.join(', ') || '',
+          source: targetLead.source
+        }
+      });
+
+      res.json({ success: true, ghlContact });
+    } catch (error: any) {
+      res.status(500).json({ message: "Push to CRM error: " + error.message });
+    }
+  });
+
+  // Search Campaigns
+  app.get("/api/leads/campaigns", async (req, res) => {
+    try {
+      const campaigns = await storage.getSearchCampaigns(mockUserId);
+      res.json(campaigns);
+    } catch (error: any) {
+      res.status(500).json({ message: "Get search campaigns error: " + error.message });
+    }
+  });
+
+  app.post("/api/leads/campaigns", async (req, res) => {
+    try {
+      const validatedData = insertSearchCampaignSchema.parse({
+        ...req.body,
+        userId: mockUserId
+      });
+      const campaign = await storage.createSearchCampaign(validatedData);
+      res.json(campaign);
+    } catch (error: any) {
+      res.status(400).json({ message: "Create search campaign error: " + error.message });
     }
   });
 

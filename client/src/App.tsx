@@ -7,6 +7,7 @@ import Login from "@/pages/login";
 import CommandCenter from "@/pages/command-center"; 
 import WarRoom from "@/pages/warroom";
 import SupersalExecutive from "@/pages/supersal-executive";
+import LeadIntelligence from "@/pages/lead-intelligence";
 import NotFound from "@/pages/not-found";
 import MobileNav from "@/components/ui/mobile-nav";
 
@@ -22,6 +23,7 @@ function Router() {
           <Route path="/command" component={CommandCenter} />
           <Route path="/warroom" component={WarRoom} />
           <Route path="/executive" component={SupersalExecutive} />
+          <Route path="/leads" component={LeadIntelligence} />
           <Route component={NotFound} />
         </Switch>
       </div>

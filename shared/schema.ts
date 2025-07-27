@@ -236,9 +236,80 @@ export const insertBusinessSchema = createInsertSchema(businesses).omit({
   updatedAt: true,
 });
 
+// Lead Intelligence & Search
+export const leadIntelligence = pgTable("lead_intelligence", {
+  id: uuid("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: uuid("user_id").references(() => users.id).notNull(),
+  companyName: text("company_name").notNull(),
+  domain: text("domain"),
+  industry: text("industry"),
+  employeeCount: integer("employee_count"),
+  revenue: decimal("revenue", { precision: 15, scale: 2 }),
+  location: text("location"),
+  description: text("description"),
+  technologies: jsonb("technologies"),
+  socialMedia: jsonb("social_media"),
+  contactInfo: jsonb("contact_info"),
+  leadScore: integer("lead_score").default(0),
+  intent: text("intent"), // buying, hiring, expanding, fundraising
+  source: text("source").notNull(), // seamless, apollo, clearbit, web_crawl
+  enrichedAt: timestamp("enriched_at").defaultNow(),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Lead Search Campaigns
+export const searchCampaigns = pgTable("search_campaigns", {
+  id: uuid("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: uuid("user_id").references(() => users.id).notNull(),
+  name: text("name").notNull(),
+  searchQuery: text("search_query").notNull(),
+  filters: jsonb("filters"), // industry, size, location, etc.
+  targetIntent: text("target_intent"),
+  resultsCount: integer("results_count").default(0),
+  lastRun: timestamp("last_run"),
+  status: text("status").default("active"), // active, paused, completed
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Referral Tracking
+export const referrals = pgTable("referrals", {
+  id: uuid("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: uuid("user_id").references(() => users.id).notNull(),
+  referrerContactId: uuid("referrer_contact_id").references(() => contacts.id),
+  referredContactId: uuid("referred_contact_id").references(() => contacts.id),
+  referralCode: text("referral_code"),
+  status: text("status").default("pending"), // pending, converted, rewarded
+  rewardAmount: decimal("reward_amount", { precision: 10, scale: 2 }),
+  convertedAt: timestamp("converted_at"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Insert schemas for new tables
+export const insertLeadIntelligenceSchema = createInsertSchema(leadIntelligence).omit({
+  id: true,
+  enrichedAt: true,
+  createdAt: true,
+});
+
+export const insertSearchCampaignSchema = createInsertSchema(searchCampaigns).omit({
+  id: true,
+  createdAt: true,
+});
+
+export const insertReferralSchema = createInsertSchema(referrals).omit({
+  id: true,
+  createdAt: true,
+});
+
 // Types for new tables
 export type SupersalTask = typeof supersalTasks.$inferSelect;
 export type InsertSupersalTask = z.infer<typeof insertSupersalTaskSchema>;
 export type Business = typeof businesses.$inferSelect;
 export type InsertBusiness = z.infer<typeof insertBusinessSchema>;
 export type SystemStatus = typeof systemStatus.$inferSelect;
+export type LeadIntelligence = typeof leadIntelligence.$inferSelect;
+export type InsertLeadIntelligence = z.infer<typeof insertLeadIntelligenceSchema>;
+export type SearchCampaign = typeof searchCampaigns.$inferSelect;
+export type InsertSearchCampaign = z.infer<typeof insertSearchCampaignSchema>;
+export type Referral = typeof referrals.$inferSelect;
+export type InsertReferral = z.infer<typeof insertReferralSchema>;
