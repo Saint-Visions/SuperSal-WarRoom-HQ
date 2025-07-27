@@ -286,8 +286,8 @@ export default function WarRoom() {
           </div>
         </div>
 
-        {/* Main Content Area - Full Screen */}
-        <div className="flex-1 pt-32 px-6 pb-24 relative">
+        {/* Main Content Area - OpenAI Mobile Style */}
+        <div className="flex-1 pt-24 md:pt-32 px-4 md:px-6 pb-24 relative">
           {/* Background Image */}
           <div 
             className="absolute inset-0 bg-center bg-no-repeat bg-contain opacity-5"
@@ -298,14 +298,16 @@ export default function WarRoom() {
             }}
           />
           
-          {/* Full Screen Chat Interface */}
+          {/* Mobile-Optimized Chat Interface */}
           <div className="relative z-10 h-full flex flex-col">
-            {/* Logo Header */}
-            <div className="text-center py-8">
-              <img 
-                src="/cookin-logo.png" 
-                alt="Cookin' Knowledge"
-                className="w-20 h-20 mx-auto opacity-80 hover:opacity-100 transition-opacity"
+            {/* Mobile Widget Sizes - OpenAI Style */}
+            <div className="text-center py-4 md:py-8">
+              <div 
+                className="w-16 h-16 md:w-20 md:h-20 mx-auto bg-cover bg-center rounded-lg opacity-90 hover:opacity-100 transition-opacity border border-cyan-400/20"
+                style={{
+                  backgroundImage: `url('/attached_assets/Frame 1000002501_1753624236163.png')`,
+                  backgroundSize: 'cover'
+                }}
               />
             </div>
             
@@ -321,8 +323,8 @@ export default function WarRoom() {
                   ) : conversation.length === 0 && !message.trim() && !isThinking ? (
                     <div className="text-center text-slate-400 py-12 h-full flex flex-col justify-center">
                       <Target className="w-16 h-16 mx-auto mb-4 text-cyan-400" />
-                      <h3 className="text-xl font-semibold mb-2 text-white">Production Command Center</h3>
-                      <p>Ready to execute business operations, analyze data, and manage workflows. Ask me anything about production planning.</p>
+                      <h3 className="text-lg md:text-xl font-semibold mb-2 text-white">saintsal™ production command center</h3>
+                      <p className="text-sm md:text-base">Ready to execute business operations, analyze data, and manage workflows. Ask me anything about production planning.</p>
                     </div>
                   ) : (
                     <div className="space-y-4">
@@ -450,7 +452,7 @@ export default function WarRoom() {
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   placeholder="Enter production command or query..."
-                  className="w-full bg-slate-900/80 backdrop-blur-xl border-slate-600/50 text-white resize-none rounded-xl px-6 py-4 pr-32"
+                  className="w-full bg-slate-900/80 backdrop-blur-xl border-slate-600/50 text-white resize-none rounded-xl px-4 md:px-6 py-3 md:py-4 pr-28 md:pr-32 text-sm md:text-base"
                   rows={1}
                   onKeyPress={(e) => {
                     if (e.key === 'Enter' && !e.shiftKey) {

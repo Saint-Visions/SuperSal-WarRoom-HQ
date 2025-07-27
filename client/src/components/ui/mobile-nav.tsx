@@ -33,46 +33,77 @@ export default function MobileNav({ currentPath }: MobileNavProps) {
 
   return (
     <>
-      {/* Mobile Bottom Navigation - Always Visible */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-black/90 backdrop-blur-lg border-t border-white/10">
-        <div className="flex items-center justify-around px-2 py-3">
-          {navItems.map((item) => (
-            <Link key={item.path} href={item.path}>
-              <Button
-                variant="ghost"
-                size="sm"
-                className={`flex flex-col items-center gap-1 h-auto p-2 ${
-                  currentPath === item.path 
-                    ? `${item.color} bg-primary/10` 
-                    : "text-gray-400 hover:text-white"
-                }`}
-              >
-                <item.icon className="w-5 h-5" />
-                <span className="text-xs">{item.label}</span>
-              </Button>
-            </Link>
-          ))}
+      {/* Mobile Bottom Navigation - OpenAI Style Quick Access */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-black/95 backdrop-blur-xl border-t border-slate-700/50">
+        <div className="flex items-center justify-center px-4 py-3">
+          {/* Primary War Room Button - Center Focus */}
+          <Link href="/warroom">
+            <Button
+              variant="ghost"
+              className={`flex items-center gap-2 px-6 py-3 rounded-xl ${
+                currentPath === "/warroom" 
+                  ? "bg-cyan-500/20 text-cyan-400 border border-cyan-500/30" 
+                  : "text-gray-300 hover:text-white hover:bg-slate-800/50"
+              }`}
+            >
+              <Shield className="w-5 h-5" />
+              <span className="font-medium">War Room</span>
+            </Button>
+          </Link>
+          
+          {/* Quick Access Dots */}
+          <div className="flex items-center space-x-1 ml-4">
+            {navItems.slice(1, 4).map((item) => (
+              <Link key={item.path} href={item.path}>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className={`w-10 h-10 p-0 rounded-full ${
+                    currentPath === item.path 
+                      ? `${item.color} bg-primary/10` 
+                      : "text-gray-500 hover:text-white"
+                  }`}
+                >
+                  <item.icon className="w-4 h-4" />
+                </Button>
+              </Link>
+            ))}
+          </div>
         </div>
       </div>
 
-      {/* Mobile Header - Quick Access Menu */}
-      <div className="md:hidden fixed top-0 left-0 right-0 z-40 bg-black/90 backdrop-blur-lg border-b border-white/10">
+      {/* Mobile Header - OpenAI Style Workspace Header */}
+      <div className="md:hidden fixed top-0 left-0 right-0 z-40 bg-black/95 backdrop-blur-xl border-b border-slate-700/50">
         <div className="flex items-center justify-between px-4 py-3">
           <div className="flex items-center space-x-3">
-            <Command className="w-6 h-6 text-primary" />
-            <span className="font-bold text-lg">SuperSal™</span>
-            <div className="h-4 w-px bg-gray-600"></div>
-            <PartnerTechLogo size="sm" showText={false} />
+            <div 
+              className="w-8 h-8 bg-cover bg-center rounded opacity-90 hover:opacity-100 transition-opacity border border-cyan-400/20"
+              style={{
+                backgroundImage: `url('/attached_assets/Frame 1000002501_1753624236163.png')`,
+                backgroundSize: 'cover'
+              }}
+            />
+            <div>
+              <span className="font-bold text-lg text-cyan-400">saintsal™</span>
+              <p className="text-xs text-slate-400">divine authority</p>
+            </div>
           </div>
           
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setIsOpen(!isOpen)}
-            className="p-2"
-          >
-            {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </Button>
+          <div className="flex items-center space-x-2">
+            <Link href="/tools">
+              <Button variant="ghost" size="sm" className="p-2">
+                <Terminal className="w-5 h-5 text-slate-400" />
+              </Button>
+            </Link>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setIsOpen(!isOpen)}
+              className="p-2"
+            >
+              {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </Button>
+          </div>
         </div>
       </div>
 
@@ -93,14 +124,54 @@ export default function MobileNav({ currentPath }: MobileNavProps) {
               className="bg-black/95 backdrop-blur-lg border-b border-white/10 mt-16 p-4"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="space-y-2">
-                <div className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3">
-                  Quick Actions
+              <div className="space-y-3">
+                <div className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-4">
+                  Workspace Access
+                </div>
+                
+                {/* Primary Workspaces */}
+                <div className="space-y-2">
+                  <Link href="/warroom" onClick={() => setIsOpen(false)}>
+                    <Button variant="ghost" className="w-full justify-start text-sm py-3">
+                      <Shield className="w-4 h-4 mr-3 text-cyan-400" />
+                      War Room - Production Center
+                    </Button>
+                  </Link>
+                  <Link href="/saintsalme" onClick={() => setIsOpen(false)}>
+                    <Button variant="ghost" className="w-full justify-start text-sm py-3">
+                      <Star className="w-4 h-4 mr-3 text-amber-400" />
+                      SaintSalMe - Execution Hub
+                    </Button>
+                  </Link>
+                  <Link href="/command" onClick={() => setIsOpen(false)}>
+                    <Button variant="ghost" className="w-full justify-start text-sm py-3">
+                      <Home className="w-4 h-4 mr-3 text-blue-400" />
+                      Command Center
+                    </Button>
+                  </Link>
+                </div>
+
+                <div className="border-t border-slate-700 pt-3">
+                  <div className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">
+                    System Tools
+                  </div>
+                  <Link href="/tools" onClick={() => setIsOpen(false)}>
+                    <Button variant="ghost" className="w-full justify-start text-sm py-2">
+                      <Terminal className="w-4 h-4 mr-3 text-purple-400" />
+                      SuperSal Authority Audit
+                    </Button>
+                  </Link>
+                  <Link href="/settings" onClick={() => setIsOpen(false)}>
+                    <Button variant="ghost" className="w-full justify-start text-sm py-2">
+                      <Settings className="w-4 h-4 mr-3 text-gray-400" />
+                      Configuration
+                    </Button>
+                  </Link>
                 </div>
                 
                 <Button
                   variant="ghost"
-                  className="w-full justify-start text-sm"
+                  className="w-full justify-start text-sm py-2"
                   onClick={() => setIsOpen(false)}
                 >
                   <Command className="w-4 h-4 mr-2 text-primary" />

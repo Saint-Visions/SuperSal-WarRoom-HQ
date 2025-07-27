@@ -18,12 +18,17 @@ import StickyCompanion from "@/components/ui/sticky-companion";
 function Router() {
   const [location] = useLocation();
   
+  // Check if mobile device
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+  
   return (
     <>
       <MobileNav currentPath={location} />
       <div className="pb-20 md:pb-0 pt-16 md:pt-0">
         <Switch>
-          <Route path="/" component={Login} />
+          {/* Mobile: Route to War Room by default, Login for desktop */}
+          <Route path="/" component={isMobile ? WarRoom : Login} />
+          <Route path="/login" component={Login} />
           <Route path="/command" component={CommandCenter} />
           <Route path="/warroom" component={WarRoom} />
           <Route path="/executive" component={SupersalExecutive} />
