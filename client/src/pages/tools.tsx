@@ -35,6 +35,8 @@ import {
   PlayCircle
 } from "lucide-react";
 import StickyNotes from "@/components/ui/sticky-notes";
+import CodeAgent from "@/components/tools/code-agent";
+import CodeBreaker from "@/components/tools/code-breaker";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 
@@ -108,10 +110,14 @@ export default function Tools() {
       icon: Code,
       color: "text-orange-400",
       tools: [
+        { id: "code-agent", name: "Code Agent", icon: Brain, description: "AI-powered code analysis and generation" },
+        { id: "code-breaker", name: "Code Breaker", icon: Shield, description: "Advanced debugging and error resolution" },
         { id: "vscode", name: "VS Code", icon: Code, description: "Integrated development environment" },
         { id: "database", name: "Database", icon: Database, description: "PostgreSQL database management" },
         { id: "api", name: "API Testing", icon: Globe, description: "REST API testing and monitoring" },
-        { id: "logs", name: "System Logs", icon: FileText, description: "Application logging and debugging" }
+        { id: "logs", name: "System Logs", icon: FileText, description: "Application logging and debugging" },
+        { id: "performance", name: "Performance Monitor", icon: Activity, description: "System performance analysis" },
+        { id: "security", name: "Security Scanner", icon: Shield, description: "Vulnerability detection and fixes" }
       ]
     }
   };
@@ -206,7 +212,7 @@ export default function Tools() {
           </div>
         </motion.div>
 
-        {/* Special Sticky Notes Section */}
+        {/* Special Components Sections */}
         {activeCategory === "productivity" && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -218,65 +224,124 @@ export default function Tools() {
           </motion.div>
         )}
 
-        {/* Tools Grid */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-        >
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {toolCategories[activeCategory as keyof typeof toolCategories].tools.map((tool, index) => {
-              const IconComponent = tool.icon;
-              return (
-                <motion.div
-                  key={tool.id}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.1 + index * 0.05 }}
-                >
-                  <Card className="bg-black/40 backdrop-blur-xl border-primary/20 hover:border-primary/40 transition-all duration-300 group cursor-pointer">
-                    <CardHeader>
-                      <CardTitle className="flex items-center justify-between">
-                        <div className="flex items-center space-x-2">
-                          <IconComponent className={`w-5 h-5 ${toolCategories[activeCategory as keyof typeof toolCategories].color}`} />
-                          <span className="text-white group-hover:text-primary transition-colors">
-                            {tool.name}
-                          </span>
+        {/* Code Agent Full Interface */}
+        {selectedTool === "code-agent" && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="mb-8"
+          >
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold text-blue-400">AI Code Agent</h2>
+              <Button
+                variant="outline"
+                onClick={() => setSelectedTool(null)}
+                className="border-gray-600 hover:border-primary/50"
+              >
+                Back to Tools
+              </Button>
+            </div>
+            <CodeAgent />
+          </motion.div>
+        )}
+
+        {/* Code Breaker Full Interface */}
+        {selectedTool === "code-breaker" && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="mb-8"
+          >
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold text-red-400">Code Breaker - Debug & Security</h2>
+              <Button
+                variant="outline"
+                onClick={() => setSelectedTool(null)}
+                className="border-gray-600 hover:border-primary/50"
+              >
+                Back to Tools
+              </Button>
+            </div>
+            <CodeBreaker />
+          </motion.div>
+        )}
+
+        {/* Tools Grid - Hide when specialized tool is selected */}
+        {!selectedTool && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+          >
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {toolCategories[activeCategory as keyof typeof toolCategories].tools.map((tool, index) => {
+                const IconComponent = tool.icon;
+                const isSpecialTool = tool.id === "code-agent" || tool.id === "code-breaker";
+                
+                return (
+                  <motion.div
+                    key={tool.id}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.1 + index * 0.05 }}
+                  >
+                    <Card className="bg-black/40 backdrop-blur-xl border-primary/20 hover:border-primary/40 transition-all duration-300 group cursor-pointer">
+                      <CardHeader>
+                        <CardTitle className="flex items-center justify-between">
+                          <div className="flex items-center space-x-2">
+                            <IconComponent className={`w-5 h-5 ${toolCategories[activeCategory as keyof typeof toolCategories].color}`} />
+                            <span className="text-white group-hover:text-primary transition-colors">
+                              {tool.name}
+                            </span>
+                          </div>
+                          <Badge variant="outline" className="text-xs">
+                            {isSpecialTool ? "Enhanced" : "Active"}
+                          </Badge>
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <p className="text-sm text-gray-400 mb-4 line-clamp-2">
+                          {tool.description}
+                        </p>
+                        <div className="flex space-x-2">
+                          {isSpecialTool ? (
+                            <Button
+                              size="sm"
+                              onClick={() => setSelectedTool(tool.id)}
+                              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
+                            >
+                              <PlayCircle className="w-4 h-4 mr-2" />
+                              Launch
+                            </Button>
+                          ) : (
+                            <Button
+                              size="sm"
+                              onClick={() => handleToolAction(tool.id, "execute")}
+                              disabled={executeToolMutation.isPending}
+                              className="bg-primary/20 hover:bg-primary/30 text-primary border border-primary/30"
+                            >
+                              Execute
+                            </Button>
+                          )}
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => handleToolAction(tool.id, "status")}
+                            className="border-gray-600 hover:border-primary/50"
+                          >
+                            Status
+                          </Button>
                         </div>
-                        <Badge variant="outline" className="text-xs">
-                          Active
-                        </Badge>
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-sm text-gray-400 mb-4 line-clamp-2">
-                        {tool.description}
-                      </p>
-                      <div className="flex space-x-2">
-                        <Button
-                          size="sm"
-                          onClick={() => handleToolAction(tool.id, "execute")}
-                          disabled={executeToolMutation.isPending}
-                          className="bg-primary/20 hover:bg-primary/30 text-primary border border-primary/30"
-                        >
-                          Execute
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => handleToolAction(tool.id, "status")}
-                          className="border-gray-600 hover:border-primary/50"
-                        >
-                          Status
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              );
-            })}
-          </div>
-        </motion.div>
+                      </CardContent>
+                    </Card>
+                  </motion.div>
+                );
+              })}
+            </div>
+          </motion.div>
+        )}
 
         {/* Quick Stats */}
         <motion.div
