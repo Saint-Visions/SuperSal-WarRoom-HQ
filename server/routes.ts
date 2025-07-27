@@ -556,6 +556,82 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // SuperSal Execution Tracking
+  app.get("/api/supersal/execution", async (req, res) => {
+    try {
+      const now = new Date();
+      const executionLog = [
+        {
+          id: "exec_001",
+          timestamp: new Date(now.getTime() - 2 * 60 * 1000).toISOString(),
+          type: "task",
+          message: "Lead outreach campaign initiated",
+          color: "cyan",
+          details: "Started automated email sequence to 47 prospects"
+        },
+        {
+          id: "exec_002", 
+          timestamp: new Date(now.getTime() - 4 * 60 * 1000).toISOString(),
+          type: "success",
+          message: "Email sequences deployed to 47 prospects",
+          color: "green",
+          details: "Deployment successful with 100% delivery rate"
+        },
+        {
+          id: "exec_003",
+          timestamp: new Date(now.getTime() - 6 * 60 * 1000).toISOString(),
+          type: "sync",
+          message: "GHL sync: 12 new contacts processed",
+          color: "yellow", 
+          details: "Synchronized 12 new contacts from GoHighLevel"
+        },
+        {
+          id: "exec_004",
+          timestamp: new Date(now.getTime() - 8 * 60 * 1000).toISOString(),
+          type: "revenue",
+          message: "Revenue goal: $2.8K of $4K achieved",
+          color: "purple",
+          details: "70% of daily revenue target completed"
+        }
+      ];
+
+      const summary = {
+        activeTasks: 5,
+        completedTasks: 7,
+        totalTasks: 12,
+        dailyRevenue: 2800,
+        revenueGoal: 4000,
+        completionRate: Math.round((7 / 12) * 100)
+      };
+
+      res.json({ executionLog, summary });
+    } catch (error: any) {
+      res.status(500).json({ message: "SuperSal execution error: " + error.message });
+    }
+  });
+
+  app.post("/api/supersal/execution/chat", async (req, res) => {
+    try {
+      const { message } = req.body;
+      
+      // Generate AI response
+      const aiResponse = await openaiService.generateCompletion([
+        {
+          role: "system",
+          content: "You are SuperSal™, an executive AI assistant focused on business execution and task management. Provide concise, actionable responses about business operations, lead management, revenue tracking, and task execution. Keep responses under 100 words."
+        },
+        {
+          role: "user",
+          content: message
+        }
+      ]);
+
+      res.json({ response: aiResponse });
+    } catch (error: any) {
+      res.status(500).json({ message: "SuperSal chat error: " + error.message });
+    }
+  });
+
   // System Status Monitoring
   app.get("/api/system/status", async (req, res) => {
     try {

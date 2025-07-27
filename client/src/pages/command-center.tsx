@@ -28,6 +28,7 @@ import { Link } from "wouter";
 import DragDropZone from "@/components/ui/drag-drop-zone";
 import TerminalIntegration from "@/components/ui/terminal-integration";
 
+
 export default function CommandCenter() {
   const [currentTime, setCurrentTime] = useState(new Date());
 
@@ -486,16 +487,16 @@ export default function CommandCenter() {
               <CardContent className="space-y-3">
                 <div className="h-32 bg-gray-900/50 rounded-lg p-3 overflow-y-auto text-xs space-y-2">
                   <div className="text-cyan-400">
-                    <span className="text-gray-400">[10:47]</span> Task: Lead outreach campaign initiated
+                    <span className="text-gray-400">[10:58]</span> Task: Lead outreach campaign initiated
                   </div>
                   <div className="text-green-400">
-                    <span className="text-gray-400">[10:45]</span> ✓ Email sequences deployed to 47 prospects
+                    <span className="text-gray-400">[10:56]</span> ✓ Email sequences deployed to 47 prospects
                   </div>
                   <div className="text-yellow-400">
-                    <span className="text-gray-400">[10:43]</span> ⚡ GHL sync: 12 new contacts processed
+                    <span className="text-gray-400">[10:54]</span> ⚡ GHL sync: 12 new contacts processed
                   </div>
                   <div className="text-purple-400">
-                    <span className="text-gray-400">[10:41]</span> 🎯 Revenue goal: $2.8K of $4K achieved
+                    <span className="text-gray-400">[10:52]</span> 🎯 Revenue goal: $2.8K of $4K achieved
                   </div>
                 </div>
                 <div className="flex space-x-2">
