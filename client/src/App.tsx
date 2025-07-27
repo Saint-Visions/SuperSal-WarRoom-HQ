@@ -8,6 +8,7 @@ import CommandCenter from "@/pages/command-center";
 import WarRoom from "@/pages/warroom";
 import SupersalExecutive from "@/pages/supersal-executive";
 import LeadIntelligence from "@/pages/lead-intelligence";
+import SaintSalMe from "@/pages/saintsalme";
 import NotFound from "@/pages/not-found";
 import MobileNav from "@/components/ui/mobile-nav";
 import StickyCompanion from "@/components/ui/sticky-companion";
@@ -25,6 +26,7 @@ function Router() {
           <Route path="/warroom" component={WarRoom} />
           <Route path="/executive" component={SupersalExecutive} />
           <Route path="/leads" component={LeadIntelligence} />
+          <Route path="/saintsalme" component={SaintSalMe} />
           <Route component={NotFound} />
         </Switch>
       </div>

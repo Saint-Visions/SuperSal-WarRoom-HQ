@@ -37,7 +37,15 @@ import {
   Unlock,
   Globe,
   Server,
-  Code
+  Code,
+  FileText,
+  BarChart3,
+  Slack,
+  GitBranch,
+  Sparkles,
+  Archive,
+  History,
+  TestTube
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -207,7 +215,7 @@ export default function WarRoom() {
     <div className="min-h-screen bg-gradient-to-br from-charcoal via-black to-charcoal text-white p-6">
       <div className="max-w-7xl mx-auto">
         
-        {/* War Room Header */}
+        {/* SuperSal™ War Room Header - Bruce Wayne Build */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -215,20 +223,25 @@ export default function WarRoom() {
         >
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-yellow-400 bg-clip-text text-transparent">
-                SuperSal™ War Room HQ
+              <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-400 via-primary to-blue-300 bg-clip-text text-transparent font-mono">
+                SuperSal™ War Room
               </h1>
-              <p className="text-gray-400 mt-1">Bruce Wayne Build • Mission Control Center • OpenAI Thinking Engine</p>
+              <p className="text-blue-400 mt-1 font-mono text-sm">
+                Bruce Wayne Build • Mission Ops • Charcoal x Electric Blue
+              </p>
             </div>
             <div className="flex items-center space-x-3">
-              <Badge variant={emergencyMode ? "destructive" : "outline"} className="animate-pulse">
+              <Badge 
+                variant={emergencyMode ? "destructive" : "outline"} 
+                className={`font-mono ${emergencyMode ? 'animate-pulse border-red-400 text-red-400' : 'border-blue-400 text-blue-400'}`}
+              >
                 {emergencyMode ? "EMERGENCY MODE" : "OPERATIONAL"}
               </Badge>
               <Button
                 variant="outline"
                 size="sm"
                 onClick={() => setEmergencyMode(!emergencyMode)}
-                className={emergencyMode ? "border-red-500 text-red-400" : ""}
+                className={`font-mono border-blue-400 text-blue-400 hover:bg-blue-400/10 ${emergencyMode ? "border-red-500 text-red-400" : ""}`}
               >
                 {emergencyMode ? <Unlock className="w-4 h-4" /> : <Lock className="w-4 h-4" />}
               </Button>
