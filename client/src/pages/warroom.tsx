@@ -239,123 +239,155 @@ export default function WarRoom() {
           </div>
         </div>
 
-        {/* Main Content Area */}
-        <div className="flex-1 p-6">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-full">
+        {/* Main Content Area - Full Screen */}
+        <div className="flex-1 relative">
+          {/* Background Image */}
+          <div 
+            className="absolute inset-0 bg-center bg-no-repeat bg-contain opacity-5"
+            style={{
+              backgroundImage: `url('/attached_assets/cookin copy_1753612229853.png')`,
+              backgroundSize: '400px',
+              backgroundPosition: 'center center'
+            }}
+          />
+          
+          {/* Full Screen Chat Interface */}
+          <div className="relative z-10 h-full flex flex-col">
+            {/* Workspace Header */}
+            <div className="text-center py-8">
+              <h1 className="text-xl font-medium text-white/60 mb-2">Productivity Workspace</h1>
+              <p className="text-sm text-slate-400">Your collaborative workspace is ready for action</p>
+            </div>
             
-            {/* Center Chat Interface */}
-            <div className="lg:col-span-2">
-              <Card className="bg-slate-900/30 border-slate-700 h-full flex flex-col">
+            {/* Chat Area */}
+            <div className="flex-1 max-w-4xl mx-auto w-full px-8">
+              <div className="h-full flex flex-col justify-center">
                 
-                <CardContent className="flex-1 flex flex-col p-0">
-                  {/* Chat Area */}
-                  <div className="flex-1 p-4 overflow-y-auto">
-                    {conversation.length === 0 ? (
-                      <div className="text-center text-slate-400 py-12">
-                        <Target className="w-16 h-16 mx-auto mb-4 text-cyan-400" />
-                        <h3 className="text-xl font-semibold mb-2 text-white">Production Command Center</h3>
-                        <p>Ready to execute business operations, analyze data, and manage workflows. Ask me anything about production planning.</p>
-                      </div>
-                    ) : (
-                      <AnimatePresence>
-                        {conversation.map((msg, idx) => (
-                          <motion.div
-                            key={idx}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className={`mb-4 ${msg.role === 'user' ? 'text-right' : 'text-left'}`}
-                          >
-                            <div className={`inline-block p-4 rounded-lg max-w-md ${
-                              msg.role === 'user' 
-                                ? 'bg-cyan-600 text-white' 
-                                : 'bg-slate-700 text-slate-100'
-                            }`}>
-                              <p>{msg.content}</p>
-                            </div>
-                          </motion.div>
-                        ))}
-                      </AnimatePresence>
-                    )}
-                    
-                    {isThinking && (
-                      <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        className="text-left mb-4"
-                      >
-                        <div className="inline-block p-4 rounded-lg bg-slate-700">
-                          <div className="flex items-center space-x-2">
-                            <div className="animate-spin w-4 h-4 border-2 border-cyan-400 border-t-transparent rounded-full"></div>
-                            <span className="text-slate-300">Analyzing production data...</span>
+                {conversation.length === 0 ? (
+                  <div className="text-center text-slate-400 py-12">
+                    <Target className="w-16 h-16 mx-auto mb-4 text-cyan-400" />
+                    <h3 className="text-xl font-semibold mb-2 text-white">Production Command Center</h3>
+                    <p>Ready to execute business operations, analyze data, and manage workflows. Ask me anything about production planning.</p>
+                  </div>
+                ) : (
+                  <div className="flex-1 overflow-y-auto mb-6">
+                    <AnimatePresence>
+                      {conversation.map((msg, idx) => (
+                        <motion.div
+                          key={idx}
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          className={`mb-4 ${msg.role === 'user' ? 'text-right' : 'text-left'}`}
+                        >
+                          <div className={`inline-block p-4 rounded-lg max-w-md ${
+                            msg.role === 'user' 
+                              ? 'bg-cyan-600 text-white' 
+                              : 'bg-slate-700 text-slate-100'
+                          }`}>
+                            <p>{msg.content}</p>
                           </div>
-                        </div>
-                      </motion.div>
-                    )}
+                        </motion.div>
+                      ))}
+                    </AnimatePresence>
+                  </div>
+                )}
+                
+                {isThinking && (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="text-left mb-4"
+                  >
+                    <div className="inline-block p-4 rounded-lg bg-slate-700">
+                      <div className="flex items-center space-x-2">
+                        <div className="animate-spin w-4 h-4 border-2 border-cyan-400 border-t-transparent rounded-full"></div>
+                        <span className="text-slate-300">Analyzing production data...</span>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+                
+                {/* Input Area */}
+                <div className="bg-slate-900/50 border border-slate-700 rounded-xl p-4">
+                  <div className="flex space-x-3">
+                    <div className="flex-1 relative">
+                      <Textarea
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
+                        placeholder="Execute business operations, analyze data, manage workflows..."
+                        className="bg-slate-800/50 border-slate-600 text-white min-h-[60px] pr-20 rounded-xl"
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' && !e.shiftKey) {
+                            e.preventDefault();
+                            handleSendMessage();
+                          }
+                        }}
+                      />
+                      <div className="absolute bottom-2 right-2 flex space-x-1">
+                        <Button
+                          size="sm"
+                          variant={isVoiceMode ? "default" : "ghost"}
+                          onClick={() => setIsVoiceMode(!isVoiceMode)}
+                          className="h-8 w-8 p-0"
+                        >
+                          {isVoiceMode ? <Mic className="w-4 h-4" /> : <MicOff className="w-4 h-4" />}
+                        </Button>
+                        <Button 
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => fileInputRef.current?.click()}
+                          className="h-8 w-8 p-0"
+                        >
+                          <Upload className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </div>
+                    <Button 
+                      onClick={handleSendMessage}
+                      disabled={!message.trim() || isThinking}
+                      className="bg-cyan-600 hover:bg-cyan-700 text-white h-auto px-6"
+                    >
+                      <Send className="w-4 h-4" />
+                    </Button>
                   </div>
                   
-                  {/* Input Area */}
-                  <div className="border-t border-slate-700 p-4">
-                    <div className="flex space-x-3">
-                      <div className="flex-1 relative">
-                        <Textarea
-                          value={message}
-                          onChange={(e) => setMessage(e.target.value)}
-                          placeholder="Execute business operations, analyze data, manage workflows..."
-                          className="bg-slate-800/50 border-slate-600 text-white min-h-[60px] pr-20 rounded-xl"
-                          onKeyDown={(e) => {
-                            if (e.key === 'Enter' && !e.shiftKey) {
-                              e.preventDefault();
-                              handleSendMessage();
-                            }
-                          }}
-                        />
-                        <div className="absolute bottom-2 right-2 flex space-x-1">
-                          <Button
-                            size="sm"
-                            variant={isVoiceMode ? "default" : "ghost"}
-                            onClick={() => setIsVoiceMode(!isVoiceMode)}
-                            className="h-8 w-8 p-0"
-                          >
-                            {isVoiceMode ? <Mic className="w-4 h-4" /> : <MicOff className="w-4 h-4" />}
-                          </Button>
-                          <Button 
-                            size="sm"
-                            variant="ghost"
-                            onClick={() => fileInputRef.current?.click()}
-                            className="h-8 w-8 p-0"
-                          >
-                            <Upload className="w-4 h-4" />
-                          </Button>
-                        </div>
-                      </div>
-                      <Button 
-                        onClick={handleSendMessage}
-                        disabled={!message.trim() || isThinking}
-                        className="bg-cyan-600 hover:bg-cyan-700 text-white h-auto px-6"
-                      >
-                        <Send className="w-4 h-4" />
-                      </Button>
-                    </div>
-                    
-                    <input
-                      ref={fileInputRef}
-                      type="file"
-                      multiple
-                      className="hidden"
-                      onChange={(e) => e.target.files && toast({
-                        title: "Files Ready",
-                        description: `${e.target.files.length} file(s) ready for analysis`
-                      })}
-                    />
+                  {/* Footer Status */}
+                  <div className="flex items-center justify-center space-x-4 mt-3 text-xs text-slate-400">
+                    <span>Dual companion ready</span>
+                    <span>•</span>
+                    <span>Azure-powered</span>
+                    <span>•</span>
+                    <span className="text-cyan-400">Production-grade operations</span>
+                    <span>•</span>
+                    <span className="text-amber-400">SAINTAL GOTTA GUY ⚡</span>
                   </div>
-                </CardContent>
-              </Card>
+                  
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    multiple
+                    className="hidden"
+                    onChange={(e) => e.target.files && toast({
+                      title: "Files Ready",
+                      description: `${e.target.files.length} file(s) ready for analysis`
+                    })}
+                  />
+                </div>
+              </div>
             </div>
+          </div>
+        </div>
 
-            {/* Right Sidebar - Business Tools */}
-            <div className="space-y-4">
-              {/* Production Metrics */}
-              <div className="bg-slate-900/50 border border-slate-700 rounded-lg p-4">
+        {/* Right Sidebar - Production Metrics (Collapsed by Default) */}
+        {!sidebarCollapsed && (
+          <motion.div
+            initial={{ width: 0, opacity: 0 }}
+            animate={{ width: 320, opacity: 1 }}
+            exit={{ width: 0, opacity: 0 }}
+            className="border-l border-slate-700 bg-slate-900/30 p-4 space-y-4"
+          >
+            {/* Production Metrics */}
+            <div className="bg-slate-900/50 border border-slate-700 rounded-lg p-4">
                 <div className="flex items-center mb-4">
                   <BarChart3 className="w-4 h-4 mr-2 text-blue-400" />
                   <h3 className="text-sm font-medium text-white">Production Metrics</h3>
