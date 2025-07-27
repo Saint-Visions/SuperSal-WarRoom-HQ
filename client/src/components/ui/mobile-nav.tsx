@@ -76,16 +76,14 @@ export default function MobileNav({ currentPath }: MobileNavProps) {
       <div className="md:hidden fixed top-0 left-0 right-0 z-40 bg-black/95 backdrop-blur-xl border-b border-slate-700/50">
         <div className="flex items-center justify-between px-4 py-3">
           <div className="flex items-center space-x-3">
-            <div 
-              className="w-8 h-8 bg-cover bg-center rounded opacity-90 hover:opacity-100 transition-opacity border border-cyan-400/20"
-              style={{
-                backgroundImage: `url('/attached_assets/Frame 1000002501_1753624236163.png')`,
-                backgroundSize: 'cover'
-              }}
+            <img 
+              src="/attached_assets/svt sick transparent square  copy_1753624836566.png"
+              alt="Sv. Cookin' Knowledge"
+              className="w-10 h-10 opacity-90 hover:opacity-100 transition-opacity"
             />
             <div>
-              <span className="font-bold text-lg text-cyan-400">saintsal™</span>
-              <p className="text-xs text-slate-400">divine authority</p>
+              <span className="font-bold text-lg text-amber-400">Sv.</span>
+              <p className="text-xs text-slate-400">cookin' knowledge</p>
             </div>
           </div>
           

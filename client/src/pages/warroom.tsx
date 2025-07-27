@@ -302,12 +302,10 @@ export default function WarRoom() {
           <div className="relative z-10 h-full flex flex-col">
             {/* Mobile Widget Sizes - OpenAI Style */}
             <div className="text-center py-4 md:py-8">
-              <div 
-                className="w-16 h-16 md:w-20 md:h-20 mx-auto bg-cover bg-center rounded-lg opacity-90 hover:opacity-100 transition-opacity border border-cyan-400/20"
-                style={{
-                  backgroundImage: `url('/attached_assets/Frame 1000002501_1753624236163.png')`,
-                  backgroundSize: 'cover'
-                }}
+              <img 
+                src="/attached_assets/svt sick transparent square  copy_1753624836566.png"
+                alt="Sv. Cookin' Knowledge"
+                className="w-16 h-16 md:w-20 md:h-20 mx-auto opacity-90 hover:opacity-100 transition-opacity"
               />
             </div>
             
