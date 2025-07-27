@@ -83,20 +83,27 @@ export default function CommandCenter() {
           className="mb-8"
         >
           <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-4xl font-bold mb-2">Command Center</h1>
-              <p className="text-gray-400">
-                {currentTime.toLocaleDateString('en-US', { 
-                  weekday: 'long', 
-                  year: 'numeric', 
-                  month: 'long', 
-                  day: 'numeric' 
-                })} • {currentTime.toLocaleTimeString('en-US', { 
-                  hour: '2-digit', 
-                  minute: '2-digit',
-                  second: '2-digit'
-                })}
-              </p>
+            <div className="flex items-center space-x-4">
+              <img 
+                src="/cookin-logo.png" 
+                alt="Cookin' Knowledge"
+                className="w-16 h-16 opacity-80 hover:opacity-100 transition-opacity"
+              />
+              <div>
+                <h1 className="text-4xl font-bold mb-2">Command Center</h1>
+                <p className="text-gray-400">
+                  {currentTime.toLocaleDateString('en-US', { 
+                    weekday: 'long', 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                  })} • {currentTime.toLocaleTimeString('en-US', { 
+                    hour: '2-digit', 
+                    minute: '2-digit',
+                    second: '2-digit'
+                  })}
+                </p>
+              </div>
             </div>
             <div className="flex space-x-2">
               <Button variant="outline" size="sm">
