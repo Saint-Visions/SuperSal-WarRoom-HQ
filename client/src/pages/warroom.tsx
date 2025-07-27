@@ -265,12 +265,10 @@ export default function WarRoom() {
         <div className="absolute top-0 left-0 right-0 bg-gradient-to-b from-black/80 to-transparent p-6 z-10">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <div 
-                className="w-12 h-12 bg-cover bg-center rounded opacity-90 hover:opacity-100 transition-opacity border border-cyan-400/20"
-                style={{
-                  backgroundImage: `url('/attached_assets/Frame 1000002501_1753624236163.png')`,
-                  backgroundSize: 'cover'
-                }}
+              <img 
+                src="/attached_assets/transparent icon cookin dark copy_1753626655136.png"
+                alt="Sv. Cookin' Knowledge"
+                className="w-12 h-12 opacity-90 hover:opacity-100 transition-opacity"
               />
               <div>
                 <h1 className="text-3xl font-bold text-cyan-400">saintsal™ war room</h1>

@@ -50,12 +50,10 @@ export default function SuperSalBrandedPanel() {
         <CardContent className="space-y-4">
           {/* SaintSal + You Branding */}
           <div className="text-center py-6">
-            <div 
-              className="w-20 h-20 mx-auto mb-3 bg-cover bg-center rounded-lg opacity-90 hover:opacity-100 transition-opacity border-2 border-primary/20"
-              style={{
-                backgroundImage: `url('/attached_assets/Frame 1000002501_1753620834045.png')`,
-                backgroundSize: 'cover'
-              }}
+            <img 
+              src="/attached_assets/transparent icon cookin dark copy_1753626655136.png"
+              alt="Sv. Cookin' Knowledge"
+              className="w-20 h-20 mx-auto mb-3 opacity-90 hover:opacity-100 transition-opacity"
             />
             <h3 className="text-lg font-bold text-primary mb-1">saintsal™</h3>
             <p className="text-xs text-gray-400">+ you</p>

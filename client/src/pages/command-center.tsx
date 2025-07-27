@@ -90,8 +90,8 @@ export default function CommandCenter() {
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <img 
-                src="/cookin-logo.png" 
-                alt="Cookin' Knowledge"
+                src="/attached_assets/transparent icon cookin dark copy_1753626655136.png" 
+                alt="Sv. Cookin' Knowledge"
                 className="w-16 h-16 opacity-80 hover:opacity-100 transition-opacity"
               />
               <div>

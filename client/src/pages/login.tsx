@@ -100,9 +100,9 @@ export default function Login() {
               className="mx-auto"
             >
               <img 
-                src="/side-by-side-logo.png" 
-                alt="Sv. | Cookin' Knowledge" 
-                className="w-48 h-auto mx-auto opacity-90 hover:opacity-100 transition-opacity"
+                src="/attached_assets/transparent icon cookin dark copy_1753626655136.png" 
+                alt="Sv. Cookin' Knowledge" 
+                className="w-32 h-32 mx-auto opacity-90 hover:opacity-100 transition-opacity"
               />
             </motion.div>
             
