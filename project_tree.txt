@@ -1,0 +1,279 @@
+attached_assets/
+clean_deploy.sh*
+client/
+components.json
+deploy_to_github.sh*
+deploy.sh
+DEPLOYMENT_GUIDE.md
+DEPLOYMENT_READY.md
+DOWNLOAD_AND_DEPLOY.md
+drizzle.config.ts
+FINAL_DEPLOYMENT_INSTRUCTIONS.md
+github_deploy_final.sh*
+github_deploy_fresh.sh*
+GITHUB_SETUP_INSTRUCTIONS.md
+HOW_TO_ACCESS_FILES.md
+manual_github_deploy.md
+package-lock.json
+package-lock.json.backup
+package.json
+postcss.config.js
+project_tree.txt
+push_to_github.sh*
+QUICK_FIX.md
+README.md
+replit.md
+server/
+shared/
+SIMPLE_SOLUTION.md
+STREAMLINED_DEPLOYMENT.md
+supersal-warroom-FINAL-DEPLOYMENT.tar.gz
+tailwind.config.ts
+temp_secrets.txt
+tmp/
+tsconfig.json
+USE_EXISTING_FOLDER.md
+VERCEL_DEPLOYMENT.md
+vercel.json
+vite.config.ts
+
+./attached_assets:
+android-chrome-192x192_1753612917853.png
+android-chrome-512x512_1753612917854.png
+apple-touch-icon_1753612917854.png
+ChatGPT Image Jul 21, 2025, 06_12_13 AM_1753627595618.png
+cookin copy_1753612229853.png
+cookin knowledge drip_1753601952070.png
+cxookimn trsansparent  copy_1753628280325.png
+DRIPPY SVG LOGO _1753601952071.png
+favicon_1753612917855.ico
+favicon-16x16_1753612917854.png
+favicon-32x32_1753612917854.png
+Frame 1000002501_1753620834045.png
+Frame 1000002501_1753624236163.png
+Pasted--Final-Touch-Enhancements-for-SuperSal-War-Room-HQ-1-Live-AI-Voice-Control-Speak-to-Command-U-1753601711178_1753601711179.txt
+Pasted--GITHUB-CLIENT-ID-Ov23liP03Nsnq6rdzFt3-GITHUB-CLIENT-SECRET-5e68d3ddbd8bee24e53fb44fe85b0a64ead4f02e-1753600869815_1753600869817.txt
+Pasted--Integrations-GoHighLevel-lead-webhooks-pipeline-movement-Twilio-SMS-alerts--1753627376258_1753627376258.txt
+Pasted--Integrations-GoHighLevel-lead-webhooks-pipeline-movement-Twilio-SMS-alerts-S-1753626409673_1753626409674.txt
+Pasted--JuliusGD-Oct-2024-Hello-jhs129-I-may-be-able-to-suggest-some-strategies-for-maintaining-an-up-to-1753623105548_1753623105549.txt
+Pasted--PROJECT-NAME-SuperSal-War-Room-HQ-A-3-screen-personal-AI-command-center-for-Ryan-Capatosto-bui-1753600852772_1753600852772.txt
+Pasted--REQUIRED-FUNCTIONALITY-EVALUATION-STRUCTURE-1-Core-Load-Check-Does-the-page-render-wi-1753625448214_1753625448214.txt
+Pasted--REQUIRED-FUNCTIONALITY-EVALUATION-STRUCTURE-1-Core-Load-Check-Does-the-page-render-with-1753628897700_1753628897700.txt
+Pasted--REQUIRED-FUNCTIONALITY-EVALUATION-STRUCTURE-1-Core-Load-Check-Does-the-page-render-with-1753646917903_1753646917905.txt
+Pasted--Supersal-War-Room-UI-Bruce-Wayne-Build-Page-warroom-Sticky-Companion-Supersal-AI-in-Companio-1753604648636_1753604648636.txt
+Pasted--supersalFunctionalAuthority-ts-export-const-functionalityFirstPrompt-taskName-targetPag-1753620351970_1753620351970.txt
+Pasted--supersalFunctionalAuthority-ts-export-const-functionalityFirstPrompt-taskName-targetPage-1753620676018_1753620676019.txt
+Pasted-GITHUB-CLIENT-ID-Ov23liP03Nsnq6rdzFt3-GITHUB-CLIENT-SECRET-5e68d3ddbd8bee24e53fb44fe85b0a64ead4f02e--1753602361272_1753602361273.txt
+Pasted-GITHUB-CLIENT-ID-Ov23liP03Nsnq6rdzFt3-GITHUB-CLIENT-SECRET-5e68d3ddbd8bee24e53fb44fe85b0a64ead4f02e--1753603788904_1753603788905.txt
+Pasted-Human-AI-Connection-Protocol-HACP-Patent-Support-Package-Overview-of-HACP-s-Origin-and-Structur-1753601467779_1753601467780.txt
+Pasted-Integrating-the-GoHighLevel-GHL-white-label-CRM-into-our-platform-and-PartnerTechAI-environment--1753601106741_1753601106742.txt
+Pasted-NEVER-assume-something-works-just-because-it-compiles-NEVER-give-surface-responses-NEVER-move--1753626585359_1753626585360.txt
+Pasted-OPENAI-API-KEY-***REMOVED***proj-MAK-yx6TRPmcU-zwa3QYbMI-IuWquB9rbDVcfLHI6ilaHhM1RtDtkZBfNCJJ-SDpf6Xs6S1sapT3B-1753633552115_1753633552116.txt
+Pasted-PartnerTech-ai-Reviving-the-Smart-CRM-Companion-Overview-PartnerTech-ai-formerly-referred-to-inte-1753604938837_1753604938838.txt
+Pasted-REQUIRED-FUNCTIONALITY-EVALUATION-STRUCTURE-1-Core-Load-Check-Does-the-page-render-witho-1753623383351_1753623383351.txt
+Pasted-REQUIRED-FUNCTIONALITY-EVALUATION-STRUCTURE-1-Core-Load-Check-Does-the-page-render-witho-1753628366258_1753628366258.txt
+Pasted-Saint-Visions-SuperSal-WarRoom-HQ-Type-to-search-Code-Issues-Pull-requests-Actions-Projects-Wiki-1753636136803_1753636136804.txt
+Pasted-saintvisionai-Ryans-Mac-mini-Cookin-SaintSal-Platform-cd-mkdir-supersal-clean-deploy-cd-supersa-1753635157696_1753635157697.txt
+Pasted-saintvisionai-Ryans-Mac-mini-Cookin-SaintSal-Platform-git-add-Nothing-specified-nothing-added-h-1753635043069_1753635043070.txt
+Pasted-saintvisionai-Ryans-Mac-mini-Cookin-SaintSal-Platform-git-push-Enumerating-objects-193-done-Cou-1753634723964_1753634723965.txt
+Pasted-saintvisionai-Ryans-Mac-mini-Cookin-SaintSal-Platform-git-push-Enumerating-objects-193-done-Cou-1753634728704_1753634728705.txt
+Pasted-Supersal-AI-Comprehensive-Training-and-Setup-Plan-Universal-Knowledge-Base-Ingestion-To-create-the--1753601381688_1753601381689.txt
+Pasted-We-re-talking-clean-elevated-obsidian-slick-execution-for-your-Supersal-War-Room-your-personal--1753606522798_1753606522798.txt
+Screenshot 2025-07-27 at 1.12.48 AM_1753603972424.png
+Screenshot 2025-07-27 at 2.19.19 AM_1753607961451.png
+Screenshot 2025-07-27 at 2.28.58 AM_1753608541031.png
+Screenshot 2025-07-27 at 2.32.01 AM_1753608723851.png
+Screenshot 2025-07-27 at 3.29.01 AM_1753612144739.png
+Screenshot 2025-07-27 at 3.47.01 AM_1753613224792.png
+Screenshot 2025-07-27 at 3.56.31 AM_1753613793314.png
+Screenshot 2025-07-27 at 4.20.04 AM_1753615207724.png
+Screenshot 2025-07-27 at 4.26.24 AM_1753615586993.png
+Screenshot 2025-07-27 at 4.33.55 AM_1753616038623.png
+Screenshot 2025-07-27 at 4.48.03 AM_1753616886283.png
+Screenshot 2025-07-27 at 4.55.43 AM_1753617347208.png
+Screenshot 2025-07-27 at 4.57.25 AM_1753617450810.png
+Screenshot 2025-07-27 at 5.03.41 AM_1753617824174.png
+Screenshot 2025-07-27 at 5.07.55 AM_1753618078420.png
+Screenshot 2025-07-27 at 8.15.10 AM_1753629315082.png
+Screenshot 2025-07-27 at 8.24.00 AM_1753629842893.png
+Screenshot 2025-07-27 at 8.34.34 AM_1753630477114.png
+Screenshot 2025-07-27 at 9.14.39 AM_1753632882381.png
+Screenshot 2025-07-27 at 9.27.51 AM_1753633674088.png
+Screenshot 2025-07-27 at 9.41.38 AM_1753634501392.png
+Screenshot 2025-07-27 at 9.55.25 AM_1753635328834.png
+side by side drip copy_1753601952071.png
+side by side drip copy_1753612990219.png
+small_promo_tile_resized copy_1753625694053.png
+svt sick transparent square  copy_1753601952071.png
+svt sick transparent square  copy_1753624836566.png
+svt sick transparent square  copy_1753625099367.png
+transparent icon cookin dark copy 2_1753612784547.png
+transparent icon cookin dark copy 2_1753624871025.png
+transparent icon cookin dark copy_1753625076376.png
+transparent icon cookin dark copy_1753626655136.png
+transparent icon cookin dark_1753612745390.png
+
+./client:
+index.html
+public/
+src/
+
+./client/public:
+apple-touch-icon.png
+cookin-logo.png
+favicon-16x16.png
+favicon-32x32.png
+favicon.ico
+icon-192.png
+icon-512.png
+icon.svg
+manifest.json
+side-by-side-logo.png
+
+./client/src:
+App.tsx
+components/
+hooks/
+index.css
+lib/
+main.tsx
+pages/
+
+./client/src/components:
+layout/
+parallax-background.tsx
+screens/
+supersal-authority-panel.tsx
+supersal-branded-panel.tsx
+tools/
+ui/
+
+./client/src/components/layout:
+companion-switcher.tsx
+header.tsx
+sidebar.tsx
+
+./client/src/components/screens:
+ai-screen.tsx
+command-screen.tsx
+devlab-screen.tsx
+
+./client/src/components/tools:
+code-agent.tsx
+code-breaker.tsx
+route-auditor.tsx
+
+./client/src/components/ui:
+accordion.tsx
+alert-dialog.tsx
+alert.tsx
+animated-counter.tsx
+apple-style-card.tsx
+aspect-ratio.tsx
+avatar.tsx
+badge.tsx
+breadcrumb.tsx
+button.tsx
+calendar.tsx
+card.tsx
+carousel.tsx
+chart.tsx
+checkbox.tsx
+collapsible.tsx
+command.tsx
+context-menu.tsx
+dialog.tsx
+drag-drop-upload.tsx
+drag-drop-zone.tsx
+drawer.tsx
+dropdown-menu.tsx
+form.tsx
+glassmorphism-card.tsx
+hover-card.tsx
+input-otp.tsx
+input.tsx
+label.tsx
+logo-components.tsx
+memory-panel.tsx
+menubar.tsx
+mobile-nav.tsx
+navigation-menu.tsx
+pagination.tsx
+partnertech-logo.tsx
+popover.tsx
+progress.tsx
+radio-group.tsx
+resizable.tsx
+scroll-area.tsx
+select.tsx
+separator.tsx
+sheet.tsx
+sidebar.tsx
+skeleton.tsx
+slider.tsx
+sticky-companion.tsx
+sticky-notes.tsx
+supersal-execution-widget.tsx
+switch.tsx
+table.tsx
+tabs.tsx
+terminal-integration.tsx
+textarea.tsx
+toast.tsx
+toaster.tsx
+toggle-group.tsx
+toggle.tsx
+tooltip.tsx
+
+./client/src/hooks:
+use-mobile.tsx
+use-real-time-data.tsx
+use-toast.ts
+
+./client/src/lib:
+ai-service.ts
+integrations.ts
+queryClient.ts
+utils.ts
+
+./client/src/pages:
+command-center.tsx
+lead-intelligence.tsx
+login.tsx
+not-found.tsx
+onboarding.tsx
+saintsalme-backup.tsx
+saintsalme.tsx
+settings.tsx
+splash.tsx
+supersal-executive.tsx
+tools.tsx
+warroom.tsx
+
+./server:
+db.ts
+index.ts
+routes.ts
+services/
+storage.ts
+vite.ts
+
+./server/services:
+azure-service.ts
+ghl-service.ts
+google-calendar-service.ts
+microsoft-calendar-service.ts
+openai-service.ts
+stripe-service.ts
+supersalFunctionalAuthority.ts
+twilio-service.ts
+
+./shared:
+schema.ts
+
+./tmp:
+PUSH_COMMANDS.txt
+supersal-warroom-final/
+
+./tmp/supersal-warroom-final:
+DEPLOY_INSTRUCTIONS.md
