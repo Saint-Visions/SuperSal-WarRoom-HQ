@@ -77,7 +77,7 @@ export default function MobileNav({ currentPath }: MobileNavProps) {
         <div className="flex items-center justify-between px-4 py-3">
           <div className="flex items-center space-x-3">
             <img 
-              src="/attached_assets/svt sick transparent square  copy_1753624836566.png"
+              src="/attached_assets/svt sick transparent square  copy_1753625099367.png"
               alt="Sv. Cookin' Knowledge"
               className="w-10 h-10 opacity-90 hover:opacity-100 transition-opacity"
             />

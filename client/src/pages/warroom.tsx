@@ -301,13 +301,7 @@ export default function WarRoom() {
           {/* Mobile-Optimized Chat Interface */}
           <div className="relative z-10 h-full flex flex-col">
             {/* Mobile Widget Sizes - OpenAI Style */}
-            <div className="text-center py-4 md:py-8">
-              <img 
-                src="/attached_assets/svt sick transparent square  copy_1753624836566.png"
-                alt="Sv. Cookin' Knowledge"
-                className="w-16 h-16 md:w-20 md:h-20 mx-auto opacity-90 hover:opacity-100 transition-opacity"
-              />
-            </div>
+
             
             {/* Chat Area */}
             <div className="flex-1 max-w-4xl mx-auto w-full px-8">

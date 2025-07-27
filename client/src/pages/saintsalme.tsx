@@ -276,7 +276,7 @@ export default function SaintSalMe() {
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <img 
-                src="/attached_assets/transparent icon cookin dark copy 2_1753624871025.png"
+                src="/attached_assets/transparent icon cookin dark copy_1753625076376.png"
                 alt="Sv. Cookin' Knowledge Robot Chef"
                 className="w-12 h-12 opacity-90 hover:opacity-100 transition-opacity"
               />
@@ -309,11 +309,7 @@ export default function SaintSalMe() {
                   <div className="flex-1 p-4 overflow-y-auto">
                     {conversation.length === 0 && !message.trim() ? (
                       <div className="text-center text-slate-400 py-12">
-                        <img 
-                          src="/attached_assets/transparent icon cookin dark copy 2_1753624871025.png"
-                          alt="Sv. Cookin' Knowledge Robot Chef"
-                          className="w-16 h-16 mx-auto mb-4 opacity-90"
-                        />
+
                         <h3 className="text-xl font-semibold mb-2 text-white">saintsal™ + Sv. execution center</h3>
                         <p>Ready to execute leads, build implementations, and drive results. I have full access to all your business tools and execution frameworks.</p>
                       </div>
