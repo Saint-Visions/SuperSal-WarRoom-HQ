@@ -19,7 +19,7 @@ interface SidebarProps {
 }
 
 const quickLinks = [
-  { name: "SaintVisionAI.com", icon: Globe, url: "https://saintvisionai.com" },
+  { name: "PartnerTech.ai", icon: Globe, url: "https://partnertech.ai" },
   { name: "Replit Console", icon: Terminal, url: "#" },
   { name: "GHL Dashboard", icon: TrendingUp, url: "#" },
   { name: "Stripe", icon: CreditCard, url: "https://dashboard.stripe.com" },

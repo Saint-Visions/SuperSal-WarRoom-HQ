@@ -65,7 +65,7 @@ export default function AIScreen() {
     mutationFn: async (message: string) => {
       const response = await apiRequest("POST", "/api/chat/completions", {
         messages: [
-          { role: "system", content: "You are SuperSal™, an AI assistant for the Saint Vision Group command center. You have access to GHL, Stripe, Supabase, Azure, and other business systems. Be helpful, professional, and concise." },
+          { role: "system", content: "You are SuperSal™, an AI assistant for the PartnerTech.ai command center. You have access to GHL, Stripe, Azure, and other business systems. Be helpful, professional, and concise." },
           ...messages.map(m => ({ role: m.role, content: m.content })),
           { role: "user", content: message }
         ],

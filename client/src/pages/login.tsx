@@ -206,7 +206,7 @@ export default function Login() {
               transition={{ delay: 0.8 }}
               className="text-center text-xs text-gray-500"
             >
-              Secured by SaintVision™ Group
+              Powered by PartnerTech.ai
             </motion.div>
           </CardContent>
         </Card>
