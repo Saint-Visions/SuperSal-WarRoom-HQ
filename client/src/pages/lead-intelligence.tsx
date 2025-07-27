@@ -156,17 +156,11 @@ export default function LeadIntelligence() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-6"
         >
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center space-x-4">
-              <PartnerTechLogo size="lg" animated={true} />
-              <div>
-                <h1 className="text-3xl font-bold">Lead Intelligence</h1>
-                <p className="text-gray-400">Powered by SuperSal™ • OpenAI-level intelligence meets Apple-grade experience</p>
-              </div>
-            </div>
-            {/* Premium Cookin' Knowledge Wall Logo - Top Right */}
-            <div className="flex-shrink-0">
-              <PremiumCookinLogo size="md" animated={true} />
+          <div className="flex items-center space-x-4 mb-4">
+            <PremiumCookinLogo size="lg" animated={true} />
+            <div>
+              <h1 className="text-3xl font-bold">Lead Intelligence</h1>
+              <p className="text-gray-400">Powered by SuperSal™ • OpenAI-level intelligence meets Apple-grade experience</p>
             </div>
           </div>
         </motion.div>
