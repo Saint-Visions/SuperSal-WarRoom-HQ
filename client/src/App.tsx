@@ -26,8 +26,8 @@ function Router() {
       <MobileNav currentPath={location} />
       <div className="pb-20 md:pb-0 pt-16 md:pt-0">
         <Switch>
-          {/* Mobile: Route to War Room by default, Login for desktop */}
-          <Route path="/" component={isMobile ? WarRoom : Login} />
+          {/* Root path shows PartnerTech.ai Lead Intelligence for both mobile and desktop */}
+          <Route path="/" component={LeadIntelligence} />
           <Route path="/login" component={Login} />
           <Route path="/command" component={CommandCenter} />
           <Route path="/warroom" component={WarRoom} />
