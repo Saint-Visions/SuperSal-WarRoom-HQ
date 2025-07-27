@@ -5,7 +5,7 @@ import { openaiService } from "./services/openai-service";
 import { azureService } from "./services/azure-service";
 import { ghlService } from "./services/ghl-service";
 import { stripeService } from "./services/stripe-service";
-import { googleCalendarService } from "./services/google-calendar-service";
+import { microsoftCalendarService } from "./services/microsoft-calendar-service";
 import { twilioService } from "./services/twilio-service";
 import multer from "multer";
 import { 
@@ -108,10 +108,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Google Calendar Integration
+  // Microsoft Calendar Integration
   app.get("/api/calendar/events", async (req, res) => {
     try {
-      const events = await googleCalendarService.getEvents(20);
+      const events = await microsoftCalendarService.getEvents(20);
       res.json(events);
     } catch (error: any) {
       res.status(500).json({ message: "Calendar events error: " + error.message });
@@ -120,12 +120,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post("/api/calendar/events", async (req, res) => {
     try {
-      const event = await googleCalendarService.createEvent(req.body);
+      const event = await microsoftCalendarService.createEvent(req.body);
       
       // Also save to local database
       const localEvent = await storage.createCalendarEvent({
         userId: mockUserId,
-        googleEventId: event.id,
+        microsoftEventId: event.id,
         title: event.summary,
         description: event.description || null,
         startTime: new Date(event.start.dateTime),
@@ -134,7 +134,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         attendees: event.attendees || null,
       });
 
-      res.json({ googleEvent: event, localEvent });
+      res.json({ microsoftEvent: event, localEvent });
     } catch (error: any) {
       res.status(500).json({ message: "Create calendar event error: " + error.message });
     }
