@@ -71,7 +71,6 @@ export default function SaintSalMe() {
   const aiChatMutation = useMutation({
     mutationFn: async (data: { message: string; mode: string }) => {
       setIsThinking(true);
-      await new Promise(resolve => setTimeout(resolve, 2000 + Math.random() * 1000));
       
       const response = await apiRequest("POST", "/api/saintsalme/advanced-chat", {
         message: data.message,
@@ -79,15 +78,23 @@ export default function SaintSalMe() {
         context: "execution_workspace"
       });
       
-      setIsThinking(false);
       return response;
     },
     onSuccess: (data) => {
+      setIsThinking(false);
       setConversation(prev => [...prev, 
         { role: 'user', content: message },
         { role: 'assistant', content: data.response, analysis: data.analysis }
       ]);
       setMessage("");
+    },
+    onError: (error) => {
+      setIsThinking(false);
+      toast({
+        title: "Chat Error", 
+        description: "Failed to send message. Please try again.",
+        variant: "destructive",
+      });
     }
   });
 
@@ -125,7 +132,7 @@ export default function SaintSalMe() {
   });
 
   const handleSendMessage = () => {
-    if (!message.trim()) return;
+    if (!message.trim() || aiChatMutation.isPending) return;
     aiChatMutation.mutate({ message, mode: "execution" });
   };
 

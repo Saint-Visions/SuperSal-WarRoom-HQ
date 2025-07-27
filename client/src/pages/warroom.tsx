@@ -65,22 +65,29 @@ export default function WarRoom() {
   const aiChatMutation = useMutation({
     mutationFn: async (data: { message: string }) => {
       setIsThinking(true);
-      await new Promise(resolve => setTimeout(resolve, 2000 + Math.random() * 1000));
       
       const response = await apiRequest("POST", "/api/warroom/production-chat", {
         message: data.message,
         context: "production_planning"
       });
       
-      setIsThinking(false);
       return response;
     },
     onSuccess: (data) => {
+      setIsThinking(false);
       setConversation(prev => [...prev, 
         { role: 'user', content: message },
         { role: 'assistant', content: data.response }
       ]);
       setMessage("");
+    },
+    onError: (error) => {
+      setIsThinking(false);
+      toast({
+        title: "Chat Error",
+        description: "Failed to send message. Please try again.",
+        variant: "destructive",
+      });
     }
   });
 
@@ -118,7 +125,7 @@ export default function WarRoom() {
   });
 
   const handleSendMessage = () => {
-    if (!message.trim()) return;
+    if (!message.trim() || aiChatMutation.isPending) return;
     aiChatMutation.mutate({ message });
   };
 
