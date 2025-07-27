@@ -220,7 +220,12 @@ export default function WarRoom() {
           {sidebarTools.map((tool) => (
             <motion.button
               key={tool.id}
-              onClick={() => setSelectedTool(tool.id)}
+              onClick={() => {
+                setSelectedTool(tool.id);
+                if (tool.id !== 'authority') {
+                  handleToolAction(tool.id, 'execute');
+                }
+              }}
               className={`w-full flex items-center space-x-3 p-3 rounded-lg mb-1 transition-colors ${
                 selectedTool === tool.id ? 'bg-slate-700' : 'hover:bg-slate-800'
               }`}
@@ -241,6 +246,7 @@ export default function WarRoom() {
             variant="ghost"
             size="sm"
             className="w-full justify-start text-slate-400 hover:text-white"
+            onClick={() => handleToolAction('system', 'refresh')}
           >
             <RefreshCw className="w-4 h-4" />
             {!sidebarCollapsed && <span className="ml-2">Refresh</span>}
@@ -249,6 +255,7 @@ export default function WarRoom() {
             variant="ghost"
             size="sm"
             className="w-full justify-start text-slate-400 hover:text-white"
+            onClick={() => handleToolAction('alerts', 'toggle')}
           >
             <Bell className="w-4 h-4" />
             {!sidebarCollapsed && <span className="ml-2">Alerts</span>}

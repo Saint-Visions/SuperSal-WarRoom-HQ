@@ -27,7 +27,6 @@ const navItems = [
   { path: "/warroom", icon: Shield, label: "War Room", color: "text-cyan-400" },
   { path: "/command", icon: Home, label: "Command", color: "text-blue-400" },
   { path: "/executive", icon: Bot, label: "Executive", color: "text-purple-400" },
-  { path: "/leads", icon: Search, label: "Intelligence", color: "text-green-400" },
   { path: "/saintsalme", icon: Star, label: "Execution", color: "text-amber-400" }
 ];
 
