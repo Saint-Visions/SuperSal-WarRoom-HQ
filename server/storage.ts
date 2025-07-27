@@ -104,6 +104,89 @@ export class MemStorage implements IStorage {
   private searchCampaigns: Map<string, any> = new Map();
   private stickyNotes: Map<string, StickyNote> = new Map();
 
+  constructor() {
+    this.initializeMockLeadData();
+  }
+
+  private initializeMockLeadData() {
+    const mockUserId = "550e8400-e29b-41d4-a716-446655440000";
+    
+    // Initialize mock lead intelligence data
+    const mockLeads = [
+      {
+        id: randomUUID(),
+        userId: mockUserId,
+        companyName: "TechCorp Solutions", 
+        domain: "techcorp.com",
+        industry: "Technology",
+        employeeCount: 250,
+        revenue: 15000000,
+        location: "San Francisco, CA",
+        description: "Leading SaaS provider for enterprise automation",
+        leadScore: 85,
+        intent: "buying",
+        source: "apollo",
+        technologies: ["Salesforce", "AWS", "React"],
+        contactInfo: {
+          emails: ["contact@techcorp.com", "sales@techcorp.com"],
+          phone: "+1-555-0234",
+          linkedin: "https://linkedin.com/company/techcorp-solutions"
+        },
+        enrichedAt: new Date().toISOString(),
+        createdAt: new Date().toISOString()
+      },
+      {
+        id: randomUUID(),
+        userId: mockUserId,
+        companyName: "GrowthMax Inc",
+        domain: "growthmax.io", 
+        industry: "Marketing",
+        employeeCount: 150,
+        revenue: 8000000,
+        location: "Austin, TX",
+        description: "Digital marketing agency scaling rapidly",
+        leadScore: 78,
+        intent: "hiring",
+        source: "seamless",
+        technologies: ["HubSpot", "Google Analytics", "Slack"],
+        contactInfo: {
+          emails: ["contact@growthmax.io", "sales@growthmax.io"],
+          phone: "+1-555-0567",
+          linkedin: "https://linkedin.com/company/growthmax-inc"
+        },
+        enrichedAt: new Date().toISOString(),
+        createdAt: new Date().toISOString()
+      },
+      {
+        id: randomUUID(),
+        userId: mockUserId,
+        companyName: "DataFlow Systems",
+        domain: "dataflow.com",
+        industry: "Technology", 
+        employeeCount: 400,
+        revenue: 25000000,
+        location: "New York, NY",
+        description: "Enterprise data analytics platform",
+        leadScore: 92,
+        intent: "expanding",
+        source: "clearbit",
+        technologies: ["Snowflake", "Tableau", "AWS"],
+        contactInfo: {
+          emails: ["contact@dataflow.com", "sales@dataflow.com"],
+          phone: "+1-555-0890",
+          linkedin: "https://linkedin.com/company/dataflow-systems"
+        },
+        enrichedAt: new Date().toISOString(),
+        createdAt: new Date().toISOString()
+      }
+    ];
+
+    // Store the mock leads
+    mockLeads.forEach(lead => {
+      this.leadIntelligence.set(lead.id, lead);
+    });
+  }
+
   // Users
   async getUser(id: string): Promise<User | undefined> {
     return this.users.get(id);

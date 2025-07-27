@@ -11,10 +11,13 @@ import {
   Settings,
   Shield,
   Star,
-  Search
+  Search,
+  Brain,
+  Zap
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import PartnerTechLogo from "@/components/ui/partnertech-logo";
+import { SmallGoldenLogo } from "@/components/ui/logo-components";
 
 interface MobileNavProps {
   currentPath: string;
@@ -76,11 +79,7 @@ export default function MobileNav({ currentPath }: MobileNavProps) {
       <div className="md:hidden fixed top-0 left-0 right-0 z-40 bg-black/95 backdrop-blur-xl border-b border-slate-700/50">
         <div className="flex items-center justify-between px-4 py-3">
           <div className="flex items-center space-x-3">
-            <img 
-              src="/attached_assets/transparent icon cookin dark copy_1753626655136.png"
-              alt="Sv. Cookin' Knowledge"
-              className="w-10 h-10 opacity-90 hover:opacity-100 transition-opacity"
-            />
+            <SmallGoldenLogo size="md" animated={true} className="opacity-90 hover:opacity-100 transition-opacity" />
             <div>
               <span className="font-bold text-lg text-amber-400">Sv.</span>
               <p className="text-xs text-slate-400">cookin' knowledge</p>
@@ -151,8 +150,20 @@ export default function MobileNav({ currentPath }: MobileNavProps) {
 
                 <div className="border-t border-slate-700 pt-3">
                   <div className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">
-                    System Tools
+                    Intelligence & Tools
                   </div>
+                  <Link href="/executive" onClick={() => setIsOpen(false)}>
+                    <Button variant="ghost" className="w-full justify-start text-sm py-2">
+                      <Brain className="w-4 h-4 mr-3 text-indigo-400" />
+                      SuperSal Executive
+                    </Button>  
+                  </Link>
+                  <Link href="/leads" onClick={() => setIsOpen(false)}>
+                    <Button variant="ghost" className="w-full justify-start text-sm py-2">
+                      <Zap className="w-4 h-4 mr-3 text-emerald-400" />
+                      Lead Intelligence
+                    </Button>
+                  </Link>
                   <Link href="/tools" onClick={() => setIsOpen(false)}>
                     <Button variant="ghost" className="w-full justify-start text-sm py-2">
                       <Terminal className="w-4 h-4 mr-3 text-purple-400" />
