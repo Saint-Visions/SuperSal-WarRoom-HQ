@@ -36,6 +36,8 @@ import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
+import { DragDropUpload } from "@/components/ui/drag-drop-upload";
+import { MemoryPanel } from "@/components/ui/memory-panel";
 
 export default function SaintSalMe() {
   const [leftSidebarCollapsed, setLeftSidebarCollapsed] = useState(true);
@@ -45,8 +47,63 @@ export default function SaintSalMe() {
   const [isThinking, setIsThinking] = useState(false);
   const [conversation, setConversation] = useState<any[]>([]);
   const [isVoiceMode, setIsVoiceMode] = useState(false);
+  const [isDragOver, setIsDragOver] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
+
+  // Drag and drop handlers
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragOver(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragOver(false);
+  };
+
+  const handleDrop = async (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragOver(false);
+    
+    const files = Array.from(e.dataTransfer.files);
+    if (files.length > 0) {
+      await uploadFiles(files);
+    }
+  };
+
+  const uploadFiles = async (files: File[]) => {
+    try {
+      const formData = new FormData();
+      files.forEach(file => {
+        formData.append('files', file);
+      });
+
+      const response = await apiRequest('/api/upload/saintsalme', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (response.success) {
+        toast({
+          title: "Files Uploaded Successfully",
+          description: `${files.length} file(s) uploaded and analyzed by AI`,
+        });
+        
+        // Add to conversation
+        setConversation(prev => [...prev, {
+          role: 'system',
+          content: `📁 Uploaded ${files.length} file(s): ${files.map(f => f.name).join(', ')}. Files have been analyzed and added to AI memory.`
+        }]);
+      }
+    } catch (error: any) {
+      toast({
+        title: "Upload Failed",
+        description: error.message || "Failed to upload files",
+        variant: "destructive",
+      });
+    }
+  };
 
   // Production data queries for execution workspace
   const { data: businessMetrics } = useQuery({
@@ -358,6 +415,21 @@ export default function SaintSalMe() {
                 key={tool.id}
                 variant="ghost"
                 size="sm"
+                onClick={() => {
+                  if (tool.id === 'files') {
+                    // Show drag-drop upload modal
+                    toast({
+                      title: "File Manager Active",
+                      description: "Drag files anywhere in the workspace to upload",
+                    });
+                  } else if (tool.id === 'memory') {
+                    // Show memory panel modal
+                    toast({
+                      title: "AI Memory Panel",
+                      description: "Memory system ready for interaction",
+                    });
+                  }
+                }}
                 className={`w-full justify-start text-slate-400 hover:text-white hover:bg-slate-800/50 ${rightSidebarCollapsed ? 'px-2' : 'px-3'}`}
               >
                 <tool.icon className={`w-5 h-5 ${tool.color} ${rightSidebarCollapsed ? '' : 'mr-3'}`} />

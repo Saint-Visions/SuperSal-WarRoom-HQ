@@ -50,6 +50,7 @@ export interface IStorage {
 
   // AI Memory
   getAiMemory(userId: string, limit?: number): Promise<AiMemory[]>;
+  getAiMemoriesBySession(sessionPrefix: string): Promise<AiMemory[]>;
   createAiMemory(memory: InsertAiMemory): Promise<AiMemory>;
 
   // Workflows
@@ -265,6 +266,12 @@ export class MemStorage implements IStorage {
       .filter(memory => memory.userId === userId)
       .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
       .slice(0, limit);
+  }
+
+  async getAiMemoriesBySession(sessionPrefix: string): Promise<AiMemory[]> {
+    return Array.from(this.aiMemory.values())
+      .filter(memory => memory.sessionId?.startsWith(sessionPrefix))
+      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
   }
 
   async createAiMemory(insertMemory: InsertAiMemory): Promise<AiMemory> {
@@ -591,6 +598,60 @@ export class MemStorage implements IStorage {
 
   async deleteStickyNote(id: string): Promise<boolean> {
     return this.stickyNotes.delete(id);
+  }
+
+  // Enhanced Memory operations for drag-drop functionality
+  async getMemories(workspace: string): Promise<any[]> {
+    // Filter AI memories by workspace stored in metadata
+    const workspaceMemories = Array.from(this.aiMemory.values()).filter(memory => 
+      memory.metadata && 
+      typeof memory.metadata === 'object' && 
+      memory.metadata.workspace === workspace
+    );
+    
+    return workspaceMemories.map(memory => ({
+      id: memory.id,
+      content: memory.content,
+      memoryType: memory.memoryType || 'ai_memory',
+      importance: memory.importance || 3,
+      metadata: memory.metadata,
+      createdAt: memory.createdAt,
+      sessionId: memory.sessionId
+    }));
+  }
+
+  async saveMemory(data: { 
+    content: string; 
+    memoryType: string; 
+    importance: number; 
+    workspace: string; 
+    metadata?: any 
+  }): Promise<any> {
+    const memory: AiMemory = {
+      id: randomUUID(),
+      content: data.content,
+      memoryType: data.memoryType,
+      importance: data.importance,
+      userId: 'system', // Default for system memories
+      sessionId: `${data.workspace}_${Date.now()}`,
+      metadata: {
+        ...data.metadata,
+        workspace: data.workspace
+      },
+      createdAt: new Date()
+    };
+    
+    this.aiMemory.set(memory.id, memory);
+    
+    return {
+      id: memory.id,
+      content: memory.content,
+      memoryType: memory.memoryType,
+      importance: memory.importance,
+      metadata: memory.metadata,
+      createdAt: memory.createdAt,
+      sessionId: memory.sessionId
+    };
   }
 }
 

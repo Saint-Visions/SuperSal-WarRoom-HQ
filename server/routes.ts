@@ -1858,6 +1858,246 @@ ${code ? code.replace(/console\.log\(/g, '// console.log(') : '// No code provid
     }
   });
 
+  // File Upload Endpoints for War Room and SaintSalMe
+  app.post("/api/upload/warroom", upload.array("files", 10), async (req, res) => {
+    try {
+      const files = req.files as Express.Multer.File[];
+      const uploadedFiles = [];
+
+      for (const file of files) {
+        // Save file metadata and analyze with OpenAI if image
+        const fileData = {
+          id: Date.now() + Math.random(),
+          originalName: file.originalname,
+          mimeType: file.mimetype,
+          size: file.size,
+          uploadDate: new Date(),
+          workspace: "warroom",
+          analysis: null as any
+        };
+
+        // If it's an image, analyze with OpenAI Vision
+        if (file.mimetype.startsWith('image/')) {
+          try {
+            const base64Image = file.buffer.toString('base64');
+            const analysis = await openaiService.analyzeImage(`data:${file.mimetype};base64,${base64Image}`);
+            fileData.analysis = analysis;
+          } catch (error) {
+            console.error('Image analysis failed:', error);
+          }
+        }
+
+        // Store in AI memory system
+        await storage.createAiMemory({
+          userId: mockUserId,
+          sessionId: `warroom-${Date.now()}`,
+          memoryType: "file_upload",
+          content: `File uploaded: ${file.originalname}`,
+          metadata: fileData,
+          importance: 3
+        });
+
+        uploadedFiles.push(fileData);
+      }
+
+      res.json({ 
+        success: true, 
+        files: uploadedFiles,
+        message: `Successfully uploaded ${files.length} file(s) to War Room`
+      });
+    } catch (error: any) {
+      res.status(500).json({ message: "Upload failed: " + error.message });
+    }
+  });
+
+  app.post("/api/upload/saintsalme", upload.array("files", 10), async (req, res) => {
+    try {
+      const files = req.files as Express.Multer.File[];
+      const uploadedFiles = [];
+
+      for (const file of files) {
+        const fileData = {
+          id: Date.now() + Math.random(),
+          originalName: file.originalname,
+          mimeType: file.mimetype,
+          size: file.size,
+          uploadDate: new Date(),
+          workspace: "saintsalme",
+          analysis: null as any
+        };
+
+        // Enhanced analysis for SaintSalMe workspace
+        if (file.mimetype.startsWith('image/')) {
+          try {
+            const base64Image = file.buffer.toString('base64');
+            const analysis = await openaiService.analyzeImage(`data:${file.mimetype};base64,${base64Image}`, 
+              "Analyze this image for business execution opportunities, lead insights, and actionable intelligence."
+            );
+            fileData.analysis = analysis;
+          } catch (error) {
+            console.error('Image analysis failed:', error);
+          }
+        }
+
+        // Store in extended memory system
+        await storage.createAiMemory({
+          userId: mockUserId,
+          sessionId: `saintsalme-${Date.now()}`,
+          memoryType: "execution_file",
+          content: `Execution file uploaded: ${file.originalname}`,
+          metadata: fileData,
+          importance: 4
+        });
+
+        uploadedFiles.push(fileData);
+      }
+
+      res.json({ 
+        success: true, 
+        files: uploadedFiles,
+        message: `Successfully uploaded ${files.length} file(s) to SaintSalMe execution workspace`
+      });
+    } catch (error: any) {
+      res.status(500).json({ message: "Upload failed: " + error.message });
+    }
+  });
+
+  // Extended Memory Endpoints
+  app.get("/api/memory/warroom", async (req, res) => {
+    try {
+      const memories = await storage.getAiMemoriesBySession("warroom");
+      res.json({ memories });
+    } catch (error: any) {
+      res.status(500).json({ message: "Memory retrieval failed: " + error.message });
+    }
+  });
+
+  app.get("/api/memory/saintsalme", async (req, res) => {
+    try {
+      const memories = await storage.getAiMemoriesBySession("saintsalme");
+      res.json({ memories });
+    } catch (error: any) {
+      res.status(500).json({ message: "Memory retrieval failed: " + error.message });
+    }
+  });
+
+  app.post("/api/memory/save", async (req, res) => {
+    try {
+      const { workspace, content, importance = 3 } = req.body;
+      
+      const memory = await storage.createAiMemory({
+        userId: mockUserId,
+        sessionId: `${workspace}-${Date.now()}`,
+        memoryType: "user_note",
+        content,
+        importance,
+        metadata: { workspace, timestamp: new Date() }
+      });
+
+      res.json({ success: true, memory });
+    } catch (error: any) {
+      res.status(500).json({ message: "Memory save failed: " + error.message });
+    }
+  });
+
+  // File Upload Endpoints
+  app.post('/api/upload/:workspace', upload.array('files', 10), async (req, res) => {
+    try {
+      const { workspace } = req.params;
+      const files = req.files as Express.Multer.File[];
+      
+      if (!files || files.length === 0) {
+        return res.status(400).json({ success: false, message: 'No files uploaded' });
+      }
+
+      const uploadedFiles = [];
+      
+      for (const file of files) {
+        let analysis = null;
+        
+        // Analyze images with OpenAI
+        if (file.mimetype.startsWith('image/')) {
+          try {
+            const imageBuffer = file.buffer;
+            const base64Image = `data:${file.mimetype};base64,${imageBuffer.toString('base64')}`;
+            analysis = await openaiService.analyzeImage(base64Image, 
+              `Analyze this image for ${workspace === 'warroom' ? 'operational intelligence and system insights' : 'execution opportunities and business strategies'}`
+            );
+          } catch (error) {
+            console.error('Image analysis failed:', error);
+          }
+        }
+
+        const uploadedFile = {
+          id: Date.now() + Math.random(),
+          originalName: file.originalname,
+          mimeType: file.mimetype,
+          size: file.size,
+          uploadDate: new Date(),
+          workspace,
+          analysis
+        };
+
+        uploadedFiles.push(uploadedFile);
+
+        // Save to AI memory
+        await storage.saveMemory({
+          content: `File uploaded: ${file.originalname}${analysis ? ' - AI Analysis: ' + analysis.analysis : ''}`,
+          memoryType: 'file_upload',
+          importance: analysis ? 4 : 2,
+          workspace,
+          metadata: {
+            originalName: file.originalname,
+            analysis: analysis
+          }
+        });
+      }
+
+      res.json({
+        success: true,
+        message: `${files.length} file(s) uploaded successfully`,
+        files: uploadedFiles
+      });
+      
+    } catch (error: any) {
+      console.error('File upload error:', error);
+      res.status(500).json({ success: false, message: error.message });
+    }
+  });
+
+  // Memory Management Endpoints
+  app.get('/api/memory/:workspace', async (req, res) => {
+    try {
+      const { workspace } = req.params;
+      const memories = await storage.getMemories(workspace);
+      res.json({ memories });
+    } catch (error: any) {
+      console.error('Memory fetch error:', error);
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.post('/api/memory/save', async (req, res) => {
+    try {
+      const { workspace, content, importance = 3 } = req.body;
+      
+      const memory = await storage.saveMemory({
+        content,
+        memoryType: 'user_note',
+        importance,
+        workspace,
+        metadata: {
+          source: 'user_input'
+        }
+      });
+
+      res.json({ success: true, memory });
+    } catch (error: any) {
+      console.error('Memory save error:', error);
+      res.status(500).json({ success: false, message: error.message });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

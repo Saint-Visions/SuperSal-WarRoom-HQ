@@ -34,6 +34,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
+import { DragDropUpload } from "@/components/ui/drag-drop-upload";
+import { MemoryPanel } from "@/components/ui/memory-panel";
 import SuperSalAuthorityPanel from "@/components/supersal-authority-panel";
 
 export default function WarRoom() {
