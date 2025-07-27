@@ -26,6 +26,8 @@ function Router() {
           <Route path="/" component={Login} />
           <Route path="/command" component={CommandCenter} />
           <Route path="/warroom" component={WarRoom} />
+          <Route path="/executive" component={SupersalExecutive} />
+          <Route path="/leads" component={LeadIntelligence} />
           <Route path="/saintsalme" component={SaintSalMe} />
           <Route path="/tools" component={Tools} />
           <Route path="/settings" component={Settings} />
