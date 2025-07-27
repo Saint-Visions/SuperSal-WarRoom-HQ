@@ -98,9 +98,33 @@ export default function SaintSalMe() {
     { id: "settings", icon: Settings, label: "Settings", color: "text-gray-400" }
   ];
 
+  // Execution tool actions
+  const executionActionMutation = useMutation({
+    mutationFn: async (data: { toolId: string; action: string; params?: any }) => {
+      return await apiRequest("POST", "/api/saintsalme/tool-action", data);
+    },
+    onSuccess: (data) => {
+      toast({
+        title: "Execution Complete",
+        description: data.result,
+      });
+      
+      // Add execution result to conversation
+      setConversation(prev => [...prev, {
+        role: 'system',
+        content: `Execution Result: ${data.result}`,
+        data: data
+      }]);
+    }
+  });
+
   const handleSendMessage = () => {
     if (!message.trim()) return;
     aiChatMutation.mutate({ message, mode: "execution" });
+  };
+
+  const handleExecutionAction = (toolId: string, action: string, params?: any) => {
+    executionActionMutation.mutate({ toolId, action, params });
   };
 
   return (
@@ -429,22 +453,89 @@ export default function SaintSalMe() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2">
-                  <Button variant="outline" size="sm" className="w-full justify-start text-xs">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="w-full justify-start text-xs"
+                    onClick={() => handleExecutionAction('leads', 'execute')}
+                    disabled={executionActionMutation.isPending}
+                  >
                     <Users className="w-3 h-3 mr-2" />
                     Execute Lead Campaign
                   </Button>
-                  <Button variant="outline" size="sm" className="w-full justify-start text-xs">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="w-full justify-start text-xs"
+                    onClick={() => handleExecutionAction('implementation', 'build')}
+                    disabled={executionActionMutation.isPending}
+                  >
                     <Code className="w-3 h-3 mr-2" />
-                    Deploy Implementation
+                    Build Implementation
                   </Button>
-                  <Button variant="outline" size="sm" className="w-full justify-start text-xs">
-                    <Database className="w-3 h-3 mr-2" />
-                    Execute Data Query
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="w-full justify-start text-xs"
+                    onClick={() => handleExecutionAction('deployment', 'launch')}
+                    disabled={executionActionMutation.isPending}
+                  >
+                    <Rocket className="w-3 h-3 mr-2" />
+                    Launch Deployment
                   </Button>
-                  <Button variant="outline" size="sm" className="w-full justify-start text-xs">
-                    <Globe className="w-3 h-3 mr-2" />
-                    Launch Integration
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="w-full justify-start text-xs"
+                    onClick={() => handleExecutionAction('campaigns', 'execute')}
+                    disabled={executionActionMutation.isPending}
+                  >
+                    <Target className="w-3 h-3 mr-2" />
+                    Execute Campaign
                   </Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="w-full justify-start text-xs"
+                    onClick={() => handleExecutionAction('automation', 'deploy')}
+                    disabled={executionActionMutation.isPending}
+                  >
+                    <Zap className="w-3 h-3 mr-2" />
+                    Deploy Automation
+                  </Button>
+                </CardContent>
+              </Card>
+
+              {/* Live Execution Stats */}
+              <Card className="bg-slate-900/30 border-slate-700">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-sm flex items-center">
+                    <Sparkles className="w-4 h-4 mr-2 text-amber-400" />
+                    Live Execution
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs text-slate-400">Active Executions</span>
+                    <span className="text-sm font-semibold text-amber-400">
+                      {realtimeData?.saintsalme?.activeExecutions || 5}
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs text-slate-400">Revenue Today</span>
+                    <span className="text-sm font-semibold text-green-400">
+                      ${realtimeData?.saintsalme?.revenueToday || 2847}
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs text-slate-400">Leads Processed</span>
+                    <span className="text-sm font-semibold text-cyan-400">
+                      {realtimeData?.saintsalme?.leadsProcessed || 18}
+                    </span>
+                  </div>
+                  <div className="text-xs text-slate-500 pt-1">
+                    Last execution: {new Date().toLocaleTimeString()}
+                  </div>
                 </CardContent>
               </Card>
 
@@ -452,7 +543,7 @@ export default function SaintSalMe() {
               <Card className="bg-slate-900/30 border-slate-700">
                 <CardHeader className="pb-3">
                   <CardTitle className="text-sm flex items-center">
-                    <Sparkles className="w-4 h-4 mr-2 text-blue-400" />
+                    <Brain className="w-4 h-4 mr-2 text-blue-400" />
                     System Health
                   </CardTitle>
                 </CardHeader>

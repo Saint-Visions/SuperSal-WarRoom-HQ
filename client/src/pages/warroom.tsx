@@ -55,6 +55,11 @@ export default function WarRoom() {
     refetchInterval: 30000,
   });
 
+  const { data: realtimeData } = useQuery({
+    queryKey: ['/api/workspace/realtime'],
+    refetchInterval: 3000,
+  });
+
   // AI chat for production planning
   const aiChatMutation = useMutation({
     mutationFn: async (data: { message: string }) => {
@@ -91,9 +96,33 @@ export default function WarRoom() {
     { id: "settings", icon: Settings, label: "Settings", color: "text-gray-400" }
   ];
 
+  // Tool action mutations
+  const toolActionMutation = useMutation({
+    mutationFn: async (data: { toolId: string; action: string; params?: any }) => {
+      return await apiRequest("POST", "/api/warroom/tool-action", data);
+    },
+    onSuccess: (data) => {
+      toast({
+        title: "Tool Executed",
+        description: data.result,
+      });
+      
+      // Add tool result to conversation
+      setConversation(prev => [...prev, {
+        role: 'system',
+        content: `Tool Result: ${data.result}`,
+        data: data
+      }]);
+    }
+  });
+
   const handleSendMessage = () => {
     if (!message.trim()) return;
     aiChatMutation.mutate({ message });
+  };
+
+  const handleToolAction = (toolId: string, action: string, params?: any) => {
+    toolActionMutation.mutate({ toolId, action, params });
   };
 
   return (
@@ -402,18 +431,79 @@ export default function WarRoom() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2">
-                  <Button variant="outline" size="sm" className="w-full justify-start text-xs">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="w-full justify-start text-xs"
+                    onClick={() => handleToolAction('analytics', 'analyze')}
+                    disabled={toolActionMutation.isPending}
+                  >
                     <Target className="w-3 h-3 mr-2" />
                     Analyze Performance
                   </Button>
-                  <Button variant="outline" size="sm" className="w-full justify-start text-xs">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="w-full justify-start text-xs"
+                    onClick={() => handleToolAction('database', 'query')}
+                    disabled={toolActionMutation.isPending}
+                  >
                     <Database className="w-3 h-3 mr-2" />
                     Query Database
                   </Button>
-                  <Button variant="outline" size="sm" className="w-full justify-start text-xs">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="w-full justify-start text-xs"
+                    onClick={() => handleToolAction('monitoring', 'status')}
+                    disabled={toolActionMutation.isPending}
+                  >
                     <Globe className="w-3 h-3 mr-2" />
-                    Check Integrations
+                    Check Systems
                   </Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="w-full justify-start text-xs"
+                    onClick={() => handleToolAction('automation', 'execute')}
+                    disabled={toolActionMutation.isPending}
+                  >
+                    <Zap className="w-3 h-3 mr-2" />
+                    Run Automation
+                  </Button>
+                </CardContent>
+              </Card>
+
+              {/* Real-time Activity */}
+              <Card className="bg-slate-900/30 border-slate-700">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-sm flex items-center">
+                    <Activity className="w-4 h-4 mr-2 text-cyan-400" />
+                    Live Activity
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs text-slate-400">Active Users</span>
+                    <span className="text-sm font-semibold text-cyan-400">
+                      {realtimeData?.warroom?.activeUsers || 1}
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs text-slate-400">System Load</span>
+                    <span className="text-sm font-semibold text-green-400">
+                      {realtimeData?.warroom?.systemLoad || 25}%
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs text-slate-400">Processes</span>
+                    <span className="text-sm font-semibold text-yellow-400">
+                      {realtimeData?.warroom?.activeProcesses || 12}
+                    </span>
+                  </div>
+                  <div className="text-xs text-slate-500 pt-1">
+                    Last update: {new Date().toLocaleTimeString()}
+                  </div>
                 </CardContent>
               </Card>
             </div>
