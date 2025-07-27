@@ -1,0 +1,311 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Light theme colors */
+  --background: hsl(0, 0%, 100%);
+  --foreground: hsl(20, 14.3%, 4.1%);
+  --muted: hsl(60, 4.8%, 95.9%);
+  --muted-foreground: hsl(25, 5.3%, 44.7%);
+  --popover: hsl(0, 0%, 100%);
+  --popover-foreground: hsl(20, 14.3%, 4.1%);
+  --card: hsl(0, 0%, 100%);
+  --card-foreground: hsl(20, 14.3%, 4.1%);
+  --border: hsl(20, 5.9%, 90%);
+  --input: hsl(20, 5.9%, 90%);
+  --primary: hsl(207, 90%, 54%);
+  --primary-foreground: hsl(211, 100%, 99%);
+  --secondary: hsl(60, 4.8%, 95.9%);
+  --secondary-foreground: hsl(24, 9.8%, 10%);
+  --accent: hsl(60, 4.8%, 95.9%);
+  --accent-foreground: hsl(24, 9.8%, 10%);
+  --destructive: hsl(0, 84.2%, 60.2%);
+  --destructive-foreground: hsl(60, 9.1%, 97.8%);
+  --ring: hsl(20, 14.3%, 4.1%);
+  --radius: 0.5rem;
+
+  /* SuperSal Command Center Colors */
+  --gold: hsl(45, 84%, 55%);
+  --charcoal: hsl(0, 0%, 10%);
+  --surface: hsl(0, 0%, 16%);
+  --elevated: hsl(0, 0%, 20%);
+  --glass-bg: hsla(0, 0%, 16%, 0.8);
+  --glass-border: hsla(0, 0%, 100%, 0.1);
+}
+
+.dark {
+  /* Dark theme - SuperSal primary theme */
+  --background: hsl(0, 0%, 10%);
+  --foreground: hsl(0, 0%, 98%);
+  --muted: hsl(0, 0%, 16%);
+  --muted-foreground: hsl(0, 0%, 64.9%);
+  --popover: hsl(0, 0%, 16%);
+  --popover-foreground: hsl(0, 0%, 98%);
+  --card: hsl(0, 0%, 16%);
+  --card-foreground: hsl(0, 0%, 98%);
+  --border: hsl(0, 0%, 20%);
+  --input: hsl(0, 0%, 20%);
+  --primary: hsl(45, 84%, 55%);
+  --primary-foreground: hsl(0, 0%, 10%);
+  --secondary: hsl(0, 0%, 20%);
+  --secondary-foreground: hsl(0, 0%, 98%);
+  --accent: hsl(0, 0%, 20%);
+  --accent-foreground: hsl(0, 0%, 98%);
+  --destructive: hsl(0, 62.8%, 30.6%);
+  --destructive-foreground: hsl(0, 0%, 98%);
+  --ring: hsl(45, 84%, 55%);
+  --radius: 0.5rem;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+    font-family: 'Inter', sans-serif;
+  }
+
+  html {
+    @apply dark;
+  }
+}
+
+@layer components {
+  .glassmorphism {
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+  }
+
+  .logo-watermark {
+    position: relative;
+  }
+
+  .logo-watermark::before {
+    content: "CookinKnowledge™";
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-45deg);
+    font-size: 3rem;
+    font-weight: bold;
+    color: var(--elevated);
+    opacity: 0.05;
+    pointer-events: none;
+    z-index: 0;
+    user-select: none;
+  }
+
+  .animate-pulse-gold {
+    animation: pulse-gold 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  @keyframes pulse-gold {
+    0%, 100% { 
+      opacity: 1; 
+    }
+    50% { 
+      opacity: 0.3; 
+    }
+  }
+
+  .sidebar-collapsed {
+    width: 4rem;
+  }
+
+  .sidebar-expanded {
+    width: 16rem;
+  }
+
+  .transition-width {
+    transition: width 0.3s ease-in-out;
+  }
+
+  .tab-btn {
+    @apply text-gray-300 hover:text-white transition-all duration-200;
+  }
+
+  .tab-btn.active {
+    @apply bg-primary text-primary-foreground;
+  }
+
+  .screen-content {
+    min-height: calc(100vh - 5rem);
+  }
+
+  /* Custom scrollbar */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: var(--muted);
+    border-radius: 3px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: var(--gold);
+    border-radius: 3px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: hsl(45, 84%, 65%);
+  }
+
+  /* Status indicators */
+  .status-online {
+    @apply w-2 h-2 bg-green-400 rounded-full animate-pulse-gold;
+  }
+
+  .status-warning {
+    @apply w-2 h-2 bg-yellow-400 rounded-full animate-pulse-gold;
+  }
+
+  .status-offline {
+    @apply w-2 h-2 bg-red-400 rounded-full;
+  }
+
+  /* Animation utilities */
+  .animate-slide-up {
+    animation: slideUp 0.3s ease-out forwards;
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-out forwards;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  /* Chart and metric styling */
+  .metric-card {
+    @apply glassmorphism rounded-xl p-4 hover:bg-white/5 transition-all duration-200;
+  }
+
+  .metric-value {
+    @apply text-2xl font-bold;
+  }
+
+  .metric-change-positive {
+    @apply text-green-400 text-xs;
+  }
+
+  .metric-change-negative {
+    @apply text-red-400 text-xs;
+  }
+
+  .metric-change-neutral {
+    @apply text-gray-400 text-xs;
+  }
+
+  /* Command center specific styles */
+  .command-grid {
+    @apply grid grid-cols-1 lg:grid-cols-3 gap-6;
+  }
+
+  .ai-chat-container {
+    @apply lg:col-span-2 glassmorphism rounded-xl p-6 flex flex-col;
+    height: calc(100vh - 12rem);
+  }
+
+  .workflow-canvas {
+    @apply bg-charcoal rounded-lg p-4 relative border border-white/10;
+    min-height: 24rem;
+  }
+
+  /* Node styling for workflow builder */
+  .workflow-node {
+    @apply absolute rounded-lg p-3 text-center cursor-pointer hover:scale-105 transition-transform;
+    width: 8rem;
+  }
+
+  .workflow-node.start {
+    @apply bg-green-500;
+  }
+
+  .workflow-node.process {
+    @apply bg-blue-500;
+  }
+
+  .workflow-node.decision {
+    @apply bg-yellow-500 text-black;
+  }
+
+  .workflow-node.action {
+    @apply bg-purple-500;
+  }
+
+  .workflow-node.end {
+    @apply bg-red-500;
+  }
+
+  /* Terminal styling */
+  .terminal {
+    @apply bg-charcoal rounded-lg p-4 font-mono text-sm overflow-y-auto custom-scrollbar;
+    min-height: 16rem;
+  }
+
+  .terminal-prompt {
+    @apply text-green-400;
+  }
+
+  .terminal-output {
+    @apply text-white;
+  }
+
+  .terminal-info {
+    @apply text-blue-400;
+  }
+
+  .terminal-cursor {
+    @apply animate-pulse;
+  }
+}
+
+/* Font imports */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+/* Ensure dark theme is applied */
+html {
+  color-scheme: dark;
+}
+
+/* Custom focus styles */
+*:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+/* Loading spinner */
+.spinner {
+  @apply animate-spin w-4 h-4 border-2 border-primary border-t-transparent rounded-full;
+}
+
+/* Hover effects */
+.hover-lift {
+  @apply hover:scale-105 hover:shadow-lg transition-all duration-200;
+}
+
+.hover-glow {
+  @apply hover:shadow-[0_0_20px_rgba(212,175,55,0.3)] transition-all duration-300;
+}
