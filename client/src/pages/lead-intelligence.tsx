@@ -150,22 +150,23 @@ export default function LeadIntelligence() {
       <div className="min-h-screen bg-charcoal/90 text-white p-6">
         <div className="max-w-7xl mx-auto">
         
-        {/* Premium Cookin' Knowledge Wall Logo - Top Left */}
-        <div className="absolute top-6 left-6 z-50">
-          <PremiumCookinLogo size="lg" animated={true} />
-        </div>
-        
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-6 mt-40"
+          className="mb-6"
         >
-          <div className="flex items-center space-x-4 mb-4">
-            <PartnerTechLogo size="lg" animated={true} />
-            <div>
-              <h1 className="text-3xl font-bold">Lead Intelligence</h1>
-              <p className="text-gray-400">Powered by SuperSal™ • OpenAI-level intelligence meets Apple-grade experience</p>
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center space-x-4">
+              <PartnerTechLogo size="lg" animated={true} />
+              <div>
+                <h1 className="text-3xl font-bold">Lead Intelligence</h1>
+                <p className="text-gray-400">Powered by SuperSal™ • OpenAI-level intelligence meets Apple-grade experience</p>
+              </div>
+            </div>
+            {/* Premium Cookin' Knowledge Wall Logo - Top Right */}
+            <div className="flex-shrink-0">
+              <PremiumCookinLogo size="md" animated={true} />
             </div>
           </div>
         </motion.div>
