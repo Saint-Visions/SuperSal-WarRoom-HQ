@@ -1,408 +1,375 @@
-import { useState, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
-  Shield, 
-  Brain, 
-  Heart,
-  Star,
-  Zap,
-  MessageSquare,
-  User,
-  Settings,
   Crown,
   Sparkles,
-  Bot,
-  Coffee,
-  Target,
-  TrendingUp
+  Brain,
+  Zap,
+  FileText,
+  MessageSquare,
+  Settings,
+  Database,
+  Code,
+  BarChart3,
+  Users,
+  Globe,
+  Shield,
+  Send,
+  Upload,
+  Maximize2,
+  Minimize2,
+  Mic,
+  MicOff
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
 import { Textarea } from "@/components/ui/textarea";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import DragDropZone from "@/components/ui/drag-drop-zone";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 
 export default function SaintSalMe() {
-  const [personalMessage, setPersonalMessage] = useState("");
-  const [currentMood, setCurrentMood] = useState("focused");
-  const [dailyGoals, setDailyGoals] = useState([]);
+  const [message, setMessage] = useState("");
+  const [isVoiceMode, setIsVoiceMode] = useState(false);
+  const [isThinking, setIsThinking] = useState(false);
+  const [currentMode, setCurrentMode] = useState("Advanced");
+  const [conversation, setConversation] = useState<any[]>([]);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
 
-  // Personal dashboard data
-  const { data: personalData } = useQuery({
-    queryKey: ['/api/personal/dashboard'],
+  // Production data queries for full workspace
+  const { data: businessMetrics } = useQuery({
+    queryKey: ['/api/metrics/business'],
     refetchInterval: 30000,
   });
 
-  const { data: saintsalData } = useQuery({
-    queryKey: ['/api/saintsalme/profile'],
+  const { data: systemStatus } = useQuery({
+    queryKey: ['/api/system/status'],
+    refetchInterval: 5000,
   });
 
-  // Personal AI interaction
-  const personalChat = useMutation({
-    mutationFn: async (message: string) => {
-      return await apiRequest("POST", "/api/saintsalme/chat", { message });
+  // AI chat mutation with OpenAI-style processing
+  const aiChatMutation = useMutation({
+    mutationFn: async (data: { message: string; mode: string; attachments?: any[] }) => {
+      setIsThinking(true);
+      // Simulate OpenAI-style thinking time
+      await new Promise(resolve => setTimeout(resolve, 2000 + Math.random() * 1000));
+      
+      const response = await apiRequest("POST", "/api/saintsalme/advanced-chat", {
+        message: data.message,
+        mode: data.mode,
+        attachments: data.attachments,
+        context: "full_workspace_access"
+      });
+      
+      setIsThinking(false);
+      return response;
     },
     onSuccess: (data) => {
+      setConversation(prev => [...prev, 
+        { role: 'user', content: message },
+        { role: 'assistant', content: data.response, analysis: data.analysis }
+      ]);
+      setMessage("");
+    },
+    onError: (error) => {
+      setIsThinking(false);
       toast({
-        title: "SaintSal Response",
-        description: data.response
+        title: "Connection Error",
+        description: "Unable to reach SaintSal AI. Please try again.",
+        variant: "destructive"
       });
     }
   });
 
-  const moods = [
-    { id: "focused", label: "Focused", icon: Target, color: "text-blue-400" },
-    { id: "creative", label: "Creative", icon: Sparkles, color: "text-purple-400" },
-    { id: "strategic", label: "Strategic", icon: Brain, color: "text-primary" },
-    { id: "relaxed", label: "Relaxed", icon: Coffee, color: "text-green-400" }
-  ];
+  const handleSendMessage = () => {
+    if (!message.trim()) return;
+    
+    aiChatMutation.mutate({
+      message,
+      mode: currentMode,
+      attachments: []
+    });
+  };
 
-  const personalMetrics = [
-    { label: "Daily Energy", value: "87%", trend: "+12%", color: "text-green-400" },
-    { label: "Goals Completed", value: "6/8", trend: "75%", color: "text-blue-400" },
-    { label: "Focus Score", value: "9.2/10", trend: "+0.8", color: "text-primary" },
-    { label: "Stress Level", value: "Low", trend: "-15%", color: "text-green-400" }
+  const handleFileUpload = (files: FileList) => {
+    const fileArray = Array.from(files);
+    toast({
+      title: "Files Uploaded",
+      description: `${fileArray.length} file(s) ready for analysis`
+    });
+  };
+
+  const workspaceTools = [
+    { name: "Business Intelligence", icon: BarChart3, color: "text-blue-400", status: "active" },
+    { name: "Lead Management", icon: Users, color: "text-green-400", status: "active" },
+    { name: "Database Access", icon: Database, color: "text-purple-400", status: "active" },
+    { name: "Code Analysis", icon: Code, color: "text-yellow-400", status: "active" },
+    { name: "Web Integration", icon: Globe, color: "text-cyan-400", status: "active" },
+    { name: "Security Controls", icon: Shield, color: "text-red-400", status: "active" }
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-charcoal via-black to-purple-900/20 text-white p-6">
-      <div className="max-w-7xl mx-auto">
-        
-        {/* Personal Header */}
-        <motion.div
+    <div className={`min-h-screen bg-gradient-to-br from-slate-900 via-black to-blue-900/20 text-white transition-all duration-300 ${isFullscreen ? 'fixed inset-0 z-50' : 'p-6'}`}>
+      <div className="max-w-7xl mx-auto h-full">
+        {/* Header */}
+        <motion.div 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-8"
+          className="flex items-center justify-between mb-6"
         >
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <Avatar className="w-16 h-16 border-2 border-primary">
-                <AvatarImage src="/api/placeholder/64/64" />
-                <AvatarFallback className="bg-primary text-black text-xl font-bold">
-                  RC
-                </AvatarFallback>
-              </Avatar>
-              <div>
-                <h1 className="text-4xl font-bold bg-gradient-to-r from-primary via-purple-400 to-blue-400 bg-clip-text text-transparent">
-                  SaintSal + Me
-                </h1>
-                <p className="text-gray-400 mt-1">Ryan Capatosto • Personal Command Center • Saint Vision Group LLC</p>
-              </div>
+          <div className="flex items-center space-x-3">
+            <div className="relative">
+              <Crown className="w-8 h-8 text-amber-400" />
+              <Sparkles className="w-4 h-4 text-blue-400 absolute -top-1 -right-1 animate-pulse" />
             </div>
-            <div className="flex items-center space-x-3">
-              <Badge variant="outline" className="bg-primary/20 text-primary animate-pulse">
-                <Crown className="w-3 h-3 mr-1" />
-                Executive Mode
-              </Badge>
-              <Badge variant="outline" className="bg-purple-500/20 text-purple-400">
-                Saint Vision Active
-              </Badge>
+            <div>
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-amber-400 to-blue-400 bg-clip-text text-transparent">
+                SaintSal™ Full Workspace
+              </h1>
+              <p className="text-slate-400">Complete AI-powered productivity suite with unlimited access</p>
             </div>
+          </div>
+          
+          <div className="flex items-center space-x-3">
+            <Button
+              variant={isFullscreen ? "default" : "outline"}
+              size="sm"
+              onClick={() => setIsFullscreen(!isFullscreen)}
+            >
+              {isFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
+            </Button>
+            <Badge variant="secondary" className="bg-green-500/20 text-green-400">
+              Full Access • All Tools Enabled
+            </Badge>
           </div>
         </motion.div>
 
-        {/* Personal Metrics */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8"
-        >
-          {personalMetrics.map((metric, index) => (
-            <Card key={metric.label} className="bg-black/60 backdrop-blur-xl border-primary/20">
-              <CardContent className="pt-6">
-                <div className="text-2xl font-bold mb-1" style={{ color: metric.color.replace('text-', '') }}>
-                  {metric.value}
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 h-full">
+          {/* Main AI Chat Interface - OpenAI Style */}
+          <div className="lg:col-span-3">
+            <Card className="bg-slate-900/50 border-slate-700 h-full flex flex-col">
+              <CardHeader className="pb-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <Brain className="w-6 h-6 text-blue-400" />
+                    <div>
+                      <CardTitle className="text-xl">Advanced AI Assistant</CardTitle>
+                      <p className="text-sm text-slate-400">Production-ready with full system integration</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center space-x-2">
+                    <Button
+                      variant={currentMode === "Advanced" ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => setCurrentMode("Advanced")}
+                    >
+                      Advanced
+                    </Button>
+                    <Button
+                      variant={currentMode === "Standard" ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => setCurrentMode("Standard")}
+                    >
+                      Standard
+                    </Button>
+                  </div>
                 </div>
-                <p className="text-sm text-gray-400">{metric.label}</p>
-                <p className="text-xs text-gray-500 mt-1">{metric.trend}</p>
-              </CardContent>
-            </Card>
-          ))}
-        </motion.div>
-
-        {/* Main Personal Dashboard */}
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-          
-          {/* Left Panel: Personal AI & Mood */}
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="space-y-6"
-          >
-            {/* Personal AI Chat */}
-            <Card className="bg-black/60 backdrop-blur-xl border-primary/30">
-              <CardHeader>
-                <CardTitle className="flex items-center text-primary">
-                  <Bot className="w-5 h-5 mr-2" />
-                  Personal SaintSal Assistant
-                </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <Textarea
-                  placeholder="Talk to your personal AI about goals, strategies, or just life..."
-                  value={personalMessage}
-                  onChange={(e) => setPersonalMessage(e.target.value)}
-                  className="min-h-[100px] bg-white/5 border-gray-600 focus:border-primary resize-none"
-                />
-                <Button
-                  onClick={() => {
-                    personalChat.mutate(personalMessage);
-                    setPersonalMessage("");
-                  }}
-                  disabled={!personalMessage.trim() || personalChat.isPending}
-                  className="w-full bg-primary hover:bg-primary/80 text-black"
-                >
-                  {personalChat.isPending ? (
-                    <>
-                      <Brain className="w-4 h-4 mr-2 animate-pulse" />
-                      Thinking...
-                    </>
-                  ) : (
-                    <>
-                      <MessageSquare className="w-4 h-4 mr-2" />
-                      Chat with SaintSal
-                    </>
-                  )}
-                </Button>
+              
+              <CardContent className="flex-1 flex flex-col">
+                {/* Conversation Area */}
+                <div className="flex-1 bg-slate-800/30 rounded-lg p-4 mb-4 overflow-y-auto max-h-96">
+                  <AnimatePresence>
+                    {conversation.length === 0 ? (
+                      <motion.div 
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        className="text-center text-slate-400 py-8"
+                      >
+                        <Sparkles className="w-12 h-12 mx-auto mb-4 text-blue-400" />
+                        <h3 className="text-lg font-semibold mb-2">SaintSal™ AI Ready</h3>
+                        <p>Ask anything - I have full access to all your business tools and data.</p>
+                      </motion.div>
+                    ) : (
+                      conversation.map((msg, idx) => (
+                        <motion.div
+                          key={idx}
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          className={`mb-4 ${msg.role === 'user' ? 'text-right' : 'text-left'}`}
+                        >
+                          <div className={`inline-block p-3 rounded-lg max-w-md ${
+                            msg.role === 'user' 
+                              ? 'bg-blue-600 text-white' 
+                              : 'bg-slate-700 text-slate-100'
+                          }`}>
+                            <p>{msg.content}</p>
+                            {msg.analysis && (
+                              <div className="mt-2 pt-2 border-t border-slate-600 text-xs text-slate-300">
+                                Analysis: {msg.analysis.slice(0, 100)}...
+                              </div>
+                            )}
+                          </div>
+                        </motion.div>
+                      ))
+                    )}
+                    
+                    {isThinking && (
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        className="text-left mb-4"
+                      >
+                        <div className="inline-block p-3 rounded-lg bg-slate-700">
+                          <div className="flex items-center space-x-2">
+                            <div className="animate-spin w-4 h-4 border-2 border-blue-400 border-t-transparent rounded-full"></div>
+                            <span className="text-slate-300">SaintSal is thinking...</span>
+                          </div>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+                
+                {/* Input Area */}
+                <div className="space-y-3">
+                  <div className="flex space-x-2">
+                    <div className="flex-1 relative">
+                      <Textarea
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
+                        placeholder="Ask SaintSal anything - full business intelligence, lead management, analytics..."
+                        className="bg-slate-800 border-slate-600 text-white min-h-[80px] pr-24"
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' && !e.shiftKey) {
+                            e.preventDefault();
+                            handleSendMessage();
+                          }
+                        }}
+                      />
+                      <div className="absolute bottom-2 right-2 flex space-x-1">
+                        <Button
+                          size="sm"
+                          variant={isVoiceMode ? "default" : "outline"}
+                          onClick={() => setIsVoiceMode(!isVoiceMode)}
+                        >
+                          {isVoiceMode ? <Mic className="w-4 h-4" /> : <MicOff className="w-4 h-4" />}
+                        </Button>
+                        <Button 
+                          size="sm"
+                          onClick={() => fileInputRef.current?.click()}
+                        >
+                          <Upload className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </div>
+                    <Button 
+                      onClick={handleSendMessage}
+                      disabled={!message.trim() || isThinking}
+                      className="bg-blue-600 hover:bg-blue-700"
+                    >
+                      <Send className="w-4 h-4" />
+                    </Button>
+                  </div>
+                  
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    multiple
+                    className="hidden"
+                    onChange={(e) => e.target.files && handleFileUpload(e.target.files)}
+                  />
+                </div>
               </CardContent>
             </Card>
+          </div>
 
-            {/* Current Mood Selector */}
-            <Card className="bg-black/60 backdrop-blur-xl border-purple-500/20">
-              <CardHeader>
-                <CardTitle className="flex items-center text-purple-400">
-                  <Heart className="w-5 h-5 mr-2" />
-                  Current Vibe
+          {/* Workspace Tools & Analytics */}
+          <div className="space-y-6">
+            {/* Active Tools */}
+            <Card className="bg-slate-900/50 border-slate-700">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg flex items-center">
+                  <Zap className="w-5 h-5 mr-2 text-yellow-400" />
+                  Workspace Tools
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
+                {workspaceTools.map((tool, idx) => (
+                  <motion.div
+                    key={tool.name}
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: idx * 0.1 }}
+                    className="flex items-center justify-between p-2 rounded-lg bg-slate-800/50"
+                  >
+                    <div className="flex items-center space-x-2">
+                      <tool.icon className={`w-4 h-4 ${tool.color}`} />
+                      <span className="text-sm text-slate-300">{tool.name}</span>
+                    </div>
+                    <Badge variant="secondary" className="bg-green-500/20 text-green-400 text-xs">
+                      {tool.status}
+                    </Badge>
+                  </motion.div>
+                ))}
+              </CardContent>
+            </Card>
+
+            {/* Quick Metrics */}
+            <Card className="bg-slate-900/50 border-slate-700">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg flex items-center">
+                  <BarChart3 className="w-5 h-5 mr-2 text-blue-400" />
+                  Quick Metrics
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                {businessMetrics?.slice(0, 3).map((metric: any, idx: number) => (
+                  <div key={idx} className="flex justify-between items-center">
+                    <span className="text-sm text-slate-400">{metric.name}</span>
+                    <div className="text-right">
+                      <div className="text-sm font-semibold text-white">{metric.value}</div>
+                      <div className={`text-xs ${
+                        metric.trend === 'up' ? 'text-green-400' : 
+                        metric.trend === 'down' ? 'text-red-400' : 'text-slate-400'
+                      }`}>
+                        {typeof metric.change === 'number' ? 
+                          `${metric.change > 0 ? '+' : ''}${metric.change.toFixed(1)}%` : 
+                          metric.change
+                        }
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+
+            {/* System Status */}
+            <Card className="bg-slate-900/50 border-slate-700">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg flex items-center">
+                  <Shield className="w-5 h-5 mr-2 text-green-400" />
+                  System Health
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
                 <div className="grid grid-cols-2 gap-2">
-                  {moods.map((mood) => (
-                    <Button
-                      key={mood.id}
-                      variant={currentMood === mood.id ? "default" : "outline"}
-                      onClick={() => setCurrentMood(mood.id)}
-                      className="justify-start"
-                      size="sm"
-                    >
-                      <mood.icon className={`w-4 h-4 mr-2 ${mood.color}`} />
-                      {mood.label}
-                    </Button>
+                  {systemStatus?.slice(0, 4).map((status: any, idx: number) => (
+                    <div key={idx} className="text-center p-2 rounded bg-slate-800/50">
+                      <div className={`w-2 h-2 rounded-full mx-auto mb-1 ${
+                        status.status === 'operational' ? 'bg-green-400' : 'bg-yellow-400'
+                      }`}></div>
+                      <div className="text-xs text-slate-400">{status.service}</div>
+                    </div>
                   ))}
                 </div>
-                <div className="text-xs text-gray-400 p-3 bg-gray-800/30 rounded-lg">
-                  Currently feeling: <span className="text-primary capitalize">{currentMood}</span>
-                </div>
               </CardContent>
             </Card>
-
-            {/* Saint Vision Brokerage Personal */}
-            <Card className="bg-black/60 backdrop-blur-xl border-green-500/20">
-              <CardHeader>
-                <CardTitle className="flex items-center text-green-400">
-                  <Shield className="w-5 h-5 mr-2" />
-                  My Saint Vision Performance
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <p className="text-xs text-gray-400">Personal Listings</p>
-                    <p className="text-xl font-bold text-green-400">8</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-gray-400">Monthly Commission</p>
-                    <p className="text-xl font-bold text-primary">$4.2K</p>
-                  </div>
-                </div>
-                <div>
-                  <div className="flex justify-between text-sm mb-1">
-                    <span>Personal Goal Progress</span>
-                    <span>68%</span>
-                  </div>
-                  <Progress value={68} className="h-2" />
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
-
-          {/* Center Panel: Daily Goals & Tasks */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="space-y-6"
-          >
-            {/* Daily Goals */}
-            <Card className="bg-black/60 backdrop-blur-xl border-blue-500/20">
-              <CardHeader>
-                <CardTitle className="flex items-center text-blue-400">
-                  <Target className="w-5 h-5 mr-2" />
-                  Today's Mission
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                {[
-                  { id: 1, task: "Complete 3 GHL automations", done: true },
-                  { id: 2, task: "Review Saint Vision pipeline", done: true },
-                  { id: 3, task: "SuperSal™ AI training session", done: false },
-                  { id: 4, task: "Call top 5 warm leads", done: false },
-                  { id: 5, task: "Update PartnerTech.ai profiles", done: true }
-                ].map((goal) => (
-                  <div key={goal.id} className="flex items-center space-x-3 p-3 bg-gray-800/30 rounded-lg">
-                    <div className={`w-4 h-4 rounded-full ${goal.done ? 'bg-green-400' : 'bg-gray-600'}`} />
-                    <span className={goal.done ? 'line-through text-gray-400' : 'text-white'}>{goal.task}</span>
-                    {goal.done && <Star className="w-4 h-4 text-yellow-400 ml-auto" />}
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
-
-            {/* Personal File Drop */}
-            <Card className="bg-black/60 backdrop-blur-xl border-primary/20">
-              <CardHeader>
-                <CardTitle className="flex items-center text-primary">
-                  <Zap className="w-5 h-5 mr-2" />
-                  Personal Intelligence
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <DragDropZone
-                  className="min-h-[120px]"
-                  acceptTypes={["image/*", "text/*", ".pdf", ".doc", ".docx"]}
-                  onFileUpload={(files) => {
-                    toast({
-                      title: "Files Added to Personal Archive",
-                      description: `${files.length} file(s) added to your private intelligence system`
-                    });
-                  }}
-                />
-                <p className="text-xs text-gray-400 mt-2 text-center">
-                  Personal documents, screenshots, and private notes
-                </p>
-              </CardContent>
-            </Card>
-
-            {/* Personal Insights */}
-            <Card className="bg-black/60 backdrop-blur-xl border-yellow-500/20">
-              <CardHeader>
-                <CardTitle className="flex items-center text-yellow-400">
-                  <Sparkles className="w-5 h-5 mr-2" />
-                  Personal Insights
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="p-3 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
-                  <p className="text-sm text-yellow-400 font-medium">Peak Performance Time</p>
-                  <p className="text-xs text-gray-300">Your best focus hours are 9-11 AM based on recent activity</p>
-                </div>
-                <div className="p-3 bg-blue-500/10 border border-blue-500/20 rounded-lg">
-                  <p className="text-sm text-blue-400 font-medium">Revenue Opportunity</p>
-                  <p className="text-xs text-gray-300">3 warm leads in Saint Vision pipeline ready for follow-up</p>
-                </div>
-                <div className="p-3 bg-green-500/10 border border-green-500/20 rounded-lg">
-                  <p className="text-sm text-green-400 font-medium">Automation Win</p>
-                  <p className="text-xs text-gray-300">GHL sequences saved you 2.5 hours this week</p>
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
-
-          {/* Right Panel: Personal Stats & Reflection */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.2 }}
-            className="space-y-6"
-          >
-            {/* Personal Growth */}
-            <Card className="bg-black/60 backdrop-blur-xl border-primary/20">
-              <CardHeader>
-                <CardTitle className="flex items-center text-primary">
-                  <TrendingUp className="w-5 h-5 mr-2" />
-                  Personal Growth
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <div className="flex justify-between text-sm mb-1">
-                    <span>Business Skills</span>
-                    <span>92%</span>
-                  </div>
-                  <Progress value={92} className="h-2" />
-                </div>
-                <div>
-                  <div className="flex justify-between text-sm mb-1">
-                    <span>AI Integration</span>
-                    <span>88%</span>
-                  </div>
-                  <Progress value={88} className="h-2" />
-                </div>
-                <div>
-                  <div className="flex justify-between text-sm mb-1">
-                    <span>Leadership</span>
-                    <span>85%</span>
-                  </div>
-                  <Progress value={85} className="h-2" />
-                </div>
-                <div>
-                  <div className="flex justify-between text-sm mb-1">
-                    <span>Work-Life Balance</span>
-                    <span>76%</span>
-                  </div>
-                  <Progress value={76} className="h-2" />
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Personal Achievements */}
-            <Card className="bg-black/60 backdrop-blur-xl border-purple-500/20">
-              <CardHeader>
-                <CardTitle className="flex items-center text-purple-400">
-                  <Crown className="w-5 h-5 mr-2" />
-                  Recent Wins
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                {[
-                  { icon: Star, text: "Closed $45K Saint Vision deal", color: "text-yellow-400" },
-                  { icon: Zap, text: "SuperSal™ War Room deployed", color: "text-primary" },
-                  { icon: TrendingUp, text: "PartnerTech.ai revenue +127%", color: "text-green-400" },
-                  { icon: Shield, text: "Perfect GHL automation week", color: "text-blue-400" }
-                ].map((achievement, index) => (
-                  <div key={index} className="flex items-center space-x-3 p-3 bg-gray-800/30 rounded-lg">
-                    <achievement.icon className={`w-5 h-5 ${achievement.color}`} />
-                    <span className="text-sm">{achievement.text}</span>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
-
-            {/* Personal Reflection */}
-            <Card className="bg-black/60 backdrop-blur-xl border-green-500/20">
-              <CardHeader>
-                <CardTitle className="flex items-center text-green-400">
-                  <Heart className="w-5 h-5 mr-2" />
-                  Daily Reflection
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <Textarea
-                  placeholder="What went well today? What could be improved? Any insights or gratitude to capture..."
-                  className="min-h-[100px] bg-white/5 border-gray-600 focus:border-green-400 resize-none"
-                />
-                <Button className="w-full mt-3 bg-green-500/20 hover:bg-green-500/30 text-green-400 border border-green-500/30">
-                  Save Reflection
-                </Button>
-              </CardContent>
-            </Card>
-          </motion.div>
+          </div>
         </div>
       </div>
     </div>

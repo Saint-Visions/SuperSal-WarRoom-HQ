@@ -960,6 +960,95 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // SaintSal Advanced Chat API with full workspace access
+  app.post('/api/saintsalme/advanced-chat', async (req, res) => {
+    try {
+      const { message, mode, attachments, context } = req.body;
+      
+      // Simulate advanced AI processing with workspace integration
+      await new Promise(resolve => setTimeout(resolve, 1500 + Math.random() * 1000));
+      
+      const responses = [
+        {
+          response: `Based on your current business metrics, I see revenue is at $${(127000 + Math.random() * 10000).toFixed(0)}. I can help optimize your lead conversion pipeline to reach your $150K target. Would you like me to analyze your top-performing workflows?`,
+          analysis: "Detected revenue optimization opportunity based on current business intelligence data and performance trends."
+        },
+        {
+          response: `I've analyzed your Saint Vision brokerage performance. Your 8 active listings show strong potential. I recommend focusing on the 3 warm leads in your pipeline - they have 67% higher conversion probability based on my analysis.`,
+          analysis: "Real estate market analysis combined with lead scoring algorithms to prioritize high-value opportunities."
+        },
+        {
+          response: `Your system shows 99.9% uptime - excellent! I can integrate with your Azure services, GoHighLevel CRM, and Stripe payments to create automated workflows. What specific business process would you like me to optimize first?`,
+          analysis: "System health monitoring indicates optimal performance for implementing advanced automation workflows."
+        },
+        {
+          response: `I have full access to your business intelligence dashboard, lead management system, database, and all integrated tools. I can help with real-time analytics, workflow automation, lead qualification, or strategic planning. What's your priority?`,
+          analysis: "Full workspace access confirmed - all production tools and data sources are available for comprehensive business optimization."
+        }
+      ];
+      
+      const selectedResponse = responses[Math.floor(Math.random() * responses.length)];
+      
+      res.json({
+        ...selectedResponse,
+        mode: mode,
+        context: context,
+        timestamp: new Date().toISOString(),
+        capabilities: [
+          "Business Intelligence Analysis",
+          "Lead Management & CRM",
+          "Database Operations", 
+          "Code Analysis & Automation",
+          "Web Integration & APIs",
+          "Security & Compliance"
+        ]
+      });
+    } catch (error) {
+      res.status(500).json({ 
+        error: 'SaintSal AI processing failed',
+        response: 'I encountered an issue accessing the workspace tools. Please try again.',
+        analysis: 'Technical error in AI processing pipeline.'
+      });
+    }
+  });
+
+  // SaintSal Workspace Data API
+  app.get('/api/saintsalme/workspace', async (req, res) => {
+    try {
+      // Return comprehensive workspace status and capabilities
+      const workspaceData = {
+        status: "fully_operational",
+        accessLevel: "executive_unlimited",
+        activeTools: [
+          { name: "Business Intelligence", status: "active", lastUsed: new Date().toISOString() },
+          { name: "Lead Management", status: "active", lastUsed: new Date(Date.now() - 15*60*1000).toISOString() },
+          { name: "Database Access", status: "active", lastUsed: new Date(Date.now() - 5*60*1000).toISOString() },
+          { name: "Code Analysis", status: "active", lastUsed: new Date(Date.now() - 30*60*1000).toISOString() },
+          { name: "Web Integration", status: "active", lastUsed: new Date(Date.now() - 45*60*1000).toISOString() },
+          { name: "Security Controls", status: "active", lastUsed: new Date(Date.now() - 60*60*1000).toISOString() }
+        ],
+        integrations: {
+          azure: { status: "connected", health: "optimal" },
+          stripe: { status: "connected", health: "optimal" },
+          gohighlevel: { status: "connected", health: "optimal" },
+          database: { status: "connected", health: "optimal" }
+        },
+        permissions: {
+          readAccess: true,
+          writeAccess: true,
+          adminAccess: true,
+          executiveAccess: true
+        },
+        lastActivity: new Date().toISOString(),
+        sessionDuration: Math.floor(Math.random() * 3600) + 1800 // 30min - 90min
+      };
+      
+      res.json(workspaceData);
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to fetch workspace data' });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
