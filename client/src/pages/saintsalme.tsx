@@ -79,8 +79,9 @@ export default function SaintSalMe() {
           context: "execution_workspace"
         });
         
-        console.log('Execution API Response:', response);
-        return response;
+        const jsonData = await response.json();
+        console.log('Execution API Response:', jsonData);
+        return jsonData;
       } catch (error) {
         console.error('Execution API Error:', error);
         throw error;

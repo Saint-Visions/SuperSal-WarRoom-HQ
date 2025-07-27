@@ -72,8 +72,9 @@ export default function WarRoom() {
           context: "production_planning"
         });
         
-        console.log('API Response:', response);
-        return response;
+        const jsonData = await response.json();
+        console.log('API Response:', jsonData);
+        return jsonData;
       } catch (error) {
         console.error('API Error:', error);
         throw error;
