@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
+import ParallaxBackground from "@/components/parallax-background";
 import { 
   Activity,
   BarChart3,
@@ -37,7 +38,7 @@ import SuperSalAuthorityPanel from "@/components/supersal-authority-panel";
 
 export default function WarRoom() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const [selectedTool, setSelectedTool] = useState("productivity");
+  const [selectedTool, setSelectedTool] = useState("analytics");
   const [activeTab, setActiveTab] = useState("operations");
   const [message, setMessage] = useState("");
   const [isThinking, setIsThinking] = useState(false);
@@ -157,20 +158,30 @@ export default function WarRoom() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white flex">
-      {/* Collapsible Sidebar */}
+    <ParallaxBackground className="min-h-screen">
+      <div className="min-h-screen bg-black/90 text-white flex relative overflow-hidden">
+      {/* Collapsible Sidebar - Full Height */}
       <motion.div 
         initial={false}
-        animate={{ width: sidebarCollapsed ? '60px' : '240px' }}
-        className="bg-slate-900/50 border-r border-slate-700 flex flex-col"
+        animate={{ width: sidebarCollapsed ? '60px' : '280px' }}
+        className="bg-slate-900/30 backdrop-blur-xl border-r border-slate-700/50 flex flex-col absolute left-0 top-0 h-full z-20"
       >
         {/* Header */}
         <div className="p-4 border-b border-slate-700">
           <div className="flex items-center justify-between">
             {!sidebarCollapsed && (
-              <div>
-                <h2 className="text-sm font-semibold text-cyan-400">WARROOM</h2>
-                <p className="text-xs text-slate-400">PRODUCTION CENTER</p>
+              <div className="flex items-center space-x-3">
+                <div 
+                  className="w-8 h-8 bg-cover bg-center rounded opacity-90 hover:opacity-100 transition-opacity border border-cyan-400/20"
+                  style={{
+                    backgroundImage: `url('/attached_assets/Frame 1000002501_1753620834045.png')`,
+                    backgroundSize: 'cover'
+                  }}
+                />
+                <div>
+                  <h2 className="text-sm font-semibold text-cyan-400">saintsal™ war room</h2>
+                  <p className="text-xs text-slate-400">production command center</p>
+                </div>
               </div>
             )}
             <Button
@@ -243,36 +254,40 @@ export default function WarRoom() {
         </div>
       </motion.div>
 
-      {/* Main Workspace */}
-      <div className="flex-1 flex flex-col">
-        {/* Top Bar */}
-        <div className="bg-slate-900/30 border-b border-slate-700 p-4">
+      {/* Main Workspace - Full Screen */}
+      <motion.div 
+        animate={{ marginLeft: sidebarCollapsed ? '60px' : '280px' }}
+        className="flex-1 flex flex-col min-h-screen relative"
+      >
+        {/* Immersive Header */}
+        <div className="absolute top-0 left-0 right-0 bg-gradient-to-b from-black/80 to-transparent p-6 z-10">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <img 
-                src="/cookin-logo.png" 
-                alt="Cookin' Knowledge"
-                className="w-12 h-12 opacity-80 hover:opacity-100 transition-opacity"
+              <div 
+                className="w-12 h-12 bg-cover bg-center rounded opacity-90 hover:opacity-100 transition-opacity border border-cyan-400/20"
+                style={{
+                  backgroundImage: `url('/attached_assets/Frame 1000002501_1753620834045.png')`,
+                  backgroundSize: 'cover'
+                }}
               />
+              <div>
+                <h1 className="text-3xl font-bold text-cyan-400">saintsal™ war room</h1>
+                <p className="text-slate-300">Production command center with divine authority</p>
+              </div>
             </div>
-            <div className="flex items-center space-x-3">
-              <Button variant="outline" size="sm">
-                <Search className="w-4 h-4 mr-2" />
-                Search
-              </Button>
-              <Button variant="outline" size="sm">
-                <Filter className="w-4 h-4 mr-2" />
-                Filter
-              </Button>
-              <Button variant="outline" size="sm">
-                <Maximize2 className="w-4 h-4" />
-              </Button>
+            <div className="flex space-x-3">
+              <Badge variant="secondary" className="bg-green-500/20 text-green-400 px-4 py-2">
+                {realtimeData?.warroom?.connections || 12} Live Connections
+              </Badge>
+              <Badge variant="secondary" className="bg-blue-500/20 text-blue-400 px-4 py-2">
+                Divine Authority
+              </Badge>
             </div>
           </div>
         </div>
 
         {/* Main Content Area - Full Screen */}
-        <div className="flex-1 relative">
+        <div className="flex-1 pt-32 px-6 pb-24 relative">
           {/* Background Image */}
           <div 
             className="absolute inset-0 bg-center bg-no-repeat bg-contain opacity-5"
@@ -418,7 +433,63 @@ export default function WarRoom() {
             </div>
           </div>
         </div>
+
+        {/* Bottom Search Bar - War Room Style */}
+        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent p-6 z-20">
+          <div className="max-w-4xl mx-auto">
+            <div className="flex space-x-4">
+              <input
+                type="file"
+                ref={fileInputRef}
+                className="hidden"
+                multiple
+                accept="image/*,.pdf,.txt,.doc,.docx"
+              />
+              <div className="flex-1 relative">
+                <Textarea
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  placeholder="Enter production command or query..."
+                  className="w-full bg-slate-900/80 backdrop-blur-xl border-slate-600/50 text-white resize-none rounded-xl px-6 py-4 pr-32"
+                  rows={1}
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                      e.preventDefault();
+                      handleSendMessage();
+                    }
+                  }}
+                />
+                <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex space-x-2">
+                  <Button
+                    onClick={() => fileInputRef.current?.click()}
+                    variant="ghost"
+                    size="sm"
+                    className="p-2 hover:bg-slate-700/50"
+                  >
+                    <Upload className="w-4 h-4 text-slate-400 hover:text-white" />
+                  </Button>
+                  <Button
+                    onClick={() => setIsVoiceMode(!isVoiceMode)}
+                    variant="ghost"
+                    size="sm"
+                    className="p-2 hover:bg-slate-700/50"
+                  >
+                    {isVoiceMode ? <MicOff className="w-4 h-4 text-red-400" /> : <Mic className="w-4 h-4 text-slate-400 hover:text-white" />}
+                  </Button>
+                  <Button
+                    onClick={handleSendMessage}
+                    disabled={!message.trim() || aiChatMutation.isPending}
+                    className="p-2 bg-cyan-600 hover:bg-cyan-700 rounded-lg"
+                  >
+                    <Send className="w-4 h-4" />
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </motion.div>
       </div>
-    </div>
+    </ParallaxBackground>
   );
 }
