@@ -66,19 +66,30 @@ export default function WarRoom() {
     mutationFn: async (data: { message: string }) => {
       setIsThinking(true);
       
-      const response = await apiRequest("POST", "/api/warroom/production-chat", {
-        message: data.message,
-        context: "production_planning"
-      });
-      
-      return response;
+      try {
+        const response = await apiRequest("POST", "/api/warroom/production-chat", {
+          message: data.message,
+          context: "production_planning"
+        });
+        
+        console.log('API Response:', response);
+        return response;
+      } catch (error) {
+        console.error('API Error:', error);
+        throw error;
+      }
     },
     onSuccess: (data) => {
       setIsThinking(false);
       console.log('Received response:', data);
       
       // Add AI response to existing conversation
-      setConversation(prev => [...prev, { role: 'assistant', content: data.response }]);
+      if (data && data.response) {
+        setConversation(prev => [...prev, { role: 'assistant', content: data.response }]);
+      } else {
+        console.error('No response content received:', data);
+        setConversation(prev => [...prev, { role: 'assistant', content: 'I received your message but encountered an issue with the response. Please try again.' }]);
+      }
     },
     onError: (error) => {
       setIsThinking(false);

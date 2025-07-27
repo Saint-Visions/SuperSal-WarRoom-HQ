@@ -72,24 +72,39 @@ export default function SaintSalMe() {
     mutationFn: async (data: { message: string; mode: string }) => {
       setIsThinking(true);
       
-      const response = await apiRequest("POST", "/api/saintsalme/advanced-chat", {
-        message: data.message,
-        mode: data.mode,
-        context: "execution_workspace"
-      });
-      
-      return response;
+      try {
+        const response = await apiRequest("POST", "/api/saintsalme/advanced-chat", {
+          message: data.message,
+          mode: data.mode,
+          context: "execution_workspace"
+        });
+        
+        console.log('Execution API Response:', response);
+        return response;
+      } catch (error) {
+        console.error('Execution API Error:', error);
+        throw error;
+      }
     },
     onSuccess: (data) => {
       setIsThinking(false);
       console.log('Received execution response:', data);
       
       // Add AI response to existing conversation
-      setConversation(prev => [...prev, { 
-        role: 'assistant', 
-        content: data.response, 
-        analysis: data.analysis 
-      }]);
+      if (data && data.response) {
+        setConversation(prev => [...prev, { 
+          role: 'assistant', 
+          content: data.response, 
+          analysis: data.analysis 
+        }]);
+      } else {
+        console.error('No response content received:', data);
+        setConversation(prev => [...prev, { 
+          role: 'assistant', 
+          content: 'I received your message but encountered an issue with the response. Please try again.',
+          analysis: 'Technical error in response processing.'
+        }]);
+      }
     },
     onError: (error) => {
       setIsThinking(false);
