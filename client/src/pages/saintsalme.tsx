@@ -227,7 +227,7 @@ export default function SaintSalMe() {
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <img 
-                src="/attached_assets/transparent icon cookin dark_1753612745390.png" 
+                src="/attached_assets/transparent icon cookin dark copy 2_1753612784547.png" 
                 alt="Cookin' Knowledge"
                 className="w-12 h-12 opacity-80 hover:opacity-100 transition-opacity"
               />
