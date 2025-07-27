@@ -55,7 +55,7 @@ export default function MobileNav({ currentPath }: MobileNavProps) {
           
           {/* Quick Access Dots */}
           <div className="flex items-center space-x-1 ml-4">
-            {navItems.slice(1, 4).map((item) => (
+            {navItems.slice(1).map((item) => (
               <Link key={item.path} href={item.path}>
                 <Button
                   variant="ghost"

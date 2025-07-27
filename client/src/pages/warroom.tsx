@@ -223,7 +223,21 @@ export default function WarRoom() {
               onClick={() => {
                 setSelectedTool(tool.id);
                 if (tool.id !== 'authority') {
-                  handleToolAction(tool.id, 'execute');
+                  // Map tools to their correct actions
+                  const actionMap = {
+                    'analytics': 'analyze',
+                    'monitoring': 'status', 
+                    'database': 'query',
+                    'automation': 'execute',
+                    'intelligence': 'analyze',
+                    'productivity': 'optimize',
+                    'security': 'scan',
+                    'integrations': 'status',
+                    'radar': 'scan',
+                    'settings': 'configure'
+                  };
+                  const action = actionMap[tool.id] || 'execute';
+                  handleToolAction(tool.id, action);
                 }
               }}
               className={`w-full flex items-center space-x-3 p-3 rounded-lg mb-1 transition-colors ${
