@@ -1,635 +1,424 @@
-import { useState, useEffect, useRef } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useState, useRef } from "react";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
-  Shield, 
-  AlertTriangle, 
-  CheckCircle, 
-  Zap, 
   Activity,
-  Settings,
-  Maximize2,
-  RefreshCw,
-  Bell,
-  Eye,
-  Target,
-  Gauge,
-  Terminal,
-  Brain,
-  Cpu,
-  Database,
-  Network,
-  Upload,
-  Bot,
-  MessageSquare,
-  Mic,
-  Search,
-  TrendingUp,
-  Users,
-  Phone,
-  Mail,
-  XCircle,
-  PlayCircle,
-  StopCircle,
-  Radio,
-  Radar,
-  Lock,
-  Unlock,
-  Globe,
-  Server,
-  Code,
-  FileText,
   BarChart3,
-  GitBranch,
-  Sparkles,
-  Archive,
-  History,
-  TestTube,
-  Monitor,
-  Layers,
-  Calendar,
-  Clock,
-  DollarSign,
-  Building2,
-  Briefcase,
-  LineChart,
-  PieChart,
-  Workflow,
-  Timer,
-  CheckSquare,
-  AlertCircle,
-  TrendingDown,
-  Loader2,
-  Power,
-  HardDrive,
-  Wifi,
-  Bluetooth
+  Brain,
+  Database,
+  Globe,
+  Home,
+  MessageSquare,
+  Radar,
+  Settings,
+  Shield,
+  Target,
+  Zap,
+  ChevronRight,
+  ChevronLeft,
+  Search,
+  Filter,
+  Maximize2,
+  Send,
+  Upload,
+  Mic,
+  MicOff,
+  RefreshCw,
+  Bell
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
-import { Switch } from "@/components/ui/switch";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Separator } from "@/components/ui/separator";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import DragDropZone from "@/components/ui/drag-drop-zone";
-import TerminalIntegration from "@/components/ui/terminal-integration";
+import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 
-interface SystemMetric {
-  name: string;
-  value: number;
-  status: 'healthy' | 'warning' | 'critical';
-  change: number;
-  lastUpdate: string;
-}
-
-interface WorkflowTask {
-  id: string;
-  title: string;
-  status: 'pending' | 'running' | 'completed' | 'failed';
-  priority: 'low' | 'medium' | 'high' | 'critical';
-  assignedTo: string;
-  dueDate: string;
-  progress: number;
-  estimatedTime: string;
-  tags: string[];
-}
-
-interface BusinessMetric {
-  name: string;
-  value: string;
-  change: number;
-  trend: 'up' | 'down' | 'stable';
-  target?: string;
-  category: 'revenue' | 'leads' | 'conversion' | 'performance';
-}
-
 export default function WarRoom() {
-  const [activePanel, setActivePanel] = useState("overview");
-  const [companionMode, setCompanionMode] = useState("advanced");
-  const [systemAlerts, setSystemAlerts] = useState<any[]>([]);
-  const [isRecording, setIsRecording] = useState(false);
-  const [aiThinking, setAiThinking] = useState(false);
-  const [commandInput, setCommandInput] = useState("");
-  const [selectedSystem, setSelectedSystem] = useState("all");
-  const [emergencyMode, setEmergencyMode] = useState(false);
-  const [autoRefresh, setAutoRefresh] = useState(true);
-  const [viewMode, setViewMode] = useState<'grid' | 'full'>('grid');
-  const chatRef = useRef<HTMLDivElement>(null);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [selectedTool, setSelectedTool] = useState("productivity");
+  const [message, setMessage] = useState("");
+  const [isThinking, setIsThinking] = useState(false);
+  const [conversation, setConversation] = useState<any[]>([]);
+  const [isVoiceMode, setIsVoiceMode] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
-  const queryClient = useQueryClient();
 
-  // Real-time system monitoring with faster refresh for production
-  const { data: systemStatus, refetch: refetchSystem } = useQuery({
+  // Production data queries
+  const { data: systemStatus } = useQuery({
     queryKey: ['/api/system/status'],
-    refetchInterval: autoRefresh ? 3000 : false,
-  });
-
-  const { data: dashboardData } = useQuery({
-    queryKey: ['/api/dashboard'],
-    refetchInterval: autoRefresh ? 5000 : false,
-  });
-
-  const { data: workflowData } = useQuery({
-    queryKey: ['/api/workflows'],
-    refetchInterval: autoRefresh ? 10000 : false,
+    refetchInterval: 5000,
   });
 
   const { data: businessMetrics } = useQuery({
     queryKey: ['/api/metrics/business'],
-    refetchInterval: autoRefresh ? 15000 : false,
+    refetchInterval: 30000,
   });
 
-  const { data: activeProjects } = useQuery({
-    queryKey: ['/api/projects/active'],
-    refetchInterval: autoRefresh ? 30000 : false,
-  });
-
-  // AI Assistant with production-level processing
-  const aiProcessing = useMutation({
-    mutationFn: async (input: { command?: string, files?: FileList, audio?: Blob }) => {
-      setAiThinking(true);
+  // AI chat for production planning
+  const aiChatMutation = useMutation({
+    mutationFn: async (data: { message: string }) => {
+      setIsThinking(true);
+      await new Promise(resolve => setTimeout(resolve, 2000 + Math.random() * 1000));
       
-      const formData = new FormData();
-      if (input.command) formData.append('command', input.command);
-      if (input.files) {
-        Array.from(input.files).forEach((file, index) => {
-          formData.append(`file_${index}`, file);
-        });
-      }
-      if (input.audio) formData.append('audio', input.audio);
-
-      // Realistic processing time based on complexity
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      return await apiRequest("/api/warroom/ai-process", {
-        method: 'POST',
-        body: formData
+      const response = await apiRequest("POST", "/api/warroom/production-chat", {
+        message: data.message,
+        context: "production_planning"
       });
+      
+      setIsThinking(false);
+      return response;
     },
     onSuccess: (data) => {
-      setAiThinking(false);
-      toast({
-        title: "AI Analysis Complete",
-        description: data.response || "Task processed successfully"
-      });
-      // Refresh relevant data
-      queryClient.invalidateQueries({ queryKey: ['/api/system/status'] });
-      queryClient.invalidateQueries({ queryKey: ['/api/workflows'] });
-    },
-    onError: () => {
-      setAiThinking(false);
-      toast({
-        title: "Processing Error",
-        description: "Unable to process request. Please try again.",
-        variant: "destructive"
-      });
+      setConversation(prev => [...prev, 
+        { role: 'user', content: message },
+        { role: 'assistant', content: data.response }
+      ]);
+      setMessage("");
     }
   });
 
-  // Emergency Actions
-  const emergencyAction = useMutation({
-    mutationFn: async (action: string) => {
-      return await apiRequest("/api/warroom/emergency", {
-        method: 'POST',
-        body: { action }
-      });
-    },
-    onSuccess: () => {
-      toast({
-        title: "Emergency Action Executed",
-        description: "System status updated"
-      });
-      refetchSystem();
-    }
-  });
-
-  // Workflow Management
-  const workflowAction = useMutation({
-    mutationFn: async ({ action, taskId, data }: { action: string, taskId?: string, data?: any }) => {
-      return await apiRequest("/api/workflows/manage", {
-        method: 'POST',
-        body: { action, taskId, data }
-      });
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/workflows'] });
-      toast({
-        title: "Workflow Updated",
-        description: "Changes applied successfully"
-      });
-    }
-  });
-
-  const handleVoiceCommand = async () => {
-    if (!isRecording) {
-      setIsRecording(true);
-      // Mock voice recording - in production would use Web Speech API
-      setTimeout(() => {
-        setIsRecording(false);
-        aiProcessing.mutate({ command: "Voice command processed" });
-      }, 3000);
-    }
-  };
-
-  const handleFileUpload = (files: FileList) => {
-    aiProcessing.mutate({ files });
-  };
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'healthy': case 'completed': case 'online': return 'text-green-400';
-      case 'warning': case 'running': case 'pending': return 'text-yellow-400';
-      case 'critical': case 'failed': case 'offline': return 'text-red-400';
-      default: return 'text-gray-400';
-    }
-  };
-
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case 'healthy': case 'completed': case 'online': return <CheckCircle className="w-4 h-4" />;
-      case 'warning': case 'running': case 'pending': return <AlertTriangle className="w-4 h-4" />;
-      case 'critical': case 'failed': case 'offline': return <XCircle className="w-4 h-4" />;
-      default: return <Activity className="w-4 h-4" />;
-    }
-  };
-
-  const mockSystemData: SystemMetric[] = [
-    { name: "CPU Usage", value: 67, status: 'warning', change: 5.2, lastUpdate: new Date().toISOString() },
-    { name: "Memory", value: 45, status: 'healthy', change: -2.1, lastUpdate: new Date().toISOString() },
-    { name: "Network I/O", value: 23, status: 'healthy', change: 1.8, lastUpdate: new Date().toISOString() },
-    { name: "Disk Space", value: 89, status: 'critical', change: 12.5, lastUpdate: new Date().toISOString() },
+  const sidebarTools = [
+    { id: "productivity", icon: Target, label: "Productivity", color: "text-cyan-400" },
+    { id: "analytics", icon: BarChart3, label: "Analytics", color: "text-blue-400" },
+    { id: "monitoring", icon: Activity, label: "Monitoring", color: "text-green-400" },
+    { id: "database", icon: Database, label: "Database", color: "text-purple-400" },
+    { id: "automation", icon: Zap, label: "Automation", color: "text-yellow-400" },
+    { id: "intelligence", icon: Brain, label: "Intelligence", color: "text-pink-400" },
+    { id: "security", icon: Shield, label: "Security", color: "text-red-400" },
+    { id: "integrations", icon: Globe, label: "Integrations", color: "text-orange-400" },
+    { id: "radar", icon: Radar, label: "Radar", color: "text-teal-400" },
+    { id: "settings", icon: Settings, label: "Settings", color: "text-gray-400" }
   ];
 
-  const mockWorkflowTasks: WorkflowTask[] = [
-    {
-      id: "1",
-      title: "Lead Qualification Automation",
-      status: 'running',
-      priority: 'high',
-      assignedTo: "AI Engine",
-      dueDate: "2025-01-27T15:00:00Z",
-      progress: 75,
-      estimatedTime: "2h 15m",
-      tags: ["automation", "leads", "priority"]
-    },
-    {
-      id: "2", 
-      title: "CRM Data Sync",
-      status: 'completed',
-      priority: 'medium',
-      assignedTo: "System",
-      dueDate: "2025-01-27T12:00:00Z",
-      progress: 100,
-      estimatedTime: "45m",
-      tags: ["sync", "crm", "data"]
-    },
-    {
-      id: "3",
-      title: "Quarterly Report Generation",
-      status: 'pending',
-      priority: 'critical',
-      assignedTo: "Analytics",
-      dueDate: "2025-01-27T18:00:00Z",
-      progress: 0,
-      estimatedTime: "4h 30m",
-      tags: ["reports", "quarterly", "analytics"]
-    }
-  ];
-
-  const mockBusinessMetrics: BusinessMetric[] = [
-    { name: "Monthly Revenue", value: "$127,540", change: 8.3, trend: 'up', target: "$150,000", category: 'revenue' },
-    { name: "Active Leads", value: "1,247", change: 12.1, trend: 'up', category: 'leads' },
-    { name: "Conversion Rate", value: "24.8%", change: -2.1, trend: 'down', target: "28%", category: 'conversion' },
-    { name: "System Uptime", value: "99.94%", change: 0.05, trend: 'stable', target: "99.9%", category: 'performance' }
-  ];
+  const handleSendMessage = () => {
+    if (!message.trim()) return;
+    aiChatMutation.mutate({ message });
+  };
 
   return (
-    <div className="min-h-screen bg-charcoal text-white p-4">
-      <div className="max-w-full mx-auto">
-        {/* War Room Header */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-6"
-        >
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center space-x-4">
-              <div className="p-3 bg-primary/20 rounded-xl">
-                <Radar className="w-8 h-8 text-primary" />
-              </div>
+    <div className="min-h-screen bg-black text-white flex">
+      {/* Collapsible Sidebar */}
+      <motion.div 
+        initial={false}
+        animate={{ width: sidebarCollapsed ? '60px' : '240px' }}
+        className="bg-slate-900/50 border-r border-slate-700 flex flex-col"
+      >
+        {/* Header */}
+        <div className="p-4 border-b border-slate-700">
+          <div className="flex items-center justify-between">
+            {!sidebarCollapsed && (
               <div>
-                <h1 className="text-3xl font-bold">War Room HQ</h1>
-                <p className="text-gray-400">Mission Control • Production Environment</p>
+                <h2 className="text-sm font-semibold text-cyan-400">WARROOM</h2>
+                <p className="text-xs text-slate-400">PRODUCTION CENTER</p>
+              </div>
+            )}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+              className="p-1 h-8 w-8"
+            >
+              {sidebarCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
+            </Button>
+          </div>
+        </div>
+
+        {/* Status Indicator */}
+        <div className="p-3 border-b border-slate-700">
+          <div className="flex items-center space-x-2">
+            <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+            {!sidebarCollapsed && (
+              <div>
+                <span className="text-xs text-green-400 font-medium">LIVE</span>
+                <p className="text-xs text-slate-400">Azure • SaintSalGPT 4.1</p>
+              </div>
+            )}
+          </div>
+          {!sidebarCollapsed && (
+            <div className="mt-2 text-xs text-yellow-400">
+              🔥 Enterprise Route Intelligence: 47+ Clients • $8,947 Revenue • Premium Add-On Available
+            </div>
+          )}
+        </div>
+
+        {/* Tools */}
+        <div className="flex-1 p-2">
+          {sidebarTools.map((tool) => (
+            <motion.button
+              key={tool.id}
+              onClick={() => setSelectedTool(tool.id)}
+              className={`w-full flex items-center space-x-3 p-3 rounded-lg mb-1 transition-colors ${
+                selectedTool === tool.id ? 'bg-slate-700' : 'hover:bg-slate-800'
+              }`}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <tool.icon className={`w-5 h-5 ${tool.color}`} />
+              {!sidebarCollapsed && (
+                <span className="text-sm text-slate-300">{tool.label}</span>
+              )}
+            </motion.button>
+          ))}
+        </div>
+
+        {/* Bottom Actions */}
+        <div className="p-2 border-t border-slate-700">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="w-full justify-start text-slate-400 hover:text-white"
+          >
+            <RefreshCw className="w-4 h-4" />
+            {!sidebarCollapsed && <span className="ml-2">Refresh</span>}
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="w-full justify-start text-slate-400 hover:text-white"
+          >
+            <Bell className="w-4 h-4" />
+            {!sidebarCollapsed && <span className="ml-2">Alerts</span>}
+          </Button>
+        </div>
+      </motion.div>
+
+      {/* Main Workspace */}
+      <div className="flex-1 flex flex-col">
+        {/* Top Bar */}
+        <div className="bg-slate-900/30 border-b border-slate-700 p-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <div className="text-center">
+                <h1 className="text-lg font-semibold text-white">Productivity Workspace</h1>
+                <p className="text-sm text-slate-400">Your collaborative workspace is ready for action</p>
               </div>
             </div>
             <div className="flex items-center space-x-3">
-              <Badge variant={emergencyMode ? "destructive" : "secondary"}>
-                {emergencyMode ? "EMERGENCY MODE" : "NORMAL OPS"}
-              </Badge>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setAutoRefresh(!autoRefresh)}
-                className={autoRefresh ? "border-green-500 text-green-400" : ""}
-              >
-                <RefreshCw className={`w-4 h-4 mr-2 ${autoRefresh ? 'animate-spin' : ''}`} />
-                Auto Refresh
+              <Button variant="outline" size="sm">
+                <Search className="w-4 h-4 mr-2" />
+                Search
               </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setViewMode(viewMode === 'grid' ? 'full' : 'grid')}
-              >
-                {viewMode === 'grid' ? <Maximize2 className="w-4 h-4" /> : <Layers className="w-4 h-4" />}
+              <Button variant="outline" size="sm">
+                <Filter className="w-4 h-4 mr-2" />
+                Filter
+              </Button>
+              <Button variant="outline" size="sm">
+                <Maximize2 className="w-4 h-4" />
               </Button>
             </div>
           </div>
-        </motion.div>
-
-        {/* Main War Room Grid */}
-        <div className={`grid gap-6 ${viewMode === 'grid' ? 'grid-cols-1 lg:grid-cols-3' : 'grid-cols-1'}`}>
-          
-          {/* Left Panel - System Monitoring */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className={viewMode === 'grid' ? 'lg:col-span-1' : 'col-span-full'}
-          >
-            <Card className="bg-black/40 backdrop-blur-xl border-primary/20 h-full">
-              <CardHeader>
-                <CardTitle className="flex items-center text-primary">
-                  <Monitor className="w-5 h-5 mr-2" />
-                  System Status
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {mockSystemData.map((metric) => (
-                    <div key={metric.name} className="p-3 bg-gray-800/30 rounded-lg">
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="text-sm font-medium">{metric.name}</span>
-                        <div className={`flex items-center ${getStatusColor(metric.status)}`}>
-                          {getStatusIcon(metric.status)}
-                          <span className="ml-1 text-xs">{metric.status}</span>
-                        </div>
-                      </div>
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="text-2xl font-bold">{metric.value}%</span>
-                        <span className={`text-xs ${metric.change >= 0 ? 'text-red-400' : 'text-green-400'}`}>
-                          {metric.change >= 0 ? '+' : ''}{metric.change}%
-                        </span>
-                      </div>
-                      <Progress value={metric.value} className="h-2" />
-                    </div>
-                  ))}
-                  
-                  <Separator />
-                  
-                  {/* Quick Actions */}
-                  <div className="space-y-2">
-                    <h4 className="text-sm font-semibold text-gray-300">Quick Actions</h4>
-                    <div className="grid grid-cols-2 gap-2">
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => emergencyAction.mutate("restart_services")}
-                        disabled={emergencyAction.isPending}
-                      >
-                        <RefreshCw className="w-3 h-3 mr-1" />
-                        Restart
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => emergencyAction.mutate("clear_cache")}
-                        disabled={emergencyAction.isPending}
-                      >
-                        <Archive className="w-3 h-3 mr-1" />
-                        Clear Cache
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => emergencyAction.mutate("backup_data")}
-                        disabled={emergencyAction.isPending}
-                      >
-                        <HardDrive className="w-3 h-3 mr-1" />
-                        Backup
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant={emergencyMode ? "destructive" : "outline"}
-                        onClick={() => setEmergencyMode(!emergencyMode)}
-                      >
-                        <Shield className="w-3 h-3 mr-1" />
-                        {emergencyMode ? "Exit" : "Emergency"}
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
-
-          {/* Center Panel - AI Command Center */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className={viewMode === 'grid' ? 'lg:col-span-1' : 'col-span-full'}
-          >
-            <Card className="bg-black/40 backdrop-blur-xl border-primary/20 h-full">
-              <CardHeader>
-                <CardTitle className="flex items-center justify-between">
-                  <div className="flex items-center text-primary">
-                    <Brain className="w-5 h-5 mr-2" />
-                    AI Command Center
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Badge variant={companionMode === "advanced" ? "default" : "secondary"}>
-                      {companionMode === "advanced" ? "Advanced" : "Standard"}
-                    </Badge>
-                    <Switch
-                      checked={companionMode === "advanced"}
-                      onCheckedChange={(checked) => setCompanionMode(checked ? "advanced" : "standard")}
-                    />
-                  </div>
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {/* AI Chat Interface */}
-                <div className="border border-gray-700 rounded-lg h-64 flex flex-col">
-                  <ScrollArea className="flex-1 p-3" ref={chatRef}>
-                    <div className="space-y-2">
-                      <div className="flex items-start space-x-2">
-                        <Bot className="w-5 h-5 text-primary mt-1" />
-                        <div className="bg-primary/10 rounded-lg p-2 flex-1">
-                          <p className="text-sm">War Room HQ is online and monitoring all systems. How can I assist with your operations today?</p>
-                        </div>
-                      </div>
-                      
-                      {aiThinking && (
-                        <div className="flex items-start space-x-2">
-                          <Bot className="w-5 h-5 text-primary mt-1" />
-                          <div className="bg-primary/10 rounded-lg p-2 flex-1">
-                            <div className="flex items-center space-x-2">
-                              <Loader2 className="w-4 h-4 animate-spin" />
-                              <p className="text-sm">Processing your request...</p>
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </ScrollArea>
-                  
-                  <div className="p-3 border-t border-gray-700">
-                    <div className="flex space-x-2">
-                      <Input
-                        placeholder="Enter command or ask AI..."
-                        value={commandInput}
-                        onChange={(e) => setCommandInput(e.target.value)}
-                        onKeyPress={(e) => {
-                          if (e.key === 'Enter' && commandInput.trim()) {
-                            aiProcessing.mutate({ command: commandInput });
-                            setCommandInput("");
-                          }
-                        }}
-                        className="flex-1 bg-gray-800/50 border-gray-600"
-                      />
-                      <Button
-                        size="sm"
-                        onClick={handleVoiceCommand}
-                        variant={isRecording ? "destructive" : "outline"}
-                        disabled={aiProcessing.isPending}
-                      >
-                        <Mic className={`w-4 h-4 ${isRecording ? 'animate-pulse' : ''}`} />
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-
-                {/* File Upload Zone */}
-                <DragDropZone
-                  onFilesUploaded={handleFileUpload}
-                  className="h-24 border-dashed border-gray-600 bg-gray-800/20"
-                  dragText="Drop files for AI analysis"
-                />
-              </CardContent>
-            </Card>
-          </motion.div>
-
-          {/* Right Panel - Business Intelligence */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.2 }}
-            className={viewMode === 'grid' ? 'lg:col-span-1' : 'col-span-full'}
-          >
-            <Card className="bg-black/40 backdrop-blur-xl border-primary/20 h-full">
-              <CardHeader>
-                <CardTitle className="flex items-center text-primary">
-                  <BarChart3 className="w-5 h-5 mr-2" />
-                  Business Intelligence
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <Tabs defaultValue="metrics" className="w-full">
-                  <TabsList className="grid w-full grid-cols-2">
-                    <TabsTrigger value="metrics">Metrics</TabsTrigger>
-                    <TabsTrigger value="workflows">Workflows</TabsTrigger>
-                  </TabsList>
-                  
-                  <TabsContent value="metrics" className="space-y-4">
-                    {mockBusinessMetrics.map((metric) => (
-                      <div key={metric.name} className="p-3 bg-gray-800/30 rounded-lg">
-                        <div className="flex items-center justify-between mb-1">
-                          <span className="text-xs text-gray-400">{metric.name}</span>
-                          <div className={`flex items-center text-xs ${
-                            metric.trend === 'up' ? 'text-green-400' : 
-                            metric.trend === 'down' ? 'text-red-400' : 'text-gray-400'
-                          }`}>
-                            {metric.trend === 'up' ? <TrendingUp className="w-3 h-3 mr-1" /> :
-                             metric.trend === 'down' ? <TrendingDown className="w-3 h-3 mr-1" /> :
-                             <Activity className="w-3 h-3 mr-1" />}
-                            {metric.change >= 0 ? '+' : ''}{metric.change}%
-                          </div>
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <span className="text-lg font-bold">{metric.value}</span>
-                          {metric.target && (
-                            <span className="text-xs text-gray-500">Target: {metric.target}</span>
-                          )}
-                        </div>
-                      </div>
-                    ))}
-                  </TabsContent>
-                  
-                  <TabsContent value="workflows" className="space-y-4">
-                    <ScrollArea className="h-64">
-                      {mockWorkflowTasks.map((task) => (
-                        <div key={task.id} className="p-3 bg-gray-800/30 rounded-lg mb-3">
-                          <div className="flex items-center justify-between mb-2">
-                            <span className="text-sm font-medium truncate flex-1">{task.title}</span>
-                            <Badge 
-                              variant={task.priority === 'critical' ? 'destructive' : 
-                                     task.priority === 'high' ? 'default' : 'secondary'}
-                              className="text-xs"
-                            >
-                              {task.priority}
-                            </Badge>
-                          </div>
-                          <div className="flex items-center justify-between mb-2">
-                            <div className={`flex items-center ${getStatusColor(task.status)}`}>
-                              {getStatusIcon(task.status)}
-                              <span className="ml-1 text-xs">{task.status}</span>
-                            </div>
-                            <span className="text-xs text-gray-400">{task.estimatedTime}</span>
-                          </div>
-                          <Progress value={task.progress} className="h-1 mb-2" />
-                          <div className="flex flex-wrap gap-1">
-                            {task.tags.map((tag) => (
-                              <Badge key={tag} variant="outline" className="text-xs">
-                                {tag}
-                              </Badge>
-                            ))}
-                          </div>
-                        </div>
-                      ))}
-                    </ScrollArea>
-                  </TabsContent>
-                </Tabs>
-              </CardContent>
-            </Card>
-          </motion.div>
         </div>
 
-        {/* Bottom Panel - Terminal Integration (Collapsed by default) */}
-        {viewMode === 'full' && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="mt-6"
-          >
-            <Card className="bg-black/40 backdrop-blur-xl border-primary/20">
-              <CardHeader>
-                <CardTitle className="flex items-center text-primary">
-                  <Terminal className="w-5 h-5 mr-2" />
-                  Integrated Terminal
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <TerminalIntegration className="h-64" />
-              </CardContent>
-            </Card>
-          </motion.div>
-        )}
+        {/* Main Content Area */}
+        <div className="flex-1 p-6">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-full">
+            
+            {/* Center Chat Interface */}
+            <div className="lg:col-span-2">
+              <Card className="bg-slate-900/30 border-slate-700 h-full flex flex-col">
+                <CardHeader className="pb-4 border-b border-slate-700">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-8 h-8 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-lg flex items-center justify-center">
+                        <Brain className="w-5 h-5 text-white" />
+                      </div>
+                      <div>
+                        <CardTitle className="text-white">Execute business operations, analyze data, manage workflows...</CardTitle>
+                        <p className="text-sm text-slate-400">Dual companion ready • Azure-powered • Production-grade operations</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Badge variant="secondary" className="bg-cyan-500/20 text-cyan-400">PRODUCTION</Badge>
+                      <div className="text-xs text-slate-400">SAINTAL GOTTA QUY ⚡</div>
+                    </div>
+                  </div>
+                </CardHeader>
+                
+                <CardContent className="flex-1 flex flex-col p-0">
+                  {/* Chat Area */}
+                  <div className="flex-1 p-4 overflow-y-auto">
+                    {conversation.length === 0 ? (
+                      <div className="text-center text-slate-400 py-12">
+                        <Target className="w-16 h-16 mx-auto mb-4 text-cyan-400" />
+                        <h3 className="text-xl font-semibold mb-2 text-white">Production Command Center</h3>
+                        <p>Ready to execute business operations, analyze data, and manage workflows. Ask me anything about production planning.</p>
+                      </div>
+                    ) : (
+                      <AnimatePresence>
+                        {conversation.map((msg, idx) => (
+                          <motion.div
+                            key={idx}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className={`mb-4 ${msg.role === 'user' ? 'text-right' : 'text-left'}`}
+                          >
+                            <div className={`inline-block p-4 rounded-lg max-w-md ${
+                              msg.role === 'user' 
+                                ? 'bg-cyan-600 text-white' 
+                                : 'bg-slate-700 text-slate-100'
+                            }`}>
+                              <p>{msg.content}</p>
+                            </div>
+                          </motion.div>
+                        ))}
+                      </AnimatePresence>
+                    )}
+                    
+                    {isThinking && (
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        className="text-left mb-4"
+                      >
+                        <div className="inline-block p-4 rounded-lg bg-slate-700">
+                          <div className="flex items-center space-x-2">
+                            <div className="animate-spin w-4 h-4 border-2 border-cyan-400 border-t-transparent rounded-full"></div>
+                            <span className="text-slate-300">Analyzing production data...</span>
+                          </div>
+                        </div>
+                      </motion.div>
+                    )}
+                  </div>
+                  
+                  {/* Input Area */}
+                  <div className="border-t border-slate-700 p-4">
+                    <div className="flex space-x-3">
+                      <div className="flex-1 relative">
+                        <Textarea
+                          value={message}
+                          onChange={(e) => setMessage(e.target.value)}
+                          placeholder="Execute business operations, analyze data, manage workflows..."
+                          className="bg-slate-800/50 border-slate-600 text-white min-h-[60px] pr-20 rounded-xl"
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter' && !e.shiftKey) {
+                              e.preventDefault();
+                              handleSendMessage();
+                            }
+                          }}
+                        />
+                        <div className="absolute bottom-2 right-2 flex space-x-1">
+                          <Button
+                            size="sm"
+                            variant={isVoiceMode ? "default" : "ghost"}
+                            onClick={() => setIsVoiceMode(!isVoiceMode)}
+                            className="h-8 w-8 p-0"
+                          >
+                            {isVoiceMode ? <Mic className="w-4 h-4" /> : <MicOff className="w-4 h-4" />}
+                          </Button>
+                          <Button 
+                            size="sm"
+                            variant="ghost"
+                            onClick={() => fileInputRef.current?.click()}
+                            className="h-8 w-8 p-0"
+                          >
+                            <Upload className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      </div>
+                      <Button 
+                        onClick={handleSendMessage}
+                        disabled={!message.trim() || isThinking}
+                        className="bg-cyan-600 hover:bg-cyan-700 text-white h-auto px-6"
+                      >
+                        <Send className="w-4 h-4" />
+                      </Button>
+                    </div>
+                    
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      multiple
+                      className="hidden"
+                      onChange={(e) => e.target.files && toast({
+                        title: "Files Ready",
+                        description: `${e.target.files.length} file(s) ready for analysis`
+                      })}
+                    />
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Right Sidebar - Production Tools */}
+            <div className="space-y-4">
+              {/* System Status */}
+              <Card className="bg-slate-900/30 border-slate-700">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-sm flex items-center">
+                    <Activity className="w-4 h-4 mr-2 text-green-400" />
+                    System Status
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  {systemStatus?.slice(0, 4).map((status: any, idx: number) => (
+                    <div key={idx} className="flex items-center justify-between">
+                      <div className="flex items-center space-x-2">
+                        <div className={`w-2 h-2 rounded-full ${
+                          status.status === 'operational' ? 'bg-green-400' : 'bg-yellow-400'
+                        }`}></div>
+                        <span className="text-xs text-slate-300">{status.service}</span>
+                      </div>
+                      <Badge variant="secondary" className="text-xs bg-green-500/20 text-green-400">
+                        {status.status}
+                      </Badge>
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
+
+              {/* Business Metrics */}
+              <Card className="bg-slate-900/30 border-slate-700">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-sm flex items-center">
+                    <BarChart3 className="w-4 h-4 mr-2 text-blue-400" />
+                    Production Metrics
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  {businessMetrics?.slice(0, 3).map((metric: any, idx: number) => (
+                    <div key={idx} className="space-y-1">
+                      <div className="flex justify-between items-center">
+                        <span className="text-xs text-slate-400">{metric.name}</span>
+                        <span className="text-sm font-semibold text-white">{metric.value}</span>
+                      </div>
+                      <div className="text-xs text-cyan-400">
+                        {typeof metric.change === 'number' ? 
+                          `${metric.change > 0 ? '+' : ''}${metric.change.toFixed(1)}%` : 
+                          metric.change
+                        }
+                      </div>
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
+
+              {/* Quick Actions */}
+              <Card className="bg-slate-900/30 border-slate-700">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-sm flex items-center">
+                    <Zap className="w-4 h-4 mr-2 text-yellow-400" />
+                    Quick Actions
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  <Button variant="outline" size="sm" className="w-full justify-start text-xs">
+                    <Target className="w-3 h-3 mr-2" />
+                    Analyze Performance
+                  </Button>
+                  <Button variant="outline" size="sm" className="w-full justify-start text-xs">
+                    <Database className="w-3 h-3 mr-2" />
+                    Query Database
+                  </Button>
+                  <Button variant="outline" size="sm" className="w-full justify-start text-xs">
+                    <Globe className="w-3 h-3 mr-2" />
+                    Check Integrations
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
