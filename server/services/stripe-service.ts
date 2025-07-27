@@ -1,12 +1,16 @@
 import Stripe from "stripe";
 
-if (!process.env.***REMOVED***) {
+const hasStripeKey = !!process.env.***REMOVED***;
+
+if (!hasStripeKey) {
   console.log('Stripe secret key not provided - payment features will return mock responses');
 }
 
-const stripe = new Stripe(process.env.***REMOVED***, {
-  apiVersion: "2024-06-20",
-});
+const stripe = hasStripeKey 
+  ? new Stripe(process.env.***REMOVED***!, {
+      apiVersion: "2024-06-20",
+    })
+  : null;
 
 export interface StripeKPIs {
   monthlyRevenue: number;
@@ -18,6 +22,11 @@ export interface StripeKPIs {
 
 export class StripeService {
   async createPaymentIntent(amount: number, currency: string = "usd"): Promise<string> {
+    if (!stripe) {
+      // Return mock response when Stripe is not configured
+      return "pi_mock_" + Math.random().toString(36).substr(2, 9);
+    }
+    
     try {
       const paymentIntent = await stripe.paymentIntents.create({
         amount: Math.round(amount * 100), // Convert to cents
@@ -30,6 +39,16 @@ export class StripeService {
   }
 
   async createSubscription(customerId: string, priceId: string): Promise<any> {
+    if (!stripe) {
+      // Return mock response when Stripe is not configured
+      return {
+        id: "sub_mock_" + Math.random().toString(36).substr(2, 9),
+        customer: customerId,
+        status: "active",
+        items: { data: [{ price: { id: priceId } }] }
+      };
+    }
+    
     try {
       const subscription = await stripe.subscriptions.create({
         customer: customerId,
@@ -44,6 +63,18 @@ export class StripeService {
   }
 
   async createCustomer(email: string, name?: string): Promise<Stripe.Customer> {
+    if (!stripe) {
+      // Return mock response when Stripe is not configured
+      return {
+        id: "cus_mock_" + Math.random().toString(36).substr(2, 9),
+        email,
+        name,
+        object: "customer",
+        created: Math.floor(Date.now() / 1000),
+        livemode: false,
+      } as Stripe.Customer;
+    }
+    
     try {
       return await stripe.customers.create({ email, name });
     } catch (error: any) {
@@ -52,6 +83,17 @@ export class StripeService {
   }
 
   async getKPIMetrics(): Promise<StripeKPIs> {
+    if (!stripe) {
+      // Return mock KPI data when Stripe is not configured
+      return {
+        monthlyRevenue: 15420.50,
+        revenueChange: 12.3,
+        totalCustomers: 156,
+        activeSubscriptions: 89,
+        churnRate: 2.1,
+      };
+    }
+    
     try {
       const now = new Date();
       const currentMonth = new Date(now.getFullYear(), now.getMonth(), 1);
@@ -101,6 +143,10 @@ export class StripeService {
   }
 
   private async getRevenueForPeriod(start: Date, end: Date): Promise<number> {
+    if (!stripe) {
+      return 0;
+    }
+    
     const charges = await stripe.charges.list({
       created: {
         gte: Math.floor(start.getTime() / 1000),

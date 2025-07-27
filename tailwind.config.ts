@@ -51,6 +51,11 @@ export default {
           "4": "var(--chart-4)",
           "5": "var(--chart-5)",
         },
+        // SuperSal custom colors
+        gold: "var(--gold)",
+        charcoal: "var(--charcoal)",
+        surface: "var(--surface)",
+        elevated: "var(--elevated)",
         sidebar: {
           DEFAULT: "var(--sidebar-background)",
           foreground: "var(--sidebar-foreground)",

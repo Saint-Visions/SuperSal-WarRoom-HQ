@@ -406,9 +406,9 @@ export default function DevLabScreen() {
                 <h4 className="text-sm font-medium text-gray-400 mb-2">Code Sandbox</h4>
                 <div className="bg-charcoal rounded-lg p-3 font-mono text-xs">
                   <div className="text-green-400"># Quick Python REPL</div>
-                  <div className="text-white">>>> print("Hello SuperSal!")</div>
+                  <div className="text-white">{'>>>'} print("Hello SuperSal!")</div>
                   <div className="text-blue-400">Hello SuperSal!</div>
-                  <div className="text-white">>>> _</div>
+                  <div className="text-white">{'>>>'} _</div>
                 </div>
                 <Button
                   variant="ghost"
