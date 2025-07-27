@@ -82,11 +82,12 @@ export default function SaintSalMe() {
     },
     onSuccess: (data) => {
       setIsThinking(false);
+      const userMessage = message; // Capture current message before clearing
+      setMessage(""); // Clear input first
       setConversation(prev => [...prev, 
-        { role: 'user', content: message },
+        { role: 'user', content: userMessage },
         { role: 'assistant', content: data.response, analysis: data.analysis }
       ]);
-      setMessage("");
     },
     onError: (error) => {
       setIsThinking(false);

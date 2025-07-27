@@ -75,11 +75,12 @@ export default function WarRoom() {
     },
     onSuccess: (data) => {
       setIsThinking(false);
+      const userMessage = message; // Capture current message before clearing
+      setMessage(""); // Clear input first
       setConversation(prev => [...prev, 
-        { role: 'user', content: message },
+        { role: 'user', content: userMessage },
         { role: 'assistant', content: data.response }
       ]);
-      setMessage("");
     },
     onError: (error) => {
       setIsThinking(false);
