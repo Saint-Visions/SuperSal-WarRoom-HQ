@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
+import ParallaxBackground from "@/components/parallax-background";
 import { 
   Zap,
   Users,
@@ -169,7 +170,8 @@ export default function SaintSalMe() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white flex">
+    <ParallaxBackground className="min-h-screen">
+      <div className="min-h-screen bg-black/90 text-white flex">
       {/* Collapsible Sidebar */}
       <motion.div 
         initial={false}
@@ -180,9 +182,18 @@ export default function SaintSalMe() {
         <div className="p-4 border-b border-slate-700">
           <div className="flex items-center justify-between">
             {!sidebarCollapsed && (
-              <div>
-                <h2 className="text-sm font-semibold text-amber-400">SAINTSALME</h2>
-                <p className="text-xs text-slate-400">EXECUTION CENTER</p>
+              <div className="flex items-center space-x-3">
+                <div 
+                  className="w-8 h-8 bg-cover bg-center rounded opacity-90 hover:opacity-100 transition-opacity border border-amber-400/20"
+                  style={{
+                    backgroundImage: `url('/attached_assets/Frame 1000002501_1753620834045.png')`,
+                    backgroundSize: 'cover'
+                  }}
+                />
+                <div>
+                  <h2 className="text-sm font-semibold text-amber-400">saintsal™</h2>
+                  <p className="text-xs text-slate-400">+ you execution</p>
+                </div>
               </div>
             )}
             <Button
@@ -209,7 +220,7 @@ export default function SaintSalMe() {
           </div>
           {!sidebarCollapsed && (
             <div className="mt-2 text-xs text-green-400">
-              ⚡ All Tools Enabled • Lead Execution • Revenue Generation • Saint Vision Active
+              ⚡ Divine Authority • Lead Execution • Revenue Generation • Saint Vision Active
             </div>
           )}
         </div>
@@ -572,6 +583,7 @@ export default function SaintSalMe() {
           </div>
         </div>
       </div>
-    </div>
+      </div>
+    </ParallaxBackground>
   );
 }
