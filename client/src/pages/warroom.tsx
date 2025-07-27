@@ -369,143 +369,80 @@ export default function WarRoom() {
               </Card>
             </div>
 
-            {/* Right Sidebar - Production Tools */}
+            {/* Right Sidebar - Business Tools */}
             <div className="space-y-4">
-              {/* System Status */}
-              <Card className="bg-slate-900/30 border-slate-700">
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-sm flex items-center">
-                    <Activity className="w-4 h-4 mr-2 text-green-400" />
-                    System Status
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-2">
-                  {systemStatus?.slice(0, 4).map((status: any, idx: number) => (
-                    <div key={idx} className="flex items-center justify-between">
-                      <div className="flex items-center space-x-2">
-                        <div className={`w-2 h-2 rounded-full ${
-                          status.status === 'operational' ? 'bg-green-400' : 'bg-yellow-400'
-                        }`}></div>
-                        <span className="text-xs text-slate-300">{status.service}</span>
-                      </div>
-                      <Badge variant="secondary" className="text-xs bg-green-500/20 text-green-400">
-                        {status.status}
-                      </Badge>
+              {/* Production Metrics */}
+              <div className="bg-slate-900/50 border border-slate-700 rounded-lg p-4">
+                <div className="flex items-center mb-4">
+                  <BarChart3 className="w-4 h-4 mr-2 text-blue-400" />
+                  <h3 className="text-sm font-medium text-white">Production Metrics</h3>
+                </div>
+                <div className="space-y-3">
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-slate-300">Monthly Revenue</span>
+                    <div className="text-right">
+                      <div className="text-sm font-semibold text-white">$124,416.41</div>
+                      <div className="text-xs text-red-400">-2.4%</div>
                     </div>
-                  ))}
-                </CardContent>
-              </Card>
-
-              {/* Business Metrics */}
-              <Card className="bg-slate-900/30 border-slate-700">
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-sm flex items-center">
-                    <BarChart3 className="w-4 h-4 mr-2 text-blue-400" />
-                    Production Metrics
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  {businessMetrics?.slice(0, 3).map((metric: any, idx: number) => (
-                    <div key={idx} className="space-y-1">
-                      <div className="flex justify-between items-center">
-                        <span className="text-xs text-slate-400">{metric.name}</span>
-                        <span className="text-sm font-semibold text-white">{metric.value}</span>
-                      </div>
-                      <div className="text-xs text-cyan-400">
-                        {typeof metric.change === 'number' ? 
-                          `${metric.change > 0 ? '+' : ''}${metric.change.toFixed(1)}%` : 
-                          metric.change
-                        }
-                      </div>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-slate-300">Active Leads</span>
+                    <div className="text-right">
+                      <div className="text-sm font-semibold text-white">1,271</div>
+                      <div className="text-xs text-green-400">+1.9%</div>
                     </div>
-                  ))}
-                </CardContent>
-              </Card>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-slate-300">Conversion Rate</span>
+                    <div className="text-right">
+                      <div className="text-sm font-semibold text-white">25.7%</div>
+                      <div className="text-xs text-green-400">+0.9%</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
               {/* Quick Actions */}
-              <Card className="bg-slate-900/30 border-slate-700">
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-sm flex items-center">
-                    <Zap className="w-4 h-4 mr-2 text-yellow-400" />
-                    Quick Actions
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-2">
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    className="w-full justify-start text-xs"
+              <div className="bg-slate-900/50 border border-slate-700 rounded-lg p-4">
+                <div className="flex items-center mb-4">
+                  <Zap className="w-4 h-4 mr-2 text-yellow-400" />
+                  <h3 className="text-sm font-medium text-white">Quick Actions</h3>
+                </div>
+                <div className="space-y-2">
+                  <button 
                     onClick={() => handleToolAction('analytics', 'analyze')}
                     disabled={toolActionMutation.isPending}
+                    className="w-full flex items-center p-3 bg-slate-800/50 hover:bg-slate-700/50 rounded-lg transition-colors text-left"
                   >
-                    <Target className="w-3 h-3 mr-2" />
-                    Analyze Performance
-                  </Button>
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    className="w-full justify-start text-xs"
+                    <Target className="w-4 h-4 mr-3 text-cyan-400" />
+                    <span className="text-sm text-slate-200">Analyze Performance</span>
+                  </button>
+                  <button 
                     onClick={() => handleToolAction('database', 'query')}
                     disabled={toolActionMutation.isPending}
+                    className="w-full flex items-center p-3 bg-slate-800/50 hover:bg-slate-700/50 rounded-lg transition-colors text-left"
                   >
-                    <Database className="w-3 h-3 mr-2" />
-                    Query Database
-                  </Button>
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    className="w-full justify-start text-xs"
+                    <Database className="w-4 h-4 mr-3 text-purple-400" />
+                    <span className="text-sm text-slate-200">Query Database</span>
+                  </button>
+                  <button 
                     onClick={() => handleToolAction('monitoring', 'status')}
                     disabled={toolActionMutation.isPending}
+                    className="w-full flex items-center p-3 bg-slate-800/50 hover:bg-slate-700/50 rounded-lg transition-colors text-left"
                   >
-                    <Globe className="w-3 h-3 mr-2" />
-                    Check Systems
-                  </Button>
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    className="w-full justify-start text-xs"
+                    <Globe className="w-4 h-4 mr-3 text-green-400" />
+                    <span className="text-sm text-slate-200">Check Systems</span>
+                  </button>
+                  <button 
                     onClick={() => handleToolAction('automation', 'execute')}
                     disabled={toolActionMutation.isPending}
+                    className="w-full flex items-center p-3 bg-slate-800/50 hover:bg-slate-700/50 rounded-lg transition-colors text-left"
                   >
-                    <Zap className="w-3 h-3 mr-2" />
-                    Run Automation
-                  </Button>
-                </CardContent>
-              </Card>
-
-              {/* Real-time Activity */}
-              <Card className="bg-slate-900/30 border-slate-700">
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-sm flex items-center">
-                    <Activity className="w-4 h-4 mr-2 text-cyan-400" />
-                    Live Activity
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-2">
-                  <div className="flex justify-between items-center">
-                    <span className="text-xs text-slate-400">Active Users</span>
-                    <span className="text-sm font-semibold text-cyan-400">
-                      {realtimeData?.warroom?.activeUsers || 1}
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-xs text-slate-400">System Load</span>
-                    <span className="text-sm font-semibold text-green-400">
-                      {realtimeData?.warroom?.systemLoad || 25}%
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-xs text-slate-400">Processes</span>
-                    <span className="text-sm font-semibold text-yellow-400">
-                      {realtimeData?.warroom?.activeProcesses || 12}
-                    </span>
-                  </div>
-                  <div className="text-xs text-slate-500 pt-1">
-                    Last update: {new Date().toLocaleTimeString()}
-                  </div>
-                </CardContent>
-              </Card>
+                    <Zap className="w-4 h-4 mr-3 text-yellow-400" />
+                    <span className="text-sm text-slate-200">Run Automation</span>
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>

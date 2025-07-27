@@ -417,99 +417,77 @@ export default function SaintSalMe() {
               </Card>
 
               {/* Execution Metrics */}
-              <Card className="bg-slate-900/30 border-slate-700">
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-sm flex items-center">
-                    <TrendingUp className="w-4 h-4 mr-2 text-green-400" />
-                    Execution Metrics
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <div className="space-y-1">
-                    <div className="flex justify-between items-center">
-                      <span className="text-xs text-slate-400">Leads Executed</span>
-                      <span className="text-sm font-semibold text-white">47</span>
+              <div className="bg-slate-900/50 border border-slate-700 rounded-lg p-4">
+                <div className="flex items-center mb-4">
+                  <TrendingUp className="w-4 h-4 mr-2 text-green-400" />
+                  <h3 className="text-sm font-medium text-white">Execution Metrics</h3>
+                </div>
+                <div className="space-y-3">
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-slate-300">Revenue Generated</span>
+                    <div className="text-right">
+                      <div className="text-sm font-semibold text-white">$47,892</div>
+                      <div className="text-xs text-green-400">+12.4%</div>
                     </div>
-                    <div className="text-xs text-green-400">+12 this week</div>
                   </div>
-                  <div className="space-y-1">
-                    <div className="flex justify-between items-center">
-                      <span className="text-xs text-slate-400">Revenue Generated</span>
-                      <span className="text-sm font-semibold text-white">$8,947</span>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-slate-300">Leads Executed</span>
+                    <div className="text-right">
+                      <div className="text-sm font-semibold text-white">342</div>
+                      <div className="text-xs text-cyan-400">+8.9%</div>
                     </div>
-                    <div className="text-xs text-green-400">+$2,100 this week</div>
                   </div>
-                  <div className="space-y-1">
-                    <div className="flex justify-between items-center">
-                      <span className="text-xs text-slate-400">Execution Rate</span>
-                      <span className="text-sm font-semibold text-white">89%</span>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-slate-300">Implementation Rate</span>
+                    <div className="text-right">
+                      <div className="text-sm font-semibold text-white">94.7%</div>
+                      <div className="text-xs text-yellow-400">Above target</div>
                     </div>
-                    <div className="text-xs text-green-400">+5% improvement</div>
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
 
-              {/* Quick Execute */}
-              <Card className="bg-slate-900/30 border-slate-700">
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-sm flex items-center">
-                    <Zap className="w-4 h-4 mr-2 text-yellow-400" />
-                    Quick Execute
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-2">
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    className="w-full justify-start text-xs"
+              {/* Quick Actions */}
+              <div className="bg-slate-900/50 border border-slate-700 rounded-lg p-4">
+                <div className="flex items-center mb-4">
+                  <Rocket className="w-4 h-4 mr-2 text-purple-400" />
+                  <h3 className="text-sm font-medium text-white">Quick Actions</h3>
+                </div>
+                <div className="space-y-2">
+                  <button 
                     onClick={() => handleExecutionAction('leads', 'execute')}
                     disabled={executionActionMutation.isPending}
+                    className="w-full flex items-center p-3 bg-slate-800/50 hover:bg-slate-700/50 rounded-lg transition-colors text-left"
                   >
-                    <Users className="w-3 h-3 mr-2" />
-                    Execute Lead Campaign
-                  </Button>
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    className="w-full justify-start text-xs"
+                    <Users className="w-4 h-4 mr-3 text-cyan-400" />
+                    <span className="text-sm text-slate-200">Execute Lead Campaign</span>
+                  </button>
+                  <button 
                     onClick={() => handleExecutionAction('implementation', 'build')}
                     disabled={executionActionMutation.isPending}
+                    className="w-full flex items-center p-3 bg-slate-800/50 hover:bg-slate-700/50 rounded-lg transition-colors text-left"
                   >
-                    <Code className="w-3 h-3 mr-2" />
-                    Build Implementation
-                  </Button>
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    className="w-full justify-start text-xs"
+                    <Code className="w-4 h-4 mr-3 text-green-400" />
+                    <span className="text-sm text-slate-200">Build Implementation</span>
+                  </button>
+                  <button 
                     onClick={() => handleExecutionAction('deployment', 'launch')}
                     disabled={executionActionMutation.isPending}
+                    className="w-full flex items-center p-3 bg-slate-800/50 hover:bg-slate-700/50 rounded-lg transition-colors text-left"
                   >
-                    <Rocket className="w-3 h-3 mr-2" />
-                    Launch Deployment
-                  </Button>
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    className="w-full justify-start text-xs"
+                    <Rocket className="w-4 h-4 mr-3 text-purple-400" />
+                    <span className="text-sm text-slate-200">Launch Deployment</span>
+                  </button>
+                  <button 
                     onClick={() => handleExecutionAction('campaigns', 'execute')}
                     disabled={executionActionMutation.isPending}
+                    className="w-full flex items-center p-3 bg-slate-800/50 hover:bg-slate-700/50 rounded-lg transition-colors text-left"
                   >
-                    <Target className="w-3 h-3 mr-2" />
-                    Execute Campaign
-                  </Button>
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    className="w-full justify-start text-xs"
-                    onClick={() => handleExecutionAction('automation', 'deploy')}
-                    disabled={executionActionMutation.isPending}
-                  >
-                    <Zap className="w-3 h-3 mr-2" />
-                    Deploy Automation
-                  </Button>
-                </CardContent>
-              </Card>
+                    <Target className="w-4 h-4 mr-3 text-yellow-400" />
+                    <span className="text-sm text-slate-200">Execute Campaign</span>
+                  </button>
+                </div>
+              </div>
 
               {/* Live Execution Stats */}
               <Card className="bg-slate-900/30 border-slate-700">
