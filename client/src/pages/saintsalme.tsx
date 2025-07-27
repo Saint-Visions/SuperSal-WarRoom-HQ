@@ -64,6 +64,7 @@ export default function SaintSalMe() {
   const { data: realtimeData } = useQuery({
     queryKey: ['/api/workspace/realtime'],
     refetchInterval: 3000,
+    initialData: { saintsalme: { activeExecutions: 5, revenueToday: 2847, leadsProcessed: 18 } }
   });
 
   // AI chat for execution tasks
