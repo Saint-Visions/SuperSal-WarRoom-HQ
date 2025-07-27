@@ -28,7 +28,11 @@ import {
   Camera,
   FileText,
   Search,
-  Filter
+  Filter,
+  RefreshCw,
+  CheckCircle,
+  AlertCircle,
+  PlayCircle
 } from "lucide-react";
 import StickyNotes from "@/components/ui/sticky-notes";
 import { apiRequest } from "@/lib/queryClient";
@@ -154,9 +158,9 @@ export default function Tools() {
                 <span className="text-2xl font-bold text-black">Sv.</span>
               </div>
               <div>
-                <h1 className="text-4xl font-bold mb-2">SuperSal™ Tools</h1>
+                <h1 className="text-4xl font-bold mb-2">SuperSal™ Execution Center</h1>
                 <p className="text-gray-400">
-                  Comprehensive toolkit with all integrated systems and functionality
+                  Where SuperSal gets things done - fast execution with all systems connected
                 </p>
               </div>
             </div>
