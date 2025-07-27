@@ -27,6 +27,7 @@ import {
 import { Link } from "wouter";
 import DragDropZone from "@/components/ui/drag-drop-zone";
 import TerminalIntegration from "@/components/ui/terminal-integration";
+import SuperSalExecutionWidget from "@/components/ui/supersal-execution-widget";
 
 
 export default function CommandCenter() {
@@ -214,43 +215,59 @@ export default function CommandCenter() {
               </CardContent>
             </Card>
 
-            {/* Recent Contacts */}
-            <Card className="bg-black/40 backdrop-blur-xl border-primary/20">
+            {/* SuperSal Execution Chat - EXPANDED */}
+            <Card className="bg-black/40 backdrop-blur-xl border-cyan-500/20">
               <CardHeader>
-                <CardTitle className="flex items-center text-primary">
-                  <Users className="w-5 h-5 mr-2" />
-                  Recent Contacts
+                <CardTitle className="flex items-center text-cyan-400">
+                  <MessageSquare className="w-5 h-5 mr-2" />
+                  SuperSal Execution
                 </CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="space-y-4">
+                {/* Larger execution log area */}
+                <div className="h-64 bg-gray-900/50 rounded-lg p-4 overflow-y-auto text-sm space-y-3 border border-cyan-500/20">
+                  <div className="text-cyan-400">
+                    <span className="text-gray-400">[10:58]</span> Task: Lead outreach campaign initiated
+                  </div>
+                  <div className="text-green-400">
+                    <span className="text-gray-400">[10:56]</span> ✓ Email sequences deployed to 47 prospects
+                  </div>
+                  <div className="text-yellow-400">
+                    <span className="text-gray-400">[10:54]</span> ⚡ GHL sync: 12 new contacts processed
+                  </div>
+                  <div className="text-purple-400">
+                    <span className="text-gray-400">[10:52]</span> 🎯 Revenue goal: $2.8K of $4K achieved
+                  </div>
+                  <div className="text-blue-400">
+                    <span className="text-gray-400">[10:50]</span> 📊 Analytics updated: 342 active leads tracked
+                  </div>
+                  <div className="text-orange-400">
+                    <span className="text-gray-400">[10:48]</span> 🔄 Saint Vision sync: 8 pending sales processing
+                  </div>
+                </div>
+                
+                {/* Enhanced chat input with real functionality */}
                 <div className="space-y-3">
-                  {contacts.length > 0 ? (
-                    contacts.slice(0, 5).map((contact: any, index: number) => (
-                      <div key={contact.id} className="flex items-center justify-between">
-                        <div className="flex items-center space-x-3">
-                          <div className="w-8 h-8 bg-primary/20 rounded-full flex items-center justify-center">
-                            <span className="text-xs font-medium">
-                              {contact.firstName?.[0]}{contact.lastName?.[0]}
-                            </span>
-                          </div>
-                          <div>
-                            <p className="text-sm font-medium">
-                              {contact.firstName} {contact.lastName}
-                            </p>
-                            <p className="text-xs text-gray-400">{contact.company}</p>
-                          </div>
-                        </div>
-                        <Badge variant="outline" className="text-xs">
-                          {contact.status}
-                        </Badge>
-                      </div>
-                    ))
-                  ) : (
-                    <div className="text-center py-4">
-                      <Users className="w-8 h-8 text-gray-500 mx-auto mb-2" />
-                      <p className="text-sm text-gray-400">No contacts yet</p>
+                  <SuperSalExecutionWidget />
+                  
+                  {/* Enhanced status display */}
+                  <div className="grid grid-cols-3 gap-4 text-xs">
+                    <div className="text-center p-2 bg-cyan-500/10 rounded border border-cyan-500/20">
+                      <span className="text-cyan-400 font-medium">5</span>
+                      <br />
+                      <span className="text-gray-400">Active Tasks</span>
                     </div>
-                  )}
+                    <div className="text-center p-2 bg-green-500/10 rounded border border-green-500/20">
+                      <span className="text-green-400 font-medium">7/12</span>
+                      <br />
+                      <span className="text-gray-400">Completed</span>
+                    </div>
+                    <div className="text-center p-2 bg-purple-500/10 rounded border border-purple-500/20">
+                      <span className="text-purple-400 font-medium">$2.8K</span>
+                      <br />
+                      <span className="text-gray-400">Revenue</span>
+                    </div>
+                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -476,42 +493,43 @@ export default function CommandCenter() {
               </CardContent>
             </Card>
 
-            {/* SuperSal Execution Chat */}
-            <Card className="bg-black/40 backdrop-blur-xl border-cyan-500/20">
+            {/* Recent Contacts - Moved here */}
+            <Card className="bg-black/40 backdrop-blur-xl border-primary/20">
               <CardHeader>
-                <CardTitle className="flex items-center text-cyan-400">
-                  <MessageSquare className="w-5 h-5 mr-2" />
-                  SuperSal Execution
+                <CardTitle className="flex items-center text-primary">
+                  <Users className="w-5 h-5 mr-2" />
+                  Recent Contacts
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="h-32 bg-gray-900/50 rounded-lg p-3 overflow-y-auto text-xs space-y-2">
-                  <div className="text-cyan-400">
-                    <span className="text-gray-400">[10:58]</span> Task: Lead outreach campaign initiated
-                  </div>
-                  <div className="text-green-400">
-                    <span className="text-gray-400">[10:56]</span> ✓ Email sequences deployed to 47 prospects
-                  </div>
-                  <div className="text-yellow-400">
-                    <span className="text-gray-400">[10:54]</span> ⚡ GHL sync: 12 new contacts processed
-                  </div>
-                  <div className="text-purple-400">
-                    <span className="text-gray-400">[10:52]</span> 🎯 Revenue goal: $2.8K of $4K achieved
-                  </div>
-                </div>
-                <div className="flex space-x-2">
-                  <input 
-                    type="text" 
-                    placeholder="Ask SuperSal..." 
-                    className="flex-1 bg-gray-900/50 border border-gray-600 rounded px-2 py-1 text-xs text-white placeholder-gray-400 focus:border-cyan-400 focus:outline-none"
-                  />
-                  <Button size="sm" className="bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-400 border border-cyan-500/30 px-3">
-                    →
-                  </Button>
-                </div>
-                <div className="flex justify-between text-xs text-gray-400">
-                  <span>Active: 5 tasks</span>
-                  <span>Completed: 7/12</span>
+              <CardContent>
+                <div className="space-y-3">
+                  {contacts.length > 0 ? (
+                    contacts.slice(0, 4).map((contact: any, index: number) => (
+                      <div key={contact.id} className="flex items-center justify-between">
+                        <div className="flex items-center space-x-3">
+                          <div className="w-8 h-8 bg-primary/20 rounded-full flex items-center justify-center">
+                            <span className="text-xs font-medium">
+                              {contact.firstName?.[0]}{contact.lastName?.[0]}
+                            </span>
+                          </div>
+                          <div>
+                            <p className="text-sm font-medium">
+                              {contact.firstName} {contact.lastName}
+                            </p>
+                            <p className="text-xs text-gray-400">{contact.company}</p>
+                          </div>
+                        </div>
+                        <Badge variant="outline" className="text-xs">
+                          {contact.status}
+                        </Badge>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-center py-4">
+                      <Users className="w-8 h-8 text-gray-500 mx-auto mb-2" />
+                      <p className="text-sm text-gray-400">No contacts yet</p>
+                    </div>
+                  )}
                 </div>
               </CardContent>
             </Card>
