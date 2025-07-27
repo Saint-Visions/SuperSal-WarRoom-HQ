@@ -14,7 +14,9 @@ import {
   type Workflow,
   type InsertWorkflow,
   type ChatSession,
-  type InsertChatSession
+  type InsertChatSession,
+  type StickyNote,
+  type InsertStickyNote
 } from "@shared/schema";
 import { randomUUID } from "crypto";
 
@@ -78,6 +80,12 @@ export interface IStorage {
   // Search Campaigns
   getSearchCampaigns(userId: string): Promise<any[]>;
   createSearchCampaign(campaign: any): Promise<any>;
+
+  // Sticky Notes
+  getStickyNotes(userId: string): Promise<StickyNote[]>;
+  createStickyNote(note: InsertStickyNote): Promise<StickyNote>;
+  updateStickyNote(id: string, note: Partial<StickyNote>): Promise<StickyNote>;
+  deleteStickyNote(id: string): Promise<boolean>;
 }
 
 export class MemStorage implements IStorage {
@@ -93,6 +101,7 @@ export class MemStorage implements IStorage {
   private systemStatuses: Map<string, any> = new Map();
   private leadIntelligence: Map<string, any> = new Map();
   private searchCampaigns: Map<string, any> = new Map();
+  private stickyNotes: Map<string, StickyNote> = new Map();
 
   // Users
   async getUser(id: string): Promise<User | undefined> {
@@ -539,6 +548,49 @@ export class MemStorage implements IStorage {
     };
     this.searchCampaigns.set(id, campaign);
     return campaign;
+  }
+
+  // Sticky Notes
+  async getStickyNotes(userId: string): Promise<StickyNote[]> {
+    return Array.from(this.stickyNotes.values())
+      .filter(note => note.userId === userId)
+      .sort((a, b) => {
+        // Pinned notes first, then by creation date
+        if (a.pinned && !b.pinned) return -1;
+        if (!a.pinned && b.pinned) return 1;
+        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+      });
+  }
+
+  async createStickyNote(noteData: InsertStickyNote): Promise<StickyNote> {
+    const id = randomUUID();
+    const note: StickyNote = {
+      id,
+      ...noteData,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+    this.stickyNotes.set(id, note);
+    return note;
+  }
+
+  async updateStickyNote(id: string, updateData: Partial<StickyNote>): Promise<StickyNote> {
+    const note = this.stickyNotes.get(id);
+    if (!note) {
+      throw new Error("Sticky note not found");
+    }
+
+    const updatedNote: StickyNote = {
+      ...note,
+      ...updateData,
+      updatedAt: new Date(),
+    };
+    this.stickyNotes.set(id, updatedNote);
+    return updatedNote;
+  }
+
+  async deleteStickyNote(id: string): Promise<boolean> {
+    return this.stickyNotes.delete(id);
   }
 }
 

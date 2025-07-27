@@ -23,8 +23,8 @@ interface MobileNavProps {
 const navItems = [
   { path: "/command", icon: Home, label: "Command" },
   { path: "/warroom", icon: Shield, label: "War Room" },
-  { path: "/executive", icon: Star, label: "Executive" },
-  { path: "/leads", icon: Search, label: "Leads" }
+  { path: "/saintsalme", icon: Star, label: "SaintSal" },
+  { path: "/tools", icon: Settings, label: "Tools" }
 ];
 
 export default function MobileNav({ currentPath }: MobileNavProps) {

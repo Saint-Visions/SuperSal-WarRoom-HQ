@@ -313,3 +313,25 @@ export type SearchCampaign = typeof searchCampaigns.$inferSelect;
 export type InsertSearchCampaign = z.infer<typeof insertSearchCampaignSchema>;
 export type Referral = typeof referrals.$inferSelect;
 export type InsertReferral = z.infer<typeof insertReferralSchema>;
+
+// Sticky Notes table
+export const stickyNotes = pgTable("sticky_notes", {
+  id: uuid("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: uuid("user_id").notNull().references(() => users.id),
+  content: text("content").notNull(),
+  type: text("type").notNull().default("note"), // note, contact, reminder, task
+  priority: text("priority").notNull().default("medium"), // low, medium, high
+  color: text("color").notNull().default("bg-purple-500/20"),
+  pinned: boolean("pinned").default(false),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const insertStickyNoteSchema = createInsertSchema(stickyNotes).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type StickyNote = typeof stickyNotes.$inferSelect;
+export type InsertStickyNote = z.infer<typeof insertStickyNoteSchema>;
