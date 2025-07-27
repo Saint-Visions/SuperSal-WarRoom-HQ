@@ -29,7 +29,7 @@ import {
   Rocket
 } from "lucide-react";
 import PartnerTechLogo from "@/components/ui/partnertech-logo";
-import { PremiumCookinLogo } from "@/components/ui/logo-components";
+import { AIBrainLogo } from "@/components/ui/logo-components";
 
 interface LeadIntelligence {
   id: string;
@@ -157,10 +157,10 @@ export default function LeadIntelligence() {
           className="mb-6"
         >
           <div className="flex items-center space-x-4 mb-4">
-            <PremiumCookinLogo size="lg" animated={true} />
+            <AIBrainLogo size="md" animated={true} />
             <div>
-              <h1 className="text-3xl font-bold">Lead Intelligence</h1>
-              <p className="text-gray-400">Powered by SuperSal™ • OpenAI-level intelligence meets Apple-grade experience</p>
+              <h1 className="text-3xl font-bold">Intelligence Engine</h1>
+              <p className="text-gray-400">Powered by SuperSal™ • AI-driven lead discovery with neural network processing</p>
             </div>
           </div>
         </motion.div>

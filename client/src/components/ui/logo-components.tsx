@@ -134,98 +134,81 @@ export function SmallGoldenLogo({ size = "sm", animated = false, className = "" 
   );
 }
 
-// Premium Cookin' Knowledge Wall-Mounted Logo with Splash Effect
-export function PremiumCookinLogo({ size = "xl", animated = true, className = "" }: LogoProps) {
-  const premiumSizeClasses = {
-    sm: "w-32 h-20",
-    md: "w-40 h-24", 
-    lg: "w-48 h-28",
-    xl: "w-56 h-32"
+// AI Brain Circuit Board Logo with Neural Network Effects
+export function AIBrainLogo({ size = "xl", animated = true, className = "" }: LogoProps) {
+  const brainSizeClasses = {
+    sm: "w-24 h-24",
+    md: "w-32 h-32", 
+    lg: "w-40 h-40",
+    xl: "w-48 h-48"
   };
 
   const LogoComponent = animated ? motion.div : "div";
   
   return (
     <LogoComponent
-      className={`relative ${premiumSizeClasses[size]} ${className}`}
+      className={`relative ${brainSizeClasses[size]} ${className}`}
       {...(animated && {
-        initial: { opacity: 0, scale: 0.9, y: -20 },
+        initial: { opacity: 0, scale: 0.9, rotate: -5 },
         animate: { 
           opacity: 1, 
           scale: 1, 
-          y: 0,
-          boxShadow: [
-            "0 10px 40px rgba(212, 175, 55, 0.3)",
-            "0 15px 60px rgba(212, 175, 55, 0.4)",  
-            "0 10px 40px rgba(212, 175, 55, 0.3)"
-          ]
+          rotate: 0,
         },
         transition: {
-          duration: 1.5,
-          ease: "easeOut",
-          boxShadow: {
-            duration: 3,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }
+          duration: 1.2,
+          ease: "easeOut"
         }
       })}
     >
-      {/* Wall-mounted frame effect */}
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-800/20 via-transparent to-black/10 rounded-2xl backdrop-blur-sm border border-white/10" />
-      
-      {/* Blue to gold gradient splash background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-600/30 via-indigo-500/20 to-amber-400/30 rounded-2xl opacity-60" />
-      
-      {/* Animated shimmer effect */}
-      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent rounded-2xl opacity-0 animate-pulse" 
+      {/* Neural network glow effect */}
+      <div className="absolute inset-0 rounded-2xl" 
            style={{
-             background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent)",
-             animation: "shimmer 4s ease-in-out infinite"
+             background: "radial-gradient(circle, rgba(212, 175, 55, 0.2) 0%, transparent 70%)",
+             filter: "blur(8px)"
            }} />
       
-      {/* Main logo image */}
+      {/* Main AI brain logo */}
       <motion.img
-        src="/attached_assets/ChatGPT Image Jul 21, 2025, 06_12_13 AM_1753627595618.png"
-        alt="Cookin' Knowledge - Premium Wall Logo"
+        src="/attached_assets/cxookimn trsansparent  copy_1753628280325.png"
+        alt="SV AI Brain - Intelligence Engine"
         className="relative z-10 w-full h-full object-contain drop-shadow-2xl"
         {...(animated && {
           animate: {
             filter: [
-              "brightness(1.1) contrast(1.1)",
-              "brightness(1.2) contrast(1.15)",
-              "brightness(1.1) contrast(1.1)"
+              "brightness(1) contrast(1.1)",
+              "brightness(1.1) contrast(1.2)",
+              "brightness(1) contrast(1.1)"
             ]
           },
           transition: {
-            duration: 4,
+            duration: 3,
             repeat: Infinity,
             ease: "easeInOut"
           }
         })}
       />
       
-      {/* Floating particles effect */}
+      {/* Circuit board pulse effects */}
       {animated && (
         <>
-          {[...Array(6)].map((_, i) => (
+          {[...Array(8)].map((_, i) => (
             <motion.div
               key={i}
-              className="absolute w-1 h-1 bg-amber-400 rounded-full opacity-60"
+              className="absolute w-1 h-1 bg-amber-400 rounded-full"
               style={{
-                left: `${20 + (i * 12)}%`,
-                top: `${30 + (i % 3) * 20}%`,
+                left: `${15 + (i * 10)}%`,
+                top: `${20 + (i % 4) * 15}%`,
               }}
               animate={{
-                y: [-5, -15, -5],
-                opacity: [0.6, 1, 0.6],
-                scale: [1, 1.2, 1]
+                opacity: [0, 1, 0],
+                scale: [0.5, 1.2, 0.5]
               }}
               transition={{
-                duration: 3 + (i * 0.5),
+                duration: 2,
                 repeat: Infinity,
                 ease: "easeInOut",
-                delay: i * 0.3
+                delay: i * 0.25
               }}
             />
           ))}
