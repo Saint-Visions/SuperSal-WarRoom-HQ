@@ -275,16 +275,14 @@ export default function SaintSalMe() {
         <div className="absolute top-0 left-0 right-0 bg-gradient-to-b from-black/80 to-transparent p-6 z-10">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <div 
-                className="w-12 h-12 bg-cover bg-center rounded opacity-90 hover:opacity-100 transition-opacity border border-amber-400/20"
-                style={{
-                  backgroundImage: `url('/attached_assets/Frame 1000002501_1753624236163.png')`,
-                  backgroundSize: 'cover'
-                }}
+              <img 
+                src="/attached_assets/transparent icon cookin dark copy 2_1753624871025.png"
+                alt="Sv. Cookin' Knowledge Robot Chef"
+                className="w-12 h-12 opacity-90 hover:opacity-100 transition-opacity"
               />
               <div>
                 <h1 className="text-3xl font-bold text-amber-400">saintsal™ execution center</h1>
-                <p className="text-slate-300">Divine-level execution management</p>
+                <p className="text-slate-300">Divine-level execution management with Sv. intelligence</p>
               </div>
             </div>
             <div className="flex space-x-3">
@@ -311,8 +309,12 @@ export default function SaintSalMe() {
                   <div className="flex-1 p-4 overflow-y-auto">
                     {conversation.length === 0 && !message.trim() ? (
                       <div className="text-center text-slate-400 py-12">
-                        <Rocket className="w-16 h-16 mx-auto mb-4 text-amber-400" />
-                        <h3 className="text-xl font-semibold mb-2 text-white">Execution Command Center</h3>
+                        <img 
+                          src="/attached_assets/transparent icon cookin dark copy 2_1753624871025.png"
+                          alt="Sv. Cookin' Knowledge Robot Chef"
+                          className="w-16 h-16 mx-auto mb-4 opacity-90"
+                        />
+                        <h3 className="text-xl font-semibold mb-2 text-white">saintsal™ + Sv. execution center</h3>
                         <p>Ready to execute leads, build implementations, and drive results. I have full access to all your business tools and execution frameworks.</p>
                       </div>
                     ) : (
