@@ -220,7 +220,7 @@ export default function WarRoom() {
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <img 
-                src="/attached_assets/transparent icon cookin dark copy 2_1753612784547.png" 
+                src="/cookin-logo.png" 
                 alt="Cookin' Knowledge"
                 className="w-12 h-12 opacity-80 hover:opacity-100 transition-opacity"
               />
@@ -258,7 +258,7 @@ export default function WarRoom() {
             {/* Logo Header */}
             <div className="text-center py-8">
               <img 
-                src="/attached_assets/transparent icon cookin dark copy 2_1753612784547.png" 
+                src="/cookin-logo.png" 
                 alt="Cookin' Knowledge"
                 className="w-20 h-20 mx-auto opacity-80 hover:opacity-100 transition-opacity"
               />
