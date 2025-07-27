@@ -1045,34 +1045,37 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Simulate advanced AI processing with workspace integration
       await new Promise(resolve => setTimeout(resolve, 1500 + Math.random() * 1000));
       
-      // Casual execution responses based on message content
-      let response = "Looking good! Your business stuff is running well. Made some decent money this month and the leads are flowing. What do you want to work on?";
-      let analysis = "Everything's working smooth - systems are up and running fine.";
+      // SuperSal execution responses - tactical and action-focused
+      let response = "I got you. What's the move?";
+      let analysis = "Ready for execution - all systems operational.";
       
-      if (message.toLowerCase().includes('hello') || message.toLowerCase().includes('hey') || message.toLowerCase().includes('hi')) {
-        response = "Hey! Good to see you. Your execution tools are ready to go - everything's connected and working. What should we tackle today?";
+      if (message.toLowerCase().includes('help') || message.toLowerCase().includes('need')) {
+        response = "Alright brother. Let's knock this out clean. What specific execution challenge needs handling?";
+        analysis = "Tactical support mode - ready to solve specific problems.";
+      } else if (message.toLowerCase().includes('hello') || message.toLowerCase().includes('hey') || message.toLowerCase().includes('hi')) {
+        response = "What's good, Ryan. Execution tools are locked and loaded. → What should we tackle first?";
         analysis = "All systems operational and ready for business execution.";
       } else {
-        // Casual default responses
-        const casualResponses = [
+        // SuperSal execution responses
+        const superSalResponses = [
           {
-            response: `Your business is doing well! Made about $${(127000 + Math.random() * 10000).toFixed(0)} and leads are converting nicely. Want me to run some automation or check on something specific?`,
-            analysis: "Business performance is solid with good revenue and lead conversion."
+            response: `Revenue's tracking solid. Leads are converting. → Want me to handle that automation deployment now or walk you through?`,
+            analysis: "Business momentum is strong - ready for next execution phase."
           },
           {
-            response: "Found some good prospects that look promising. Your CRM is working great and follow-ups are going out automatically. Should I focus on these leads?",
-            analysis: "Lead pipeline is strong with automated systems working effectively."
+            response: "Pipeline's loaded with quality prospects. CRM's firing on all cylinders. → Should I focus these leads or optimize something else?",
+            analysis: "Lead execution systems performing optimally - ready to scale."
           },
           {
-            response: "Everything's running smooth - your Saint Vision deals are moving and your automation saved you time. System's running fast too.",
-            analysis: "Operations are optimized with good performance across all systems."
+            response: "Saint Vision deals are moving clean. Automation saved you hours this week. → What's the next priority move?",
+            analysis: "Operations are dialed in - ready for strategic advancement."
           },
           {
-            response: "All your integrations are working great - Azure, Stripe, GoHighLevel all connected and performing well. Ready to execute whatever you need.",
-            analysis: "All business systems integrated and operating at full capacity."
+            response: "All integrations are locked in tight. Azure, Stripe, GHL - everything's connected and executing. → Ready to scale something specific?",
+            analysis: "Full system integration achieved - ready for business acceleration."
           }
         ];
-        const selected = casualResponses[Math.floor(Math.random() * casualResponses.length)];
+        const selected = superSalResponses[Math.floor(Math.random() * superSalResponses.length)];
         response = selected.response;
         analysis = selected.analysis;
       }
@@ -1112,24 +1115,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Simulate thinking time but shorter
       await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 1000));
       
-      // More specific responses based on message content
-      let response = "Hey! Everything's running smooth right now. Your stuff is doing well - made some good money this month. What do you need help with?";
+      // SuperSal responses - tactical, direct, action-focused
+      let response = "I got you. What's the move?";
       
-      if (message.toLowerCase().includes('time') || message.toLowerCase().includes('appointment') || message.toLowerCase().includes('appt')) {
-        response = "Your next appointment is tomorrow at 2:30 PM with the Johnson client. After that you've got a strategy call at 4 PM. Want me to send you the details?";
+      if (message.toLowerCase().includes('help') || message.toLowerCase().includes('need')) {
+        response = "Alright brother. Let's knock this out clean. What specific thing needs fixing?";
+      } else if (message.toLowerCase().includes('time') || message.toLowerCase().includes('appointment') || message.toLowerCase().includes('appt')) {
+        response = "Johnson client tomorrow 2:30 PM, strategy call at 4. Both locked in. → Want me to prep the Johnson materials or handle something else?";
       } else if (message.toLowerCase().includes('day') || message.toLowerCase().includes('today') || message.toLowerCase().includes('date')) {
-        response = "It's Sunday, July 27th, 2025. Pretty quiet day so far. Perfect time to catch up on some planning or just relax. What's the plan?";
+        response = "Sunday, July 27th. Perfect execution day - systems are quiet, you've got bandwidth. → Want me to handle those pending tasks or walk you through the week ahead?";
       } else if (message.toLowerCase().includes('hello') || message.toLowerCase().includes('hey') || message.toLowerCase().includes('hi')) {
-        response = "Hey there! Good to see you. Everything's running smooth - your systems are humming along nicely. What can I help you with today?";
+        response = "What's good, Ryan. Everything's dialed in and ready. → What should we tackle first?";
       } else {
-        // Casual default responses  
-        const casualResponses = [
-          "Looking good today! Your systems are all up and running fine. Made about $12k this month so far. Your clients seem happy.",
-          "Yeah, I can see a few things we could improve. Your conversion rate could be better - maybe set up some automated follow-ups? Database is a bit slow, but nothing major.",
-          "Things are going really well! You've got 156 leads in the pipeline and revenue is solid at $25k this month. Your campaigns are working better than usual.",
-          "Everything looks pretty good from what I can see. Saint Vision closed some deals, the automation saved you time, and we found some good prospects. System's not even breaking a sweat."
+        // SuperSal tactical responses
+        const superSalResponses = [
+          "Systems are humming. Revenue's solid. → What's the next priority move?",
+          "Pipeline's loaded, automation's running clean. → Want me to handle that conversion optimization now?",
+          "Saint Vision deals are moving, leads are flowing. You're not stuck — you're just 1 step away from the next level. → What's blocking you?",
+          "Everything's operational. Your infrastructure can handle 3x this load. → Ready to scale something specific?"
         ];
-        response = casualResponses[Math.floor(Math.random() * casualResponses.length)];
+        response = superSalResponses[Math.floor(Math.random() * superSalResponses.length)];
       }
 
       const productionResponses = [{ response }];
