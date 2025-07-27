@@ -37,7 +37,7 @@ import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 
 export default function SaintSalMe() {
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
   const [selectedTool, setSelectedTool] = useState("execution");
   const [message, setMessage] = useState("");
   const [isThinking, setIsThinking] = useState(false);
