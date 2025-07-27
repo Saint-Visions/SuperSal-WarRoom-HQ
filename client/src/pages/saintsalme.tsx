@@ -198,8 +198,8 @@ export default function SaintSalMe() {
             </div>
           </div>
 
-          {/* Full Screen Chat Interface */}
-          <div className="flex-1 pt-24 md:pt-32 px-4 md:px-6 pb-24 relative">
+          {/* Full Height Generous Chat Interface */}
+          <div className="flex-1 pt-20 md:pt-24 px-4 md:px-8 pb-20 relative">
             {/* Professional SaintSal Background */}
             <div 
               className="absolute inset-0 bg-center bg-no-repeat bg-contain opacity-15"
@@ -210,9 +210,9 @@ export default function SaintSalMe() {
               }}
             />
             
-            {/* Chat Area */}
+            {/* Generous Chat Workspace */}
             <div className="relative z-10 h-full flex flex-col">
-              <div className="flex-1 max-w-4xl mx-auto w-full px-8">
+              <div className="flex-1 max-w-5xl mx-auto w-full px-4">
                 <div className="h-full flex flex-col justify-center">
                   
                   <div className="flex-1 overflow-y-auto mb-6 min-h-[400px]">
@@ -261,8 +261,8 @@ export default function SaintSalMe() {
                     )}
                   </div>
                   
-                  {/* Bottom Search Bar - War Room Style */}
-                  <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 w-full max-w-3xl px-4 z-20">
+                  {/* Bottom Search/Chat Bar - Full Width */}
+                  <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 w-full max-w-4xl px-4 z-20">
                     <div className="relative bg-slate-900/90 backdrop-blur-xl border border-slate-600/50 rounded-2xl shadow-2xl">
                       <div className="flex items-center space-x-4 p-4">
                         <input
