@@ -82,12 +82,14 @@ export default function SaintSalMe() {
     },
     onSuccess: (data) => {
       setIsThinking(false);
-      const userMessage = message; // Capture current message before clearing
-      setMessage(""); // Clear input first
-      setConversation(prev => [...prev, 
-        { role: 'user', content: userMessage },
-        { role: 'assistant', content: data.response, analysis: data.analysis }
-      ]);
+      console.log('Received execution response:', data);
+      
+      // Add AI response to existing conversation
+      setConversation(prev => [...prev, { 
+        role: 'assistant', 
+        content: data.response, 
+        analysis: data.analysis 
+      }]);
     },
     onError: (error) => {
       setIsThinking(false);
@@ -134,7 +136,16 @@ export default function SaintSalMe() {
 
   const handleSendMessage = () => {
     if (!message.trim() || aiChatMutation.isPending) return;
-    aiChatMutation.mutate({ message, mode: "execution" });
+    
+    console.log('Sending execution message:', message);
+    
+    // Add user message immediately to conversation
+    const userMessage = message;
+    setConversation(prev => [...prev, { role: 'user', content: userMessage }]);
+    setMessage("");
+    
+    // Send to API
+    aiChatMutation.mutate({ message: userMessage, mode: "execution" });
   };
 
   const handleExecutionAction = (toolId: string, action: string, params?: any) => {

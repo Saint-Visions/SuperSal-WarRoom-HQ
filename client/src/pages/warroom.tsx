@@ -75,12 +75,10 @@ export default function WarRoom() {
     },
     onSuccess: (data) => {
       setIsThinking(false);
-      const userMessage = message; // Capture current message before clearing
-      setMessage(""); // Clear input first
-      setConversation(prev => [...prev, 
-        { role: 'user', content: userMessage },
-        { role: 'assistant', content: data.response }
-      ]);
+      console.log('Received response:', data);
+      
+      // Add AI response to existing conversation
+      setConversation(prev => [...prev, { role: 'assistant', content: data.response }]);
     },
     onError: (error) => {
       setIsThinking(false);
@@ -127,7 +125,16 @@ export default function WarRoom() {
 
   const handleSendMessage = () => {
     if (!message.trim() || aiChatMutation.isPending) return;
-    aiChatMutation.mutate({ message });
+    
+    console.log('Sending message:', message);
+    
+    // Add user message immediately to conversation
+    const userMessage = message;
+    setConversation(prev => [...prev, { role: 'user', content: userMessage }]);
+    setMessage("");
+    
+    // Send to API
+    aiChatMutation.mutate({ message: userMessage });
   };
 
   const handleToolAction = (toolId: string, action: string, params?: any) => {
@@ -276,34 +283,36 @@ export default function WarRoom() {
             <div className="flex-1 max-w-4xl mx-auto w-full px-8">
               <div className="h-full flex flex-col justify-center">
                 
-                {conversation.length === 0 && !message.trim() ? (
-                  <div className="text-center text-slate-400 py-12">
-                    <Target className="w-16 h-16 mx-auto mb-4 text-cyan-400" />
-                    <h3 className="text-xl font-semibold mb-2 text-white">Production Command Center</h3>
-                    <p>Ready to execute business operations, analyze data, and manage workflows. Ask me anything about production planning.</p>
-                  </div>
-                ) : (
-                  <div className="flex-1 overflow-y-auto mb-6">
-                    <AnimatePresence>
-                      {conversation.map((msg, idx) => (
-                        <motion.div
-                          key={idx}
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          className={`mb-4 ${msg.role === 'user' ? 'text-right' : 'text-left'}`}
-                        >
-                          <div className={`inline-block p-4 rounded-lg max-w-md ${
-                            msg.role === 'user' 
-                              ? 'bg-cyan-600 text-white' 
-                              : 'bg-slate-700 text-slate-100'
-                          }`}>
-                            <p>{msg.content}</p>
-                          </div>
-                        </motion.div>
-                      ))}
-                    </AnimatePresence>
-                  </div>
-                )}
+                <div className="flex-1 overflow-y-auto mb-6 min-h-[400px]">
+                  {conversation.length === 0 && !message.trim() && !isThinking ? (
+                    <div className="text-center text-slate-400 py-12 h-full flex flex-col justify-center">
+                      <Target className="w-16 h-16 mx-auto mb-4 text-cyan-400" />
+                      <h3 className="text-xl font-semibold mb-2 text-white">Production Command Center</h3>
+                      <p>Ready to execute business operations, analyze data, and manage workflows. Ask me anything about production planning.</p>
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      <AnimatePresence>
+                        {conversation.map((msg, idx) => (
+                          <motion.div
+                            key={idx}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className={`mb-4 ${msg.role === 'user' ? 'text-right' : 'text-left'}`}
+                          >
+                            <div className={`inline-block p-4 rounded-lg max-w-md ${
+                              msg.role === 'user' 
+                                ? 'bg-cyan-600 text-white' 
+                                : 'bg-slate-700 text-slate-100'
+                            }`}>
+                              <p className="whitespace-pre-wrap">{msg.content}</p>
+                            </div>
+                          </motion.div>
+                        ))}
+                      </AnimatePresence>
+                    </div>
+                  )}
+                </div>
                 
                 {isThinking && (
                   <motion.div
