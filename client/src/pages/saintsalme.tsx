@@ -38,7 +38,8 @@ import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 
 export default function SaintSalMe() {
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
+  const [leftSidebarCollapsed, setLeftSidebarCollapsed] = useState(true);
+  const [rightSidebarCollapsed, setRightSidebarCollapsed] = useState(true);
   const [selectedTool, setSelectedTool] = useState("execution");
   const [message, setMessage] = useState("");
   const [isThinking, setIsThinking] = useState(false);
@@ -125,23 +126,23 @@ export default function SaintSalMe() {
         transition={{ duration: 0.6 }}
         className="relative z-10 flex h-screen"
       >
-        {/* Collapsible Sidebar */}
+        {/* Left Collapsible Sidebar */}
         <motion.div
           initial={false}  
-          animate={{ width: sidebarCollapsed ? 60 : 280 }}
+          animate={{ width: leftSidebarCollapsed ? 60 : 280 }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
           className="bg-slate-900/30 backdrop-blur-xl border-r border-slate-700/50 flex flex-col"
         >
-          {/* Sidebar Header */}
+          {/* Left Sidebar Header */}
           <div className="p-4 border-b border-slate-700/50">
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+              onClick={() => setLeftSidebarCollapsed(!leftSidebarCollapsed)}
               className="w-full justify-start text-amber-400 hover:text-amber-300 hover:bg-amber-400/10"
             >
-              {sidebarCollapsed ? <ChevronRight className="w-5 h-5" /> : <ChevronLeft className="w-5 h-5 mr-2" />}
-              {!sidebarCollapsed && <span className="ml-2">Collapse</span>}
+              {leftSidebarCollapsed ? <ChevronRight className="w-5 h-5" /> : <ChevronLeft className="w-5 h-5 mr-2" />}
+              {!leftSidebarCollapsed && <span className="ml-2">Collapse</span>}
             </Button>
           </div>
 
@@ -157,10 +158,10 @@ export default function SaintSalMe() {
                   selectedTool === tool.id 
                     ? 'bg-amber-400/20 text-amber-400 border border-amber-400/30' 
                     : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
-                } ${sidebarCollapsed ? 'px-2' : 'px-3'}`}
+                } ${leftSidebarCollapsed ? 'px-2' : 'px-3'}`}
               >
-                <tool.icon className={`w-5 h-5 ${tool.color} ${sidebarCollapsed ? '' : 'mr-3'}`} />
-                {!sidebarCollapsed && (
+                <tool.icon className={`w-5 h-5 ${tool.color} ${leftSidebarCollapsed ? '' : 'mr-3'}`} />
+                {!leftSidebarCollapsed && (
                   <div className="text-left">
                     <div className="font-medium">{tool.label}</div>
                     <div className="text-xs text-slate-500">{tool.description}</div>
@@ -320,6 +321,56 @@ export default function SaintSalMe() {
             </div>
           </div>
         </div>
+
+        {/* Right Collapsible Sidebar */}
+        <motion.div
+          initial={false}  
+          animate={{ width: rightSidebarCollapsed ? 60 : 280 }}
+          transition={{ duration: 0.3, ease: "easeInOut" }}
+          className="bg-slate-900/30 backdrop-blur-xl border-l border-slate-700/50 flex flex-col"
+        >
+          {/* Right Sidebar Header */}
+          <div className="p-4 border-b border-slate-700/50">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setRightSidebarCollapsed(!rightSidebarCollapsed)}
+              className="w-full justify-start text-cyan-400 hover:text-cyan-300 hover:bg-cyan-400/10"
+            >
+              {rightSidebarCollapsed ? <ChevronLeft className="w-5 h-5" /> : <ChevronRight className="w-5 h-5 mr-2" />}
+              {!rightSidebarCollapsed && <span className="ml-2">Collapse</span>}
+            </Button>
+          </div>
+
+          {/* Right Panel Tools */}
+          <div className="flex-1 p-2 space-y-1">
+            {[
+              { id: "memory", icon: Brain, label: "AI Memory", description: "Conversation context", color: "text-cyan-400" },
+              { id: "files", icon: Upload, label: "File Manager", description: "Upload & manage files", color: "text-green-400" },
+              { id: "voice", icon: Mic, label: "Voice Control", description: "Voice commands", color: "text-purple-400" },
+              { id: "settings", icon: Settings, label: "Settings", description: "Workspace preferences", color: "text-slate-400" },
+              { id: "search", icon: Search, label: "Search", description: "Advanced search", color: "text-blue-400" },
+              { id: "filter", icon: Filter, label: "Filters", description: "Content filtering", color: "text-orange-400" },
+              { id: "refresh", icon: RefreshCw, label: "Refresh", description: "Reload workspace", color: "text-pink-400" },
+              { id: "notifications", icon: Bell, label: "Alerts", description: "System notifications", color: "text-red-400" }
+            ].map((tool) => (
+              <Button
+                key={tool.id}
+                variant="ghost"
+                size="sm"
+                className={`w-full justify-start text-slate-400 hover:text-white hover:bg-slate-800/50 ${rightSidebarCollapsed ? 'px-2' : 'px-3'}`}
+              >
+                <tool.icon className={`w-5 h-5 ${tool.color} ${rightSidebarCollapsed ? '' : 'mr-3'}`} />
+                {!rightSidebarCollapsed && (
+                  <div className="text-left">
+                    <div className="font-medium">{tool.label}</div>
+                    <div className="text-xs text-slate-500">{tool.description}</div>
+                  </div>
+                )}
+              </Button>
+            ))}
+          </div>
+        </motion.div>
       </motion.div>
     </div>
   );
