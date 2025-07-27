@@ -518,7 +518,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { prompt } = req.body;
       
       // Generate AI task using OpenAI
-      const aiResponse = await openaiService.generateCompletion([
+      const aiResponse = await openaiService.createChatCompletion([
         {
           role: "system",
           content: "You are SuperSal™, an executive AI assistant. Generate strategic business tasks based on the prompt. Respond with a JSON object containing: title, description, instructions, priority (low/medium/high/urgent), and tags array."
@@ -615,7 +615,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { message } = req.body;
       
       // Generate AI response
-      const aiResponse = await openaiService.generateCompletion([
+      const aiResponse = await openaiService.createChatCompletion([
         {
           role: "system",
           content: "You are SuperSal™, an executive AI assistant focused on business execution and task management. Provide concise, actionable responses about business operations, lead management, revenue tracking, and task execution. Keep responses under 100 words."
