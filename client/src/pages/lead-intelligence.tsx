@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
+import ParallaxBackground from "@/components/parallax-background";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -144,8 +145,9 @@ export default function LeadIntelligence() {
   };
 
   return (
-    <div className="min-h-screen bg-charcoal text-white p-6">
-      <div className="max-w-7xl mx-auto">
+    <ParallaxBackground className="min-h-screen">
+      <div className="min-h-screen bg-charcoal/90 text-white p-6">
+        <div className="max-w-7xl mx-auto">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -417,7 +419,8 @@ export default function LeadIntelligence() {
             </Card>
           </motion.div>
         )}
+        </div>
       </div>
-    </div>
+    </ParallaxBackground>
   );
 }

@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import ParallaxBackground from "@/components/parallax-background";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button"; 
 import { Badge } from "@/components/ui/badge";
+import SuperSalBrandedPanel from "@/components/supersal-branded-panel";
 import { Progress } from "@/components/ui/progress";
 import { 
   BarChart3, 
@@ -76,8 +78,9 @@ export default function CommandCenter() {
   const upcomingEvents = events.slice(0, 3);
 
   return (
-    <div className="min-h-screen bg-charcoal text-white p-6">
-      <div className="max-w-7xl mx-auto">
+    <ParallaxBackground className="min-h-screen">
+      <div className="min-h-screen bg-charcoal/90 text-white p-6">
+        <div className="max-w-7xl mx-auto">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -399,6 +402,8 @@ export default function CommandCenter() {
             transition={{ delay: 0.4 }}
             className="space-y-6"
           >
+            {/* SuperSal Authority Panel */}
+            <SuperSalBrandedPanel />
             {/* Calendar Events */}
             <Card className="bg-black/40 backdrop-blur-xl border-primary/20">
               <CardHeader>
@@ -604,7 +609,8 @@ export default function CommandCenter() {
             </div>
           </motion.div>
         </div>
+        </div>
       </div>
-    </div>
+    </ParallaxBackground>
   );
 }
