@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import ParallaxBackground from "@/components/parallax-background";
+import saintsalPromoImage from "@assets/small_promo_tile_resized copy_1753625694053.png";
 import { 
   Zap,
   Users,
@@ -182,8 +183,8 @@ export default function SaintSalMe() {
                   className="w-12 h-12 opacity-90 hover:opacity-100 transition-opacity"
                 />
                 <div>
-                  <h1 className="text-3xl font-bold text-amber-400">saintsal™ execution center</h1>
-                  <p className="text-slate-300">Divine-level execution management with Sv. intelligence</p>
+                  <h1 className="text-3xl font-bold text-amber-400">saintsal™ + you</h1>
+                  <p className="text-slate-300">Professional execution center powered by divine intelligence</p>
                 </div>
               </div>
               <div className="flex space-x-3">
@@ -199,12 +200,12 @@ export default function SaintSalMe() {
 
           {/* Full Screen Chat Interface */}
           <div className="flex-1 pt-24 md:pt-32 px-4 md:px-6 pb-24 relative">
-            {/* Background Image */}
+            {/* Professional SaintSal Background */}
             <div 
-              className="absolute inset-0 bg-center bg-no-repeat bg-contain opacity-5"
+              className="absolute inset-0 bg-center bg-no-repeat bg-contain opacity-15"
               style={{
-                backgroundImage: `url('/attached_assets/cookin copy_1753612229853.png')`,
-                backgroundSize: '400px',
+                backgroundImage: `url('${saintsalPromoImage}')`,
+                backgroundSize: '600px',
                 backgroundPosition: 'center center'
               }}
             />
@@ -218,8 +219,8 @@ export default function SaintSalMe() {
                     {conversation.length === 0 && !message.trim() && !isThinking ? (
                       <div className="text-center text-slate-400 py-12 h-full flex flex-col justify-center">
                         <Rocket className="w-16 h-16 mx-auto mb-4 text-amber-400" />
-                        <h3 className="text-xl font-semibold mb-2 text-white">saintsal™ execution center</h3>
-                        <p>Ready to execute leads, build implementations, and drive results. I have full access to all your business tools and execution frameworks.</p>
+                        <h3 className="text-xl font-semibold mb-2 text-white">saintsal™ + you</h3>
+                        <p>Professional partnership for business execution. Ready to implement leads, build solutions, and drive results with comprehensive business intelligence.</p>
                       </div>
                     ) : (
                       <div className="space-y-4">
