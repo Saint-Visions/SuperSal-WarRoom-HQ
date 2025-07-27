@@ -1,0 +1,712 @@
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SuperSal™ War Room HQ - AI Command Center</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'gold': '#d4af37',
+                        'charcoal': '#1a1a1a',
+                        'surface': '#2a2a2a',
+                        'elevated': '#333333'
+                    },
+                    fontFamily: {
+                        'mono': ['JetBrains Mono', 'monospace']
+                    }
+                }
+            }
+        };
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .glassmorphism {
+            background: rgba(42, 42, 42, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .logo-watermark {
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><text x="50%" y="50%" text-anchor="middle" dy=".3em" fill="%23333333" font-size="24" font-weight="bold" opacity="0.1">CookinKnowledge™</text></svg>');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: 300px;
+        }
+        .animate-pulse-gold {
+            animation: pulse-gold 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse-gold {
+            0%, 100% { opacity: 1; }
+            50% { opacity: .3; }
+        }
+        .sidebar-collapsed {
+            width: 4rem;
+        }
+        .sidebar-expanded {
+            width: 16rem;
+        }
+        .transition-width {
+            transition: width 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-charcoal text-white min-h-screen logo-watermark">
+    <!-- Header Navigation -->
+    <header class="sticky top-0 z-50 bg-surface/90 backdrop-blur-sm border-b border-white/10">
+        <div class="flex items-center justify-between px-6 py-4">
+            <div class="flex items-center space-x-4">
+                <div class="flex items-center space-x-2">
+                    <div class="w-8 h-8 bg-gold rounded-lg flex items-center justify-center">
+                        <i class="fas fa-brain text-charcoal text-sm"></i>
+                    </div>
+                    <h1 class="text-xl font-bold">SuperSal™ <span class="text-gold">War Room HQ</span></h1>
+                </div>
+                <div class="hidden md:block text-xs text-gray-400">Personal AI Command Center</div>
+            </div>
+            
+            <!-- Screen Navigation Tabs -->
+            <nav class="flex space-x-1 bg-charcoal rounded-lg p-1">
+                <button id="tab-command" class="tab-btn px-4 py-2 rounded-md text-sm font-medium transition-all active" onclick="switchScreen('command')">
+                    <i class="fas fa-tachometer-alt mr-2"></i>Command
+                </button>
+                <button id="tab-ai" class="tab-btn px-4 py-2 rounded-md text-sm font-medium transition-all" onclick="switchScreen('ai')">
+                    <i class="fas fa-robot mr-2"></i>AI Tools
+                </button>
+                <button id="tab-devlab" class="tab-btn px-4 py-2 rounded-md text-sm font-medium transition-all" onclick="switchScreen('devlab')">
+                    <i class="fas fa-code mr-2"></i>DevLab
+                </button>
+            </nav>
+
+            <!-- User Profile -->
+            <div class="flex items-center space-x-3">
+                <div class="flex items-center space-x-2 text-sm">
+                    <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                    <span class="text-gray-300">Ryan Capatosto</span>
+                </div>
+                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=32&h=32" alt="User Avatar" class="w-8 h-8 rounded-full">
+            </div>
+        </div>
+    </header>
+
+    <div class="flex h-screen">
+        <!-- Collapsible Sidebar -->
+        <aside id="sidebar" class="sidebar-expanded transition-width bg-surface border-r border-white/10 flex flex-col">
+            <div class="p-4">
+                <button id="sidebar-toggle" class="w-full flex items-center justify-center p-2 rounded-lg hover:bg-white/5 transition-colors">
+                    <i class="fas fa-bars text-gold"></i>
+                </button>
+            </div>
+            
+            <!-- Quick Launchers -->
+            <div class="px-4 pb-4">
+                <div id="sidebar-content">
+                    <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3">Quick Launch</h3>
+                    <div class="space-y-2">
+                        <a href="#" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-white/5 transition-colors group">
+                            <i class="fas fa-globe w-4 text-gold"></i>
+                            <span class="text-sm">SaintVisionAI.com</span>
+                        </a>
+                        <a href="#" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-white/5 transition-colors group">
+                            <i class="fas fa-terminal w-4 text-gold"></i>
+                            <span class="text-sm">Replit Console</span>
+                        </a>
+                        <a href="#" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-white/5 transition-colors group">
+                            <i class="fas fa-chart-line w-4 text-gold"></i>
+                            <span class="text-sm">GHL Dashboard</span>
+                        </a>
+                        <a href="#" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-white/5 transition-colors group">
+                            <i class="fas fa-credit-card w-4 text-gold"></i>
+                            <span class="text-sm">Stripe</span>
+                        </a>
+                        <a href="#" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-white/5 transition-colors group">
+                            <i class="fas fa-database w-4 text-gold"></i>
+                            <span class="text-sm">Supabase</span>
+                        </a>
+                        <a href="#" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-white/5 transition-colors group">
+                            <i class="fas fa-cloud w-4 text-gold"></i>
+                            <span class="text-sm">Azure Portal</span>
+                        </a>
+                        <a href="#" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-white/5 transition-colors group">
+                            <i class="fab fa-github w-4 text-gold"></i>
+                            <span class="text-sm">GitHub</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 overflow-auto">
+            <!-- Screen 1: Command Center -->
+            <div id="screen-command" class="screen-content p-6 space-y-6">
+                <!-- Status Bar -->
+                <div class="glassmorphism rounded-xl p-4">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <div class="flex items-center space-x-2">
+                                <div class="w-3 h-3 bg-green-400 rounded-full animate-pulse-gold"></div>
+                                <span class="text-sm font-medium">All Systems Online</span>
+                            </div>
+                            <div class="text-xs text-gray-400">Last sync: 2 minutes ago</div>
+                        </div>
+                        <div class="flex items-center space-x-4 text-sm">
+                            <span class="flex items-center space-x-1">
+                                <i class="fas fa-server text-gold"></i>
+                                <span>Server: 99.9%</span>
+                            </span>
+                            <span class="flex items-center space-x-1">
+                                <i class="fas fa-wifi text-gold"></i>
+                                <span>API: Connected</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dashboard Grid -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Calendar Widget -->
+                    <div class="lg:col-span-2 glassmorphism rounded-xl p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h2 class="text-lg font-semibold flex items-center">
+                                <i class="fas fa-calendar-alt text-gold mr-2"></i>
+                                Calendar & Schedule
+                            </h2>
+                            <div class="flex space-x-2">
+                                <button class="px-3 py-1 text-xs rounded-md bg-gold/20 text-gold hover:bg-gold/30 transition-colors">Day</button>
+                                <button class="px-3 py-1 text-xs rounded-md bg-white/10 hover:bg-white/20 transition-colors">Week</button>
+                                <button class="px-3 py-1 text-xs rounded-md bg-white/10 hover:bg-white/20 transition-colors">Month</button>
+                            </div>
+                        </div>
+                        <div class="space-y-3">
+                            <div class="flex items-center space-x-3 p-3 rounded-lg bg-white/5 hover:bg-white/10 transition-colors">
+                                <div class="w-2 h-8 bg-blue-500 rounded-full"></div>
+                                <div class="flex-1">
+                                    <div class="font-medium">Client Strategy Meeting</div>
+                                    <div class="text-sm text-gray-400">9:00 AM - 10:30 AM</div>
+                                </div>
+                                <i class="fas fa-video text-gray-400"></i>
+                            </div>
+                            <div class="flex items-center space-x-3 p-3 rounded-lg bg-white/5 hover:bg-white/10 transition-colors">
+                                <div class="w-2 h-8 bg-green-500 rounded-full"></div>
+                                <div class="flex-1">
+                                    <div class="font-medium">GHL System Review</div>
+                                    <div class="text-sm text-gray-400">2:00 PM - 3:00 PM</div>
+                                </div>
+                                <i class="fas fa-chart-line text-gray-400"></i>
+                            </div>
+                            <div class="flex items-center space-x-3 p-3 rounded-lg bg-white/5 hover:bg-white/10 transition-colors">
+                                <div class="w-2 h-8 bg-gold rounded-full"></div>
+                                <div class="flex-1">
+                                    <div class="font-medium">AI Model Training Session</div>
+                                    <div class="text-sm text-gray-400">4:30 PM - 6:00 PM</div>
+                                </div>
+                                <i class="fas fa-brain text-gray-400"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- KPIs Panel -->
+                    <div class="glassmorphism rounded-xl p-6">
+                        <h2 class="text-lg font-semibold mb-4 flex items-center">
+                            <i class="fas fa-chart-bar text-gold mr-2"></i>
+                            Key Metrics
+                        </h2>
+                        <div class="space-y-4">
+                            <div class="p-3 rounded-lg bg-white/5">
+                                <div class="text-sm text-gray-400">Monthly Revenue</div>
+                                <div class="text-2xl font-bold text-green-400">$127,890</div>
+                                <div class="text-xs text-green-400">↗ +12.4%</div>
+                            </div>
+                            <div class="p-3 rounded-lg bg-white/5">
+                                <div class="text-sm text-gray-400">Active Leads</div>
+                                <div class="text-2xl font-bold text-blue-400">342</div>
+                                <div class="text-xs text-blue-400">↗ +8.2%</div>
+                            </div>
+                            <div class="p-3 rounded-lg bg-white/5">
+                                <div class="text-sm text-gray-400">Conversion Rate</div>
+                                <div class="text-2xl font-bold text-gold">24.6%</div>
+                                <div class="text-xs text-gold">↗ +3.1%</div>
+                            </div>
+                            <div class="p-3 rounded-lg bg-white/5">
+                                <div class="text-sm text-gray-400">System Uptime</div>
+                                <div class="text-2xl font-bold text-green-400">99.9%</div>
+                                <div class="text-xs text-green-400">Excellent</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bottom Row -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Contacts & Clients -->
+                    <div class="glassmorphism rounded-xl p-6">
+                        <h2 class="text-lg font-semibold mb-4 flex items-center">
+                            <i class="fas fa-users text-gold mr-2"></i>
+                            Recent Contacts
+                        </h2>
+                        <div class="space-y-3">
+                            <div class="flex items-center space-x-3 p-3 rounded-lg hover:bg-white/5 transition-colors cursor-pointer">
+                                <!-- Professional businesswoman headshot -->
+                                <img src="https://pixabay.com/get/g89d515f5a6299b54bb22c4727a1911d733bdc0874895cffa856427e5809de4e89a265a01b0de6d74c650013be901a6bd1a55c702fdd01aa00d551fd7251a03f0_1280.jpg" alt="Sarah Johnson" class="w-10 h-10 rounded-full">
+                                <div class="flex-1">
+                                    <div class="font-medium">Sarah Johnson</div>
+                                    <div class="text-sm text-gray-400">Enterprise Client • Last contact: 2h ago</div>
+                                </div>
+                                <div class="w-2 h-2 bg-green-400 rounded-full"></div>
+                            </div>
+                            <div class="flex items-center space-x-3 p-3 rounded-lg hover:bg-white/5 transition-colors cursor-pointer">
+                                <!-- Professional businessman headshot -->
+                                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=40&h=40" alt="Michael Chen" class="w-10 h-10 rounded-full">
+                                <div class="flex-1">
+                                    <div class="font-medium">Michael Chen</div>
+                                    <div class="text-sm text-gray-400">Lead Prospect • Last contact: 5h ago</div>
+                                </div>
+                                <div class="w-2 h-2 bg-yellow-400 rounded-full"></div>
+                            </div>
+                            <div class="flex items-center space-x-3 p-3 rounded-lg hover:bg-white/5 transition-colors cursor-pointer">
+                                <!-- Professional woman with glasses -->
+                                <img src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=40&h=40" alt="Jessica Rodriguez" class="w-10 h-10 rounded-full">
+                                <div class="flex-1">
+                                    <div class="font-medium">Jessica Rodriguez</div>
+                                    <div class="text-sm text-gray-400">Active Client • Last contact: 1d ago</div>
+                                </div>
+                                <div class="w-2 h-2 bg-blue-400 rounded-full"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Memory Console -->
+                    <div class="glassmorphism rounded-xl p-6">
+                        <h2 class="text-lg font-semibold mb-4 flex items-center">
+                            <i class="fas fa-sticky-note text-gold mr-2"></i>
+                            Memory Console
+                        </h2>
+                        <div class="space-y-3">
+                            <div class="p-3 rounded-lg bg-white/5 hover:bg-white/10 transition-colors cursor-pointer">
+                                <div class="font-medium text-sm">Follow up: GHL automation setup</div>
+                                <div class="text-xs text-gray-400 mt-1">Priority: High • Due: Today 5:00 PM</div>
+                            </div>
+                            <div class="p-3 rounded-lg bg-white/5 hover:bg-white/10 transition-colors cursor-pointer">
+                                <div class="font-medium text-sm">Review Azure costs optimization</div>
+                                <div class="text-xs text-gray-400 mt-1">Priority: Medium • Due: Tomorrow</div>
+                            </div>
+                            <div class="p-3 rounded-lg bg-white/5 hover:bg-white/10 transition-colors cursor-pointer">
+                                <div class="font-medium text-sm">Update HACP protocol documentation</div>
+                                <div class="text-xs text-gray-400 mt-1">Priority: Low • Due: This week</div>
+                            </div>
+                        </div>
+                        <button class="w-full mt-4 p-2 rounded-lg border border-dashed border-gray-600 hover:border-gold hover:bg-gold/10 transition-colors text-sm text-gray-400 hover:text-gold">
+                            <i class="fas fa-plus mr-2"></i>Add New Note
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Screen 2: AI Command Tools -->
+            <div id="screen-ai" class="screen-content p-6 space-y-6 hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 h-full">
+                    <!-- AI Tools Sidebar -->
+                    <div class="glassmorphism rounded-xl p-4">
+                        <h3 class="text-lg font-semibold mb-4 flex items-center">
+                            <i class="fas fa-toolbox text-gold mr-2"></i>
+                            AI Tools
+                        </h3>
+                        <div class="space-y-2">
+                            <button class="w-full text-left p-3 rounded-lg bg-gold/20 text-gold hover:bg-gold/30 transition-colors">
+                                <i class="fas fa-robot mr-2"></i>
+                                <span class="text-sm">Assistant Playground</span>
+                            </button>
+                            <button class="w-full text-left p-3 rounded-lg hover:bg-white/10 transition-colors">
+                                <i class="fas fa-file mr-2"></i>
+                                <span class="text-sm">Files & Embedding</span>
+                            </button>
+                            <button class="w-full text-left p-3 rounded-lg hover:bg-white/10 transition-colors">
+                                <i class="fas fa-code mr-2"></i>
+                                <span class="text-sm">Code Interpreter</span>
+                            </button>
+                            <button class="w-full text-left p-3 rounded-lg hover:bg-white/10 transition-colors">
+                                <i class="fas fa-search mr-2"></i>
+                                <span class="text-sm">Azure Cognitive Search</span>
+                            </button>
+                            <button class="w-full text-left p-3 rounded-lg hover:bg-white/10 transition-colors">
+                                <i class="fas fa-microphone mr-2"></i>
+                                <span class="text-sm">Speech-to-Text</span>
+                            </button>
+                            <button class="w-full text-left p-3 rounded-lg hover:bg-white/10 transition-colors">
+                                <i class="fas fa-volume-up mr-2"></i>
+                                <span class="text-sm">Text-to-Speech</span>
+                            </button>
+                            <button class="w-full text-left p-3 rounded-lg hover:bg-white/10 transition-colors">
+                                <i class="fas fa-eye mr-2"></i>
+                                <span class="text-sm">Vision OCR</span>
+                            </button>
+                            <button class="w-full text-left p-3 rounded-lg hover:bg-white/10 transition-colors">
+                                <i class="fas fa-flask mr-2"></i>
+                                <span class="text-sm">API Tester</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Chat Interface -->
+                    <div class="lg:col-span-2 glassmorphism rounded-xl p-6 flex flex-col h-[calc(100vh-12rem)]">
+                        <div class="flex items-center justify-between mb-4">
+                            <h2 class="text-lg font-semibold flex items-center">
+                                <i class="fas fa-comments text-gold mr-2"></i>
+                                GPT-4o Chat Interface
+                            </h2>
+                            <div class="flex space-x-2">
+                                <button class="p-2 rounded-lg hover:bg-white/10 transition-colors" title="Voice Input">
+                                    <i class="fas fa-microphone text-gold"></i>
+                                </button>
+                                <button class="p-2 rounded-lg hover:bg-white/10 transition-colors" title="Clear Chat">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Chat Messages -->
+                        <div class="flex-1 overflow-y-auto space-y-4 mb-4">
+                            <div class="flex items-start space-x-3">
+                                <div class="w-8 h-8 bg-gold rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-robot text-charcoal text-sm"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="bg-white/10 rounded-lg p-3">
+                                        <p class="text-sm">Hello Ryan! I'm SuperSal™, your AI command center assistant. I'm connected to all your systems including GHL, Stripe, Supabase, and Azure services. How can I help you manage your operations today?</p>
+                                    </div>
+                                    <div class="text-xs text-gray-400 mt-1">Just now</div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start space-x-3 justify-end">
+                                <div class="flex-1 max-w-md">
+                                    <div class="bg-gold/20 rounded-lg p-3 ml-auto">
+                                        <p class="text-sm">Show me today's lead summary and any urgent tasks</p>
+                                    </div>
+                                    <div class="text-xs text-gray-400 mt-1 text-right">2 minutes ago</div>
+                                </div>
+                                <!-- Professional businessman headshot -->
+                                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=32&h=32" alt="Ryan" class="w-8 h-8 rounded-full flex-shrink-0">
+                            </div>
+
+                            <div class="flex items-start space-x-3">
+                                <div class="w-8 h-8 bg-gold rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-robot text-charcoal text-sm"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="bg-white/10 rounded-lg p-3">
+                                        <p class="text-sm mb-2">Here's your lead summary for today:</p>
+                                        <ul class="text-sm space-y-1 list-disc list-inside">
+                                            <li>🔥 3 high-priority leads in GHL pipeline</li>
+                                            <li>📞 2 scheduled calls this afternoon</li>
+                                            <li>💰 $45K in potential revenue this week</li>
+                                        </ul>
+                                        <p class="text-sm mt-2">Urgent tasks:</p>
+                                        <ul class="text-sm space-y-1 list-disc list-inside">
+                                            <li>⚠️ Follow up with Sarah Johnson (Enterprise deal)</li>
+                                            <li>🔧 Review Azure costs (monthly limit approaching)</li>
+                                        </ul>
+                                    </div>
+                                    <div class="text-xs text-gray-400 mt-1">1 minute ago</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Chat Input -->
+                        <div class="flex space-x-2">
+                            <button class="p-3 rounded-lg bg-white/10 hover:bg-white/20 transition-colors">
+                                <i class="fas fa-paperclip"></i>
+                            </button>
+                            <input type="text" placeholder="Type your message..." class="flex-1 bg-white/10 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gold border-0">
+                            <button class="p-3 rounded-lg bg-gold hover:bg-gold/80 transition-colors text-charcoal">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Memory & Files Panel -->
+                    <div class="glassmorphism rounded-xl p-4">
+                        <h3 class="text-lg font-semibold mb-4 flex items-center">
+                            <i class="fas fa-brain text-gold mr-2"></i>
+                            Memory & Files
+                        </h3>
+                        
+                        <!-- File Upload Area -->
+                        <div class="border-2 border-dashed border-gray-600 rounded-lg p-4 mb-4 hover:border-gold transition-colors">
+                            <div class="text-center">
+                                <i class="fas fa-cloud-upload-alt text-2xl text-gray-400 mb-2"></i>
+                                <p class="text-sm text-gray-400">Drop files here or click to upload</p>
+                                <p class="text-xs text-gray-500 mt-1">PDF, DOC, ZIP supported</p>
+                            </div>
+                        </div>
+
+                        <!-- Recent Files -->
+                        <div class="space-y-2">
+                            <h4 class="text-sm font-medium text-gray-400">Recent Files</h4>
+                            <div class="space-y-2">
+                                <div class="flex items-center space-x-2 p-2 rounded hover:bg-white/5 transition-colors">
+                                    <i class="fas fa-file-pdf text-red-400"></i>
+                                    <span class="text-xs flex-1">ghl-integration-guide.pdf</span>
+                                    <i class="fas fa-download text-gray-400 text-xs cursor-pointer"></i>
+                                </div>
+                                <div class="flex items-center space-x-2 p-2 rounded hover:bg-white/5 transition-colors">
+                                    <i class="fas fa-file-word text-blue-400"></i>
+                                    <span class="text-xs flex-1">hacp-protocol.docx</span>
+                                    <i class="fas fa-download text-gray-400 text-xs cursor-pointer"></i>
+                                </div>
+                                <div class="flex items-center space-x-2 p-2 rounded hover:bg-white/5 transition-colors">
+                                    <i class="fas fa-file-archive text-yellow-400"></i>
+                                    <span class="text-xs flex-1">supersal-config.zip</span>
+                                    <i class="fas fa-download text-gray-400 text-xs cursor-pointer"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Memory Log -->
+                        <div class="mt-6">
+                            <h4 class="text-sm font-medium text-gray-400 mb-2">AI Memory</h4>
+                            <div class="space-y-2 text-xs">
+                                <div class="p-2 bg-white/5 rounded">
+                                    <div class="text-green-400">✓ Learned: GHL webhook configuration</div>
+                                    <div class="text-gray-500">2 hours ago</div>
+                                </div>
+                                <div class="p-2 bg-white/5 rounded">
+                                    <div class="text-blue-400">📊 Updated: Client pipeline data</div>
+                                    <div class="text-gray-500">4 hours ago</div>
+                                </div>
+                                <div class="p-2 bg-white/5 rounded">
+                                    <div class="text-gold">🧠 Processed: HACP protocol docs</div>
+                                    <div class="text-gray-500">Yesterday</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Screen 3: DevLab/Automator -->
+            <div id="screen-devlab" class="screen-content p-6 space-y-6 hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Workflow Builder -->
+                    <div class="lg:col-span-2 glassmorphism rounded-xl p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h2 class="text-lg font-semibold flex items-center">
+                                <i class="fas fa-project-diagram text-gold mr-2"></i>
+                                Workflow Builder
+                            </h2>
+                            <div class="flex space-x-2">
+                                <button class="px-3 py-1 text-xs rounded-md bg-gold/20 text-gold hover:bg-gold/30 transition-colors">
+                                    <i class="fas fa-play mr-1"></i>Run
+                                </button>
+                                <button class="px-3 py-1 text-xs rounded-md bg-white/10 hover:bg-white/20 transition-colors">
+                                    <i class="fas fa-save mr-1"></i>Save
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Workflow Canvas -->
+                        <div class="bg-charcoal rounded-lg p-4 min-h-96 relative border border-white/10">
+                            <!-- Start Node -->
+                            <div class="absolute top-4 left-4 bg-green-500 rounded-lg p-3 w-32">
+                                <div class="text-xs font-medium text-center">🚀 Start</div>
+                                <div class="text-xs text-center mt-1">Webhook Trigger</div>
+                            </div>
+                            
+                            <!-- Process Node -->
+                            <div class="absolute top-4 left-44 bg-blue-500 rounded-lg p-3 w-32">
+                                <div class="text-xs font-medium text-center">⚙️ Process</div>
+                                <div class="text-xs text-center mt-1">Parse Lead Data</div>
+                            </div>
+                            
+                            <!-- Decision Node -->
+                            <div class="absolute top-4 left-84 bg-yellow-500 rounded-lg p-3 w-32">
+                                <div class="text-xs font-medium text-center">🤔 Decision</div>
+                                <div class="text-xs text-center mt-1">Lead Quality?</div>
+                            </div>
+                            
+                            <!-- Action Node -->
+                            <div class="absolute top-20 right-4 bg-purple-500 rounded-lg p-3 w-32">
+                                <div class="text-xs font-medium text-center">📧 Action</div>
+                                <div class="text-xs text-center mt-1">Send to CRM</div>
+                            </div>
+
+                            <!-- Connection Lines -->
+                            <svg class="absolute inset-0 pointer-events-none" width="100%" height="100%">
+                                <defs>
+                                    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                                        <polygon points="0 0, 10 3.5, 0 7" fill="#d4af37"/>
+                                    </marker>
+                                </defs>
+                                <line x1="144" y1="28" x2="176" y2="28" stroke="#d4af37" strokeWidth="2" markerEnd="url(#arrowhead)"/>
+                                <line x1="304" y1="28" x2="336" y2="28" stroke="#d4af37" strokeWidth="2" markerEnd="url(#arrowhead)"/>
+                                <line x1="368" y1="60" x2="368" y2="92" stroke="#d4af37" strokeWidth="2" markerEnd="url(#arrowhead)"/>
+                            </svg>
+                        </div>
+
+                        <!-- Node Palette -->
+                        <div class="mt-4 flex space-x-2 overflow-x-auto">
+                            <div class="bg-green-500 rounded p-2 text-xs whitespace-nowrap cursor-pointer hover:bg-green-600 transition-colors">
+                                <i class="fas fa-play mr-1"></i>Trigger
+                            </div>
+                            <div class="bg-blue-500 rounded p-2 text-xs whitespace-nowrap cursor-pointer hover:bg-blue-600 transition-colors">
+                                <i class="fas fa-cog mr-1"></i>Process
+                            </div>
+                            <div class="bg-yellow-500 rounded p-2 text-xs text-black whitespace-nowrap cursor-pointer hover:bg-yellow-600 transition-colors">
+                                <i class="fas fa-question mr-1"></i>Decision
+                            </div>
+                            <div class="bg-purple-500 rounded p-2 text-xs whitespace-nowrap cursor-pointer hover:bg-purple-600 transition-colors">
+                                <i class="fas fa-bolt mr-1"></i>Action
+                            </div>
+                            <div class="bg-red-500 rounded p-2 text-xs whitespace-nowrap cursor-pointer hover:bg-red-600 transition-colors">
+                                <i class="fas fa-stop mr-1"></i>End
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tools Panel -->
+                    <div class="glassmorphism rounded-xl p-4">
+                        <h3 class="text-lg font-semibold mb-4 flex items-center">
+                            <i class="fas fa-wrench text-gold mr-2"></i>
+                            Dev Tools
+                        </h3>
+                        
+                        <!-- API Tester -->
+                        <div class="space-y-4">
+                            <div>
+                                <h4 class="text-sm font-medium text-gray-400 mb-2">API Tester</h4>
+                                <div class="space-y-2">
+                                    <select class="w-full bg-white/10 rounded p-2 text-sm border-0 focus:outline-none focus:ring-1 focus:ring-gold">
+                                        <option>GET</option>
+                                        <option>POST</option>
+                                        <option>PUT</option>
+                                        <option>DELETE</option>
+                                    </select>
+                                    <input type="text" placeholder="API Endpoint..." class="w-full bg-white/10 rounded p-2 text-sm border-0 focus:outline-none focus:ring-1 focus:ring-gold">
+                                    <button class="w-full bg-gold hover:bg-gold/80 text-charcoal rounded p-2 text-sm font-medium transition-colors">
+                                        Send Request
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Code Sandbox -->
+                            <div>
+                                <h4 class="text-sm font-medium text-gray-400 mb-2">Code Sandbox</h4>
+                                <div class="bg-charcoal rounded-lg p-3 font-mono text-xs">
+                                    <div class="text-green-400"># Quick Python REPL</div>
+                                    <div class="text-white">>>> print("Hello SuperSal!")</div>
+                                    <div class="text-blue-400">Hello SuperSal!</div>
+                                    <div class="text-white">>>> _</div>
+                                </div>
+                                <button class="w-full mt-2 bg-white/10 hover:bg-white/20 rounded p-2 text-sm transition-colors">
+                                    Open Full Editor
+                                </button>
+                            </div>
+
+                            <!-- Quick Actions -->
+                            <div>
+                                <h4 class="text-sm font-medium text-gray-400 mb-2">Quick Actions</h4>
+                                <div class="space-y-2">
+                                    <button class="w-full text-left p-2 rounded hover:bg-white/10 transition-colors text-sm">
+                                        <i class="fas fa-database text-gold mr-2"></i>Query Supabase
+                                    </button>
+                                    <button class="w-full text-left p-2 rounded hover:bg-white/10 transition-colors text-sm">
+                                        <i class="fas fa-webhook text-gold mr-2"></i>Test Webhook
+                                    </button>
+                                    <button class="w-full text-left p-2 rounded hover:bg-white/10 transition-colors text-sm">
+                                        <i class="fas fa-sync text-gold mr-2"></i>Sync GHL Data
+                                    </button>
+                                    <button class="w-full text-left p-2 rounded hover:bg-white/10 transition-colors text-sm">
+                                        <i class="fas fa-chart-line text-gold mr-2"></i>Generate Report
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Terminal & Logs -->
+                <div class="glassmorphism rounded-xl p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-lg font-semibold flex items-center">
+                            <i class="fas fa-terminal text-gold mr-2"></i>
+                            CLI Terminal
+                        </h2>
+                        <button class="px-3 py-1 text-xs rounded-md bg-white/10 hover:bg-white/20 transition-colors">
+                            Clear
+                        </button>
+                    </div>
+                    
+                    <div class="bg-charcoal rounded-lg p-4 font-mono text-sm h-64 overflow-y-auto">
+                        <div class="text-green-400">supersal@warroom:~$ status</div>
+                        <div class="text-white">✓ All systems operational</div>
+                        <div class="text-white">✓ GHL API connected</div>
+                        <div class="text-white">✓ Stripe webhooks active</div>
+                        <div class="text-white">✓ Azure services online</div>
+                        <div class="text-green-400 mt-2">supersal@warroom:~$ sync --all</div>
+                        <div class="text-blue-400">Syncing calendar events... done</div>
+                        <div class="text-blue-400">Updating lead pipeline... done</div>
+                        <div class="text-blue-400">Refreshing KPI metrics... done</div>
+                        <div class="text-green-400 mt-2">supersal@warroom:~$ <span class="animate-pulse">_</span></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // TODO: Implement business logic, API calls, and state management
+        
+        (function() {
+            // Screen switching functionality
+            window.switchScreen = function(screenName) {
+                // Hide all screens
+                document.querySelectorAll('.screen-content').forEach(screen => {
+                    screen.classList.add('hidden');
+                });
+                
+                // Show selected screen
+                document.getElementById(`screen-${screenName}`).classList.remove('hidden');
+                
+                // Update tab states
+                document.querySelectorAll('.tab-btn').forEach(tab => {
+                    tab.classList.remove('active', 'bg-gold', 'text-charcoal');
+                    tab.classList.add('text-gray-300');
+                });
+                
+                const activeTab = document.getElementById(`tab-${screenName}`);
+                activeTab.classList.add('active', 'bg-gold', 'text-charcoal');
+                activeTab.classList.remove('text-gray-300');
+            };
+
+            // Sidebar toggle functionality
+            const sidebar = document.getElementById('sidebar');
+            const sidebarToggle = document.getElementById('sidebar-toggle');
+            const sidebarContent = document.getElementById('sidebar-content');
+            let isCollapsed = false;
+
+            sidebarToggle.addEventListener('click', function() {
+                isCollapsed = !isCollapsed;
+                
+                if (isCollapsed) {
+                    sidebar.classList.remove('sidebar-expanded');
+                    sidebar.classList.add('sidebar-collapsed');
+                    sidebarContent.style.display = 'none';
+                } else {
+                    sidebar.classList.remove('sidebar-collapsed');
+                    sidebar.classList.add('sidebar-expanded');
+                    setTimeout(() => {
+                        sidebarContent.style.display = 'block';
+                    }, 150);
+                }
+            });
+
+            // Initialize default screen
+            switchScreen('command');
+        })();
+    </script>
+</body>
+</html>

@@ -126,6 +126,30 @@ export default function SaintSalMe() {
     refetchInterval: 3000,
   });
 
+  // Tool action mutation for execution tools
+  const toolActionMutation = useMutation({
+    mutationFn: async (data: { toolId: string; action: string; params?: any }) => {
+      return await apiRequest("POST", "/api/saintsalme/tool-action", data);
+    },
+    onSuccess: (data) => {
+      toast({
+        title: "Tool Executed",
+        description: data.result,
+      });
+      
+      // Add tool result to conversation
+      setConversation(prev => [...prev, {
+        role: 'system',
+        content: `🔧 ${data.result}`,
+        data: data
+      }]);
+    }
+  });
+
+  const handleToolAction = (toolId: string, action: string, params?: any) => {
+    toolActionMutation.mutate({ toolId, action, params });
+  };
+
   // Chat mutation for AI responses
   const chatMutation = useMutation({
     mutationFn: async (input: { message: string }) => {
@@ -210,7 +234,22 @@ export default function SaintSalMe() {
                 key={tool.id}
                 variant="ghost"
                 size="sm"
-                onClick={() => setSelectedTool(tool.id)}
+                onClick={() => {
+                  setSelectedTool(tool.id);
+                  // Map tools to their correct actions
+                  const actionMap = {
+                    'execution': 'execute',
+                    'deployment': 'deploy',
+                    'implementation': 'implement',
+                    'campaign': 'launch',
+                    'intelligence': 'analyze',
+                    'analytics': 'analyze',
+                    'automation': 'deploy',
+                    'database': 'query'
+                  };
+                  const action = actionMap[tool.id] || 'execute';
+                  handleToolAction(tool.id, action);
+                }}
                 className={`w-full justify-start ${
                   selectedTool === tool.id 
                     ? 'bg-amber-400/20 text-amber-400 border border-amber-400/30' 
