@@ -264,7 +264,7 @@ export default function WarRoom() {
             <div className="flex-1 max-w-4xl mx-auto w-full px-8">
               <div className="h-full flex flex-col justify-center">
                 
-                {conversation.length === 0 ? (
+                {conversation.length === 0 && !message.trim() ? (
                   <div className="text-center text-slate-400 py-12">
                     <Target className="w-16 h-16 mx-auto mb-4 text-cyan-400" />
                     <h3 className="text-xl font-semibold mb-2 text-white">Production Command Center</h3>

@@ -258,7 +258,7 @@ export default function SaintSalMe() {
                 <CardContent className="flex-1 flex flex-col p-0">
                   {/* Chat Area */}
                   <div className="flex-1 p-4 overflow-y-auto">
-                    {conversation.length === 0 ? (
+                    {conversation.length === 0 && !message.trim() ? (
                       <div className="text-center text-slate-400 py-12">
                         <Rocket className="w-16 h-16 mx-auto mb-4 text-amber-400" />
                         <h3 className="text-xl font-semibold mb-2 text-white">Execution Command Center</h3>
