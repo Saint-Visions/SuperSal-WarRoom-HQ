@@ -41,8 +41,8 @@ export default function Login() {
         description: "Welcome to SuperSal™ War Room HQ",
       });
       
-      // Redirect to command center
-      window.location.href = "/command";
+      // Redirect to onboarding
+      window.location.href = "/onboarding";
     } catch (error) {
       toast({
         title: "Authentication Failed",
@@ -68,7 +68,7 @@ export default function Login() {
           description: "Accessing SuperSal™ War Room HQ",
         });
         
-        window.location.href = "/command";
+        window.location.href = "/onboarding";
       } else {
         throw new Error("Invalid credentials");
       }
