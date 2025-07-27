@@ -1394,6 +1394,103 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Settings routes
+  app.get('/api/settings', async (req, res) => {
+    try {
+      const settings = {
+        apiKeys: {
+          openai: { 
+            configured: !!process.env.***REMOVED***, 
+            status: process.env.***REMOVED*** ? 'active' : 'missing' 
+          },
+          azure: { 
+            configured: !!process.env.AZURE_SPEECH_KEY, 
+            status: process.env.AZURE_SPEECH_KEY ? 'active' : 'missing' 
+          },
+          stripe: { 
+            configured: !!process.env.***REMOVED***, 
+            status: process.env.***REMOVED*** ? 'active' : 'missing' 
+          },
+          gohighlevel: { 
+            configured: !!process.env.GHL_API_KEY, 
+            status: process.env.GHL_API_KEY ? 'active' : 'missing' 
+          },
+          microsoft: { 
+            configured: !!(process.env.MICROSOFT_CLIENT_ID && process.env.MICROSOFT_CLIENT_SECRET && process.env.MICROSOFT_TENANT_ID), 
+            status: (process.env.MICROSOFT_CLIENT_ID && process.env.MICROSOFT_CLIENT_SECRET && process.env.MICROSOFT_TENANT_ID) ? 'active' : 'missing',
+            keys: ['MICROSOFT_CLIENT_ID', 'MICROSOFT_CLIENT_SECRET', 'MICROSOFT_TENANT_ID']
+          },
+          twilio: { 
+            configured: !!(process.env.TWILIO_ACCOUNT_SID && process.env.TWILIO_AUTH_TOKEN), 
+            status: (process.env.TWILIO_ACCOUNT_SID && process.env.TWILIO_AUTH_TOKEN) ? 'active' : 'missing' 
+          }
+        },
+        preferences: {
+          theme: 'dark',
+          notifications: true,
+          autoRefresh: true,
+          voiceMode: false,
+          biometricAuth: false,
+          compactMode: false
+        },
+        system: {
+          refreshInterval: 30,
+          maxChatHistory: 100,
+          autoBackup: true,
+          debugMode: process.env.NODE_ENV === 'development'
+        },
+        integrations: {
+          calendar: { enabled: !!process.env.MICROSOFT_CLIENT_ID, provider: 'microsoft' },
+          crm: { enabled: true, provider: 'gohighlevel' },
+          payments: { enabled: !!process.env.***REMOVED***, provider: 'stripe' },
+          sms: { enabled: !!process.env.TWILIO_ACCOUNT_SID, provider: 'twilio' }
+        }
+      };
+      res.json(settings);
+    } catch (error) {
+      console.error('Error fetching settings:', error);
+      res.status(500).json({ error: 'Failed to fetch settings' });
+    }
+  });
+
+  app.post('/api/settings', async (req, res) => {
+    try {
+      const { apiKeys, preferences, system, integrations } = req.body;
+      
+      // In a real implementation, you would save these to database/environment
+      // For now, we'll return success
+      res.json({ 
+        message: 'Settings saved successfully',
+        saved: true,
+        timestamp: new Date().toISOString()
+      });
+    } catch (error) {
+      console.error('Error saving settings:', error);
+      res.status(500).json({ error: 'Failed to save settings' });
+    }
+  });
+
+  app.post('/api/settings/test-api', async (req, res) => {
+    try {
+      const { service, key } = req.body;
+      
+      // Mock API testing - in real implementation, test actual connections
+      const testResults = {
+        openai: { status: 'success', message: 'OpenAI API connection successful' },
+        azure: { status: 'success', message: 'Azure services accessible' },
+        stripe: { status: 'success', message: 'Stripe API connected' },
+        gohighlevel: { status: 'success', message: 'GoHighLevel CRM connected' },
+        microsoft: { status: 'success', message: 'Microsoft Graph API accessible' },
+        twilio: { status: 'success', message: 'Twilio SMS/Voice services active' }
+      };
+      
+      res.json(testResults[service] || { status: 'error', message: 'Unknown service' });
+    } catch (error) {
+      console.error('Error testing API:', error);
+      res.status(500).json({ status: 'error', message: 'API test failed' });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

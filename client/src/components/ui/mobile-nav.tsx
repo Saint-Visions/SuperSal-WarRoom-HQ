@@ -24,7 +24,8 @@ const navItems = [
   { path: "/command", icon: Home, label: "Command" },
   { path: "/warroom", icon: Shield, label: "War Room" },
   { path: "/saintsalme", icon: Star, label: "SaintSal" },
-  { path: "/tools", icon: Settings, label: "Tools" }
+  { path: "/tools", icon: Search, label: "Tools" },
+  { path: "/settings", icon: Settings, label: "Settings" }
 ];
 
 export default function MobileNav({ currentPath }: MobileNavProps) {

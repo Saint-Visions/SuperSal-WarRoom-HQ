@@ -10,6 +10,7 @@ import SupersalExecutive from "@/pages/supersal-executive";
 import LeadIntelligence from "@/pages/lead-intelligence";
 import SaintSalMe from "@/pages/saintsalme";
 import Tools from "@/pages/tools";
+import Settings from "@/pages/settings";
 import NotFound from "@/pages/not-found";
 import MobileNav from "@/components/ui/mobile-nav";
 import StickyCompanion from "@/components/ui/sticky-companion";
@@ -27,6 +28,7 @@ function Router() {
           <Route path="/warroom" component={WarRoom} />
           <Route path="/saintsalme" component={SaintSalMe} />
           <Route path="/tools" component={Tools} />
+          <Route path="/settings" component={Settings} />
           <Route component={NotFound} />
         </Switch>
       </div>
