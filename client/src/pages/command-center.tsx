@@ -38,7 +38,7 @@ export default function CommandCenter() {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
               transition={{ duration: 0.3 }}
-              className="screen-content p-6 space-y-6"
+              className="screen-content p-2 md:p-6 space-y-4 md:space-y-6"
             >
               <ActiveScreenComponent />
             </motion.div>

@@ -309,3 +309,32 @@ html {
 .hover-glow {
   @apply hover:shadow-[0_0_20px_rgba(212,175,55,0.3)] transition-all duration-300;
 }
+
+/* Mobile PWA optimizations */
+@media (max-width: 768px) {
+  /* Optimize glassmorphism for mobile performance */
+  .glass-card, .glassmorphism {
+    backdrop-filter: blur(8px) !important;
+  }
+  
+  /* Mobile-specific scroll behavior */
+  .overflow-auto {
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Prevent zoom on input focus */
+  input, select, textarea {
+    font-size: 16px !important;
+  }
+  
+  /* Mobile touch targets */
+  button, .clickable {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Hide desktop sidebar on mobile */
+  .sidebar {
+    display: none;
+  }
+}
