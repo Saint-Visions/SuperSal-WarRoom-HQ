@@ -25,6 +25,50 @@ export async function registerRoutes(app: Express): Promise<Server> {
   const mockUserId = "550e8400-e29b-41d4-a716-446655440000";
 
   // Dashboard Data Endpoints
+  // Route Auditor API endpoints
+  app.post("/api/audit/route", async (req, res) => {
+    try {
+      const { url } = req.body;
+      
+      // Mock audit implementation - in real app would perform actual checks
+      const audit = {
+        id: Date.now().toString(),
+        url,
+        method: "GET",
+        status: Math.random() > 0.7 ? "warning" : "success",
+        responseTime: Math.floor(Math.random() * 2000) + 50,
+        statusCode: 200,
+        issues: Math.random() > 0.5 ? [
+          {
+            type: "performance",
+            severity: "medium",
+            message: "Response time could be optimized",
+            suggestion: "Consider implementing caching"
+          }
+        ] : [],
+        lastChecked: new Date()
+      };
+      
+      res.json(audit);
+    } catch (error: any) {
+      res.status(500).json({ message: "Route audit error: " + error.message });
+    }
+  });
+
+  app.post("/api/audit/fix", async (req, res) => {
+    try {
+      const { routeId, issueIndex } = req.body;
+      
+      // Mock fix implementation
+      res.json({ 
+        success: true, 
+        message: `Auto-fix applied to route ${routeId}, issue ${issueIndex}` 
+      });
+    } catch (error: any) {
+      res.status(500).json({ message: "Auto-fix error: " + error.message });
+    }
+  });
+
   app.get("/api/dashboard", async (req, res) => {
     try {
       const [contacts, tasks, kpiMetrics, calendarEvents, aiMemory] = await Promise.all([

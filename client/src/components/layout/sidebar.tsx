@@ -11,6 +11,7 @@ import {
   Github 
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import CompanionSwitcher from "./companion-switcher";
 
 interface SidebarProps {
   collapsed: boolean;
@@ -97,6 +98,18 @@ export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
               </motion.a>
             ))}
           </div>
+        )}
+
+        {/* Companion Switcher - only show when expanded */}
+        {!collapsed && (
+          <motion.div
+            initial={false}
+            animate={{ opacity: collapsed ? 0 : 1 }}
+            transition={{ duration: 0.2, delay: 0.1 }}
+            className="mt-6"
+          >
+            <CompanionSwitcher />
+          </motion.div>
         )}
       </div>
     </motion.aside>

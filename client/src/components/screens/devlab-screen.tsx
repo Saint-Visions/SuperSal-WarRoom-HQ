@@ -24,6 +24,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import GlassmorphismCard from "@/components/ui/glassmorphism-card";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
+import RouteAuditor from "@/components/tools/route-auditor";
 
 interface WorkflowNode {
   id: string;
@@ -496,6 +497,15 @@ export default function DevLabScreen() {
             />
           </div>
         </GlassmorphismCard>
+      </motion.div>
+
+      {/* Route Auditor Section */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4 }}
+      >
+        <RouteAuditor />
       </motion.div>
     </motion.div>
   );
