@@ -2,15 +2,15 @@
 import React, { useEffect, useState } from 'react';
 
 type DashboardData = {
-  warroom: any;
-  saintsalme: any;
-  systemHealth: any;
-  performance: any;
+  warroom: unknown;
+  saintsalme: unknown;
+  systemHealth: unknown;
+  performance: unknown;
 };
 
 const WorkspaceRealtimeDashboard = () => {
   const [data, setData] = useState<DashboardData | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     fetch('/api/workspace/realtime')
@@ -53,3 +53,4 @@ const WorkspaceRealtimeDashboard = () => {
 };
 
 export default WorkspaceRealtimeDashboard;
+
