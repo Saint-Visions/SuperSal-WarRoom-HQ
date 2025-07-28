@@ -1,15 +1,22 @@
 "use client";
 import React, { useEffect, useState } from 'react';
 
+type DashboardData = {
+  warroom: any;
+  saintsalme: any;
+  systemHealth: any;
+  performance: any;
+};
+
 const WorkspaceRealtimeDashboard = () => {
-  const [data, setData] = useState<any>(null);
+  const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetch('/api/workspace/realtime')
       .then(res => res.json())
-      .then(json => {
-        setData(json);
+      .then((json: unknown) => {
+        setData(json as DashboardData);
         setLoading(false);
       })
       .catch(() => setLoading(false));
