@@ -1432,10 +1432,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         },
         systemHealth: {
           database: process.env.DATABASE_URL ? 'connected' : 'local',
-          openai: process.env.***REMOVED*** ? 'connected' : 'mock',
+          openai: process.env.OPENAI_API_KEY ? 'connected' : 'mock',
           azure: process.env.AZURE_SPEECH_KEY ? 'connected' : 'mock',
           ghl: process.env.GHL_API_KEY ? 'connected' : 'mock',
-          stripe: process.env.***REMOVED*** ? 'connected' : 'mock',
+          stripe: process.env.STRIPE_SECRET_KEY ? 'connected' : 'mock',
           microsoft: process.env.MICROSOFT_CLIENT_ID ? 'connected' : 'mock',
           overall: 'operational'
         },
@@ -1511,7 +1511,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         "file-upload": "File Manager: Drag & drop operational, AI document analysis ready, multi-format support enabled",
         
         // Communication Tools  
-        "chat": `OpenAI Chat: ${process.env.***REMOVED*** ? 'GPT-4o connected' : 'Mock responses'} - SuperSal tactical mode active`,
+        "chat": `OpenAI Chat: ${process.env.OPENAI_API_KEY ? 'GPT-4o connected' : 'Mock responses'} - SuperSal tactical mode active`,
         "email": "Email Automation: SMTP configured, template library loaded, campaign tracking enabled",
         "sms": `Twilio SMS: ${process.env.TWILIO_ACCOUNT_SID ? 'Live gateway' : 'Mock service'} - bulk messaging ready`,
         "voice": `Azure Speech: ${process.env.AZURE_SPEECH_KEY ? 'Connected' : 'Mock'} - TTS/STT operational, voice commands enabled`,
@@ -1525,13 +1525,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
         
         // Integration Tools
         "ghl": `GoHighLevel: ${process.env.GHL_API_KEY ? 'Live connection' : 'Mock data'} - contact sync operational, pipeline management active`,
-        "stripe": `Stripe Payments: ${process.env.***REMOVED*** ? 'Live processing' : 'Test mode'} - billing system operational, subscription management enabled`,
+        "stripe": `Stripe Payments: ${process.env.STRIPE_SECRET_KEY ? 'Live processing' : 'Test mode'} - billing system operational, subscription management enabled`,
         "azure": `Azure Services: ${process.env.AZURE_SPEECH_KEY ? 'Connected' : 'Mock'} - cognitive services enabled, AI capabilities operational`,
         "microsoft": `Microsoft Graph: ${process.env.MICROSOFT_CLIENT_ID ? 'Authenticated' : 'Mock'} - Office 365 integration active, calendar/email synced`,
         
         // Automation Tools
         "workflows": "Automation Engine: 8 active workflows, trigger monitoring enabled, execution logging operational",
-        "ai-tasks": `SuperSal AI: ${process.env.***REMOVED*** ? 'Intelligent task generation active' : 'Mock task creation'} - workflow optimization enabled`,
+        "ai-tasks": `SuperSal AI: ${process.env.OPENAI_API_KEY ? 'Intelligent task generation active' : 'Mock task creation'} - workflow optimization enabled`,
         "scheduling": "Smart Scheduling: Calendar integration active, conflict detection enabled, automated booking ready",
         "lead-scoring": "Lead Intelligence: AI scoring algorithm active, intent detection enabled, qualification automated",
         
@@ -1767,16 +1767,16 @@ ${code ? code.replace(/console\.log\(/g, '// console.log(') : '// No code provid
       const settings = {
         apiKeys: {
           openai: { 
-            configured: !!process.env.***REMOVED***, 
-            status: process.env.***REMOVED*** ? 'active' : 'missing' 
+            configured: !!process.env.OPENAI_API_KEY, 
+            status: process.env.OPENAI_API_KEY ? 'active' : 'missing'
           },
           azure: { 
             configured: !!process.env.AZURE_SPEECH_KEY, 
             status: process.env.AZURE_SPEECH_KEY ? 'active' : 'missing' 
           },
           stripe: { 
-            configured: !!process.env.***REMOVED***, 
-            status: process.env.***REMOVED*** ? 'active' : 'missing' 
+            configured: !!process.env.OPENAI_API_KEY,
+            status: process.env.STRIPE_SECRET_KEY ? 'active' : 'missing'
           },
           gohighlevel: { 
             configured: !!process.env.GHL_API_KEY, 
@@ -1809,7 +1809,7 @@ ${code ? code.replace(/console\.log\(/g, '// console.log(') : '// No code provid
         integrations: {
           calendar: { enabled: !!process.env.MICROSOFT_CLIENT_ID, provider: 'microsoft' },
           crm: { enabled: true, provider: 'gohighlevel' },
-          payments: { enabled: !!process.env.***REMOVED***, provider: 'stripe' },
+          payments: { enabled: !!process.env.STRIPE_SECRET_KEY, provider: 'stripe' },
           sms: { enabled: !!process.env.TWILIO_ACCOUNT_SID, provider: 'twilio' }
         }
       };

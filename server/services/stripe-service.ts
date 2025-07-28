@@ -1,13 +1,13 @@
 import Stripe from "stripe";
 
-const hasStripeKey = !!process.env.***REMOVED***;
+const hasStripeKey = !!process.env.STRIPE_SECRET_KEY;
 
 if (!hasStripeKey) {
   console.log('Stripe secret key not provided - payment features will return mock responses');
 }
 
 const stripe = hasStripeKey 
-  ? new Stripe(process.env.***REMOVED***!, {
+  ? new Stripe(process.env.STRIPE_SECRET_KEY!, {
       apiVersion: "2024-06-20",
     })
   : null;

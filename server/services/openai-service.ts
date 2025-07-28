@@ -2,7 +2,7 @@ import OpenAI from "openai";
 
 // the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
 const openai = new OpenAI({ 
-  apiKey: process.env.***REMOVED*** || process.env.AZURE_***REMOVED*** || 'dummy-key-for-development'
+  apiKey: process.env.OPENAI_API_KEY || process.env.AZURE_OPENAI_API_KEY || 'dummy-key-for-development'
 });
 
 export interface ChatMessage {
@@ -23,7 +23,7 @@ export class OpenAIService {
     options: ChatCompletionOptions = {}
   ): Promise<string> {
     try {
-      if (!process.env.***REMOVED*** && !process.env.AZURE_***REMOVED***) {
+      if (!process.env.OPENAI_API_KEY && !process.env.AZURE_OPENAI_API_KEY) {
         return "SuperSal™ AI response: [API key needed for real AI responses]";
       }
 

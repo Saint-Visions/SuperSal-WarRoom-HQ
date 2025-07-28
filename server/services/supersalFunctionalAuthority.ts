@@ -167,7 +167,7 @@ export class SuperSalFunctionalAuthority {
     for (const system of systems) {
       switch (system.toLowerCase()) {
         case 'openai':
-          if (process.env.***REMOVED***) {
+          if (process.env.OPENAI_API_KEY) {
             details.push(`✓ OpenAI API key configured and functional`);
           } else {
             details.push(`⚠ OpenAI running in mock mode - provide API key for full functionality`);
@@ -185,7 +185,7 @@ export class SuperSalFunctionalAuthority {
           break;
 
         case 'stripe':
-          if (process.env.***REMOVED***) {
+          if (process.env.STRIPE_SECRET_KEY) {
             details.push(`✓ Stripe payment processing active`);
           } else {
             details.push(`⚠ Stripe running in mock mode - configure secret key for payments`);
