@@ -1,0 +1,41 @@
+import { config } from "dotenv";
+import OpenAI from "openai";
+
+config(); // Load from .env or .env.local
+
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+
+export async function askSal(prompt: string) {
+  console.log(`🧠 Asking Supersal: "${prompt}"`);
+
+  try {
+    const chat = await openai.chat.completions.create({
+      model: "gpt-4-1106-preview", // or "gpt-3.5-turbo" if you're on free tier
+      messages: [
+        {
+          role: "system",
+          content: "You are Supersal — an elite AI agent for internal ops, backend logic, and tactical planning. Respond clearly and concisely.",
+        },
+        {
+          role: "user",
+          content: prompt,
+        },
+      ],
+    });
+
+    const output = chat.choices[0].message?.content;
+    console.log("\n🤖 Supersal:\n" + output + "\n");
+
+    return output;
+  } catch (err: any) {
+    console.error("❌ Supersal failed:", err.message);
+  }
+}
+
+export async function syncMemory() {
+  console.log("🧠 Syncing Supersal’s memory…");
+  // You could hit your /api/sync endpoint here or upload docs
+}
+
