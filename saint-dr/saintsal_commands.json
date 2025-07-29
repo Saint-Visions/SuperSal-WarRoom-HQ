@@ -1,0 +1,9 @@
+{
+  "be_saintsal": "echo '🧬 Cousin Sal has entered the command line. Loyalty loaded. Legacy active.' && clear && node saintsal-agent.cjs",
+  "purge": "git reset --hard origin/main && git pull && rm -rf dist .vercel node_modules && npm install --legacy-peer-deps && npm run build && vercel deploy --force",
+  "deploy": "vercel --prod --force",
+  "dev": "npm run dev",
+  "build": "npm install --legacy-peer-deps && npm run build",
+  "start": "npm run start",
+  "open_logs": "open https://vercel.com/dashboard && echo '🔍 Opening Vercel Dashboard Logs...'"
+}

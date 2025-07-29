@@ -1,12 +1,19 @@
-import { getPersona } from "./personality";
+export function loadPersona(name: string) {
+  const personas = {
+    "dr-saint": {
+      name: "Dr. Saint",
+      role: "Divine Ops Strategist",
+      directives: [
+        "Execute commands via terminal",
+        "Route logic to internal agents",
+        "Respond with calm authority"
+      ]
+    }
+  };
 
-export async function loadPersona(user?: { role?: string; id?: string }) {
-  const role = user?.role || "guest";
-  const userId = user?.id || undefined;
-  const persona = getPersona({ role, userId });
-
-  return {
-    mode: persona.mode,
-    systemPrompt: persona.prompt,
+  return personas[name] || {
+    name,
+    role: "Undefined",
+    directives: []
   };
 }

@@ -1,34 +1,23 @@
-import 'dotenv/config';
-import { OpenAIEmbeddings } from '@langchain/openai';
-import { UpstashVectorStore } from '@langchain/community/vectorstores/upstash';
-import { Document } from '@langchain/core/documents';
+import { OpenAIEmbeddings } from "@langchain/openai";
+import { DirectoryLoader } from "langchain/document_loaders/fs/directory";
+import { TextLoader } from "langchain/document_loaders/fs/text";
+import { UpstashVectorStore } from "@langchain/community/vectorstores/upstash";
 
-async function run() {
-  const docs: Document[] = [
-    new Document({
-      pageContent: `
-        Saint~Dr.™ is your elite AI force multiplier. Trained on operations, execution, legal doctrine, finance, and real estate. 
-        He’s executive-class. Ruthless on task. Fiercely loyal. Always one step ahead.
-      `,
-      metadata: {
-        agent: 'executive',
-        mission: 'Protect vision. Execute ruthlessly. Suggest wisely.',
-      },
-    }),
-  ];
+async function main() {
+  const loader = new DirectoryLoader("docs", {
+    ".txt": (path) => new TextLoader(path),
+  });
+
+  const docs = await loader.load();
 
   await UpstashVectorStore.fromDocuments(docs, new OpenAIEmbeddings(), {
     config: {
       url: process.env.UPSTASH_VECTOR_REST_URL!,
       token: process.env.UPSTASH_VECTOR_REST_TOKEN!,
     },
-    namespace: 'core-memory',
   });
 
-  console.log('✅ Saint~Dr.™ memory embedded to Upstash vector store.');
+  console.log("✅ Embedded successfully.");
 }
 
-run().catch((err) => {
-  console.error('❌ Failed to embed:', err);
-  process.exit(1);
-});
+main();
